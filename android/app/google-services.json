@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "294292984174",
+    "project_id": "sulai-a79f0",
+    "storage_bucket": "sulai-a79f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294292984174:android:e76468bf21fcf46237717f",
+        "android_client_info": {
+          "package_name": "com.project.sulai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294292984174-6mlgb0sgq2udt6pj1u7p9os798vj36f8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.sulai",
+            "certificate_hash": "fa92eeffeb229a28939ac215d74bdac4c8c31706"
+          }
+        },
+        {
+          "client_id": "294292984174-15d8u04ljl4vl7mt6gad24tngmu2bdge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQZT7fD1LeFBkKoPhsWmjbt_S_q8Luys0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294292984174-15d8u04ljl4vl7mt6gad24tngmu2bdge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
