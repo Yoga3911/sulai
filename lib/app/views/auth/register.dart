@@ -2,22 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
-import 'package:sulai/app/views/auth/widgets/login_field.dart';
+import 'package:sulai/app/views/auth/widgets/register_field.dart';
 import 'package:sulai/app/widgets/glow.dart';
+import 'package:sulai/app/widgets/loading.dart';
 
 import '../../routes/route.dart';
 import '../../services/email.dart';
 import '../../view_model/auth_provider.dart';
-import '../../view_model/user_provider.dart';
-import '../../widgets/loading.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final login = Provider.of<LoginProvider>(context);
-    final user = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -63,7 +61,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 40),
                             const Text(
-                              "SIGN IN",
+                              "SIGN UP",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 38,
@@ -79,20 +77,28 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UsernameLogin(controller: login.emailLogin),
+                            UsernameRegister(controller: login.nameRegis),
                             const SizedBox(height: 20),
-                            PasswordLogin(controller: login.passLogin),
+                            EmailRegister(controller: login.emailRegis),
+                            const SizedBox(height: 20),
+                            PasswordRegister1(controller: login.pass1Regis),
+                            const SizedBox(height: 20),
+                            PasswordRegister2(controller: login.pass2Regis),
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
                                 showDialog(
-                                  context: context,
-                                  builder: (_) => const CustomLoading(),
+                                    context: context,
+                                    builder: (_) => const CustomLoading());
+                                login.signUp(
+                                  context,
+                                  name: login.nameRegis.text,
+                                  email: login.emailRegis.text,
+                                  password: login.pass1Regis.text,
                                 );
-                                login.signIn(context, user, Social.email);
                               },
                               child: const Text(
-                                "LOGIN",
+                                "REGISTER",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               style: ElevatedButton.styleFrom(
@@ -104,84 +110,19 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            const Text(
-                              "Lupa Password ?",
-                              style: TextStyle(
-                                color: MyColor.blue,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(height: 15),
                             Text.rich(
                               TextSpan(
                                 children: [
                                   const TextSpan(
-                                      text: "Belum memiliki akun ? "),
+                                      text: "Sudah memiliki akun ? "),
                                   TextSpan(
-                                    text: "buat akun",
+                                    text: "masuk",
                                     style: const TextStyle(color: MyColor.blue),
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap = () => Navigator.pushNamed(
-                                          context, Routes.register),
+                                      ..onTap = () => Navigator.pop(context),
                                   )
                                 ],
                               ),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 2,
-                                  width: size.width * 0.15,
-                                  color: Colors.black,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: Text(
-                                    "OR",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 2,
-                                  width: size.width * 0.15,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (_) => const CustomLoading(),
-                                    );
-                                    login.signIn(context, user, Social.google);
-                                  },
-                                  icon: Image.asset("assets/icons/google.png"),
-                                ),
-                                const SizedBox(width: 20),
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (_) => const CustomLoading(),
-                                    );
-                                    login.signIn(
-                                        context, user, Social.facebook);
-                                  },
-                                  icon:
-                                      Image.asset("assets/icons/facebook.png"),
-                                ),
-                              ],
                             ),
                             const SizedBox(height: 60),
                           ],

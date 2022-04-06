@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sulai/app/constant/color.dart';
 
-class UsernameTxt extends StatefulWidget {
-  const UsernameTxt({Key? key, required this.controller}) : super(key: key);
+class UsernameLogin extends StatefulWidget {
+  const UsernameLogin({Key? key, required this.controller}) : super(key: key);
 
   final TextEditingController controller;
 
   @override
-  State<UsernameTxt> createState() => _UsernameTxtState();
+  State<UsernameLogin> createState() => _UsernameLogin();
 }
 
-class _UsernameTxtState extends State<UsernameTxt> {
+class _UsernameLogin extends State<UsernameLogin> {
   Color _color = Colors.grey;
 
   final _focusNode = FocusNode();
@@ -66,16 +66,16 @@ class _UsernameTxtState extends State<UsernameTxt> {
   }
 }
 
-class PasswordTxt extends StatefulWidget {
-  const PasswordTxt({Key? key, required this.controller}) : super(key: key);
+class PasswordLogin extends StatefulWidget {
+  const PasswordLogin({Key? key, required this.controller}) : super(key: key);
 
   final TextEditingController controller;
 
   @override
-  State<PasswordTxt> createState() => _PasswordTxtState();
+  State<PasswordLogin> createState() => _PasswordLoginState();
 }
 
-class _PasswordTxtState extends State<PasswordTxt> {
+class _PasswordLoginState extends State<PasswordLogin> {
   Color _color = Colors.grey;
   bool isVisible = false;
 

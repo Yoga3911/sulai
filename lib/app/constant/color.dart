@@ -9,4 +9,5 @@ class MyColor {
   );
   static const cream = Color(0xFFDECE9D);
   static const blue = Color(0xFF4D97EA);
+  static const grey = Color(0xFFBCBCBC);
 }
