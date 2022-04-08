@@ -7,5 +7,5 @@ import 'user_provider.dart';
 
 final List<SingleChildWidget> providerData = [
   ChangeNotifierProvider(create: (_) => UserProvider()),
-  ChangeNotifierProvider(create: (_) => LoginProvider()),
+  ChangeNotifierProvider(create: (_) => AuthProvider()),
 ];

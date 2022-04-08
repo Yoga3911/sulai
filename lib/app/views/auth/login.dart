@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
+import 'package:sulai/app/services/facebook.dart';
+import 'package:sulai/app/services/google.dart';
 import 'package:sulai/app/views/auth/widgets/login_field.dart';
 import 'package:sulai/app/widgets/glow.dart';
 
@@ -16,7 +18,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final login = Provider.of<LoginProvider>(context);
+    final auth = Provider.of<AuthProvider>(context);
     final user = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     return GestureDetector(
@@ -79,9 +81,9 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UsernameLogin(controller: login.emailLogin),
+                            UsernameLogin(controller: auth.emailLogin),
                             const SizedBox(height: 20),
-                            PasswordLogin(controller: login.passLogin),
+                            PasswordLogin(controller: auth.passLogin),
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
@@ -89,7 +91,13 @@ class LoginPage extends StatelessWidget {
                                   context: context,
                                   builder: (_) => const CustomLoading(),
                                 );
-                                login.signIn(context, user, Social.email);
+                                auth.login(
+                                  context,
+                                  user,
+                                  EmailService(),
+                                  email: auth.emailLogin.text,
+                                  password: auth.passLogin.text,
+                                );
                               },
                               child: const Text(
                                 "LOGIN",
@@ -163,7 +171,7 @@ class LoginPage extends StatelessWidget {
                                       context: context,
                                       builder: (_) => const CustomLoading(),
                                     );
-                                    login.signIn(context, user, Social.google);
+                                    auth.login(context, user, GoogleService());
                                   },
                                   icon: Image.asset("assets/icons/google.png"),
                                 ),
@@ -175,8 +183,8 @@ class LoginPage extends StatelessWidget {
                                       context: context,
                                       builder: (_) => const CustomLoading(),
                                     );
-                                    login.signIn(
-                                        context, user, Social.facebook);
+                                    auth.login(
+                                        context, user, FacebookService());
                                   },
                                   icon:
                                       Image.asset("assets/icons/facebook.png"),

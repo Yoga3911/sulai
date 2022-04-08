@@ -2,20 +2,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
+import 'package:sulai/app/view_model/auth_provider.dart';
 import 'package:sulai/app/views/auth/widgets/register_field.dart';
 import 'package:sulai/app/widgets/glow.dart';
 import 'package:sulai/app/widgets/loading.dart';
-
-import '../../routes/route.dart';
-import '../../services/email.dart';
-import '../../view_model/auth_provider.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final login = Provider.of<LoginProvider>(context);
+    final auth = Provider.of<AuthProvider>(context);
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -77,24 +74,24 @@ class RegisterPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UsernameRegister(controller: login.nameRegis),
+                            UsernameRegister(controller: auth.nameRegis),
                             const SizedBox(height: 20),
-                            EmailRegister(controller: login.emailRegis),
+                            EmailRegister(controller: auth.emailRegis),
                             const SizedBox(height: 20),
-                            PasswordRegister1(controller: login.pass1Regis),
+                            PasswordRegister1(controller: auth.pass1Regis),
                             const SizedBox(height: 20),
-                            PasswordRegister2(controller: login.pass2Regis),
+                            PasswordRegister2(controller: auth.pass2Regis),
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
                                 showDialog(
                                     context: context,
                                     builder: (_) => const CustomLoading());
-                                login.signUp(
+                                auth.resgister(
                                   context,
-                                  name: login.nameRegis.text,
-                                  email: login.emailRegis.text,
-                                  password: login.pass1Regis.text,
+                                  name: auth.nameRegis.text,
+                                  email: auth.emailRegis.text,
+                                  password: auth.pass1Regis.text,
                                 );
                               },
                               child: const Text(

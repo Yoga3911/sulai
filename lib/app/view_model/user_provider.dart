@@ -1,21 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../constant/collection.dart';
 import '../models/user_model.dart';
 
 class UserProvider with ChangeNotifier {
-  User? _user;
-  User? _seller;
+  UserModel? _user;
 
-  User get getUser => _user!;
-  User get getSeller => _seller!;
+  UserModel get getUser => _user!;
 
-  set setUser(User userCredential) => _user = userCredential;
-  set setSeller(User userCredential) => _seller = userCredential;
+  set setUser(UserModel userCredential) {
+    _user = userCredential;
+    notifyListeners();
+  }
 
-  Future<UserModel> getUserById(String userId) async {
-    final data = await MyCollection.user.doc(userId).get();
-    return UserModel.fromJson(data.data() as Map<String, dynamic>);
+  Future<void> getUserByEmail(String email) async {
+    final data = await MyCollection.user.where("email", isEqualTo: email).get();
+    inspect(data);
+    setUser = UserModel.fromJson(data.docs.first.data() as Map<String, dynamic>);
   }
 }
