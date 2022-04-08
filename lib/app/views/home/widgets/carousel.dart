@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../constant/color.dart';
+
 class CustomCarousel extends StatelessWidget {
   const CustomCarousel({Key? key}) : super(key: key);
 
@@ -36,12 +38,120 @@ class CustomCarousel extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           clipBehavior: Clip.none,
           children: [
-          Container(
-            height: 100,
-            width: 400,
-            color: Colors.red,
-          )
-        ]),
+            Container(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              height: size.height * 0.16,
+              width: size.width,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 5),
+                  const Text(
+                    "PROMO MINGGUAN!!!",
+                    style: TextStyle(
+                      color: Color(0xFF41E507),
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    "20 - 28 Maret 2022",
+                    style: TextStyle(color: MyColor.grey, fontSize: 12),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset("assets/icons/bag.png",
+                              fit: BoxFit.cover),
+                          const SizedBox(width: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "1 Basket Sulai",
+                                style: TextStyle(
+                                  color: MyColor.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                "12 Botol",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const Text(
+                        "Diskon 20%",
+                        style: TextStyle(
+                          color: MyColor.grey,
+                          fontSize: 14,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF41E507),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: const Center(
+                                child: Text(
+                              "MORE",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            )),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            height: 20,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: const Icon(
+                              Icons.shopping_bag_outlined,
+                              size: 17,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: const [
+                          Text(
+                            "Rp 25.000",
+                            style: TextStyle(fontSize: 10, color: MyColor.grey, decoration: TextDecoration.lineThrough, decorationColor: Colors.black),
+                            // te
+                          ),
+                          Text("Rp 20.000", style: TextStyle(fontSize: 12, color: Colors.red),)
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

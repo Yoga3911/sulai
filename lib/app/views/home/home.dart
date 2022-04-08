@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                             _index = index;
                           });
                         },
-                        height: size.height * 0.35,
+                        height: size.height * 0.4,
                         enableInfiniteScroll: false,
                         enlargeCenterPage: true,
                         viewportFraction: 0.7,
