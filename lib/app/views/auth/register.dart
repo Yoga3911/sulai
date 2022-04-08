@@ -87,7 +87,7 @@ class RegisterPage extends StatelessWidget {
                                 showDialog(
                                     context: context,
                                     builder: (_) => const CustomLoading());
-                                auth.resgister(
+                                auth.register(
                                   context,
                                   name: auth.nameRegis.text,
                                   email: auth.emailRegis.text,

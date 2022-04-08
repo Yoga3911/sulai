@@ -1,11 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:sulai/app/routes/route.dart';
-import 'package:sulai/app/services/google.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/views/home/widgets/carousel.dart';
 import 'package:sulai/app/views/home/widgets/custom_box.dart';

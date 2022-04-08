@@ -15,7 +15,7 @@ class EmailService extends SocialService {
         await FirebaseAuth.instance.currentUser!.sendEmailVerification();
       }
 
-      log("Login success");
+      log("Register success");
 
       return;
     } on FirebaseAuthException catch (e) {

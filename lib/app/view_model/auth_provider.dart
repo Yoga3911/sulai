@@ -36,7 +36,7 @@ class AuthProvider with ChangeNotifier {
   final String _blank =
       "https://firebasestorage.googleapis.com/v0/b/sulai-a79f0.appspot.com/o/profile.png?alt=media&token=a1d307af-90c1-4199-8703-28e43579bb7e";
 
-  void resgister(BuildContext context,
+  void register(BuildContext context,
       {String? name, String? email, String? password}) {
     final login = Provider.of<AuthProvider>(context, listen: false);
     EmailService().signUp(email: email!, password: password!).then(
