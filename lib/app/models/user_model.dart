@@ -7,7 +7,6 @@ class UserModel {
         required this.imageUrl,
         required this.name,
         required this.roleId,
-        required this.provider,
         required this.createAt,
         required this.updateAt,
     });
@@ -17,7 +16,6 @@ class UserModel {
     final String imageUrl;
     final String name;
     final String roleId;
-    final String provider;
     final DateTime createAt;
     final DateTime updateAt;
 
@@ -27,7 +25,6 @@ class UserModel {
         imageUrl: json["image_url"],
         name: json["name"],
         roleId: json["role_id"],
-        provider: json["provider"],
         createAt: (json["create_at"] as Timestamp).toDate(),
         updateAt: (json["update_at"] as Timestamp).toDate(),
     );
@@ -38,7 +35,6 @@ class UserModel {
         "image_url": imageUrl,
         "name": name,
         "role_id": roleId,
-        "provider": provider,
         "create_at": createAt,
         "update_at": updateAt,
     };

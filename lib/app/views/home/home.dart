@@ -2,13 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:sulai/app/models/product_model.dart';
+import 'package:sulai/app/view_model/product_provider.dart';
+import 'package:sulai/app/view_model/slider_notifier.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/views/home/widgets/carousel.dart';
 import 'package:sulai/app/views/home/widgets/custom_box.dart';
+import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/glow.dart';
 
 import '../../constant/color.dart';
+import '../../routes/route.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,55 +23,48 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController controller = PageController();
-  int _index = 0;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).getUser;
+    final user = Provider.of<UserProvider>(context, listen: false).getUser;
+    final product = Provider.of<ProductProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              height: size.height,
-              width: size.width,
-              padding: EdgeInsets.only(top: size.height * 0.1),
-              decoration: const BoxDecoration(gradient: MyColor.linerGradient),
-              child: ScrollConfiguration(
-                behavior: NoGlow(),
-                child: ListView(
+        body: Container(
+          decoration: const BoxDecoration(gradient: MyColor.linerGradient),
+          child: ScrollConfiguration(
+            behavior: NoGlow(),
+            child: ListView(
+              children: [
+                const CustomAppBar(),
+                Column(
                   children: [
-                    CarouselSlider(
-                      items: const [
-                        CustomCarousel(),
-                        CustomCarousel(),
-                        CustomCarousel(),
-                      ],
-                      options: CarouselOptions(
-                        onPageChanged: (index, _) {
-                          setState(() {
-                            _index = index;
-                          });
-                        },
-                        height: size.height * 0.4,
-                        enableInfiniteScroll: false,
-                        enlargeCenterPage: true,
-                        viewportFraction: 0.7,
-                        aspectRatio: 2,
-                      ),
-                    ),
-                    Center(
-                      child: AnimatedSmoothIndicator(
-                        activeIndex: _index,
-                        count: 3,
-                        effect: const WormEffect(
-                          activeDotColor: Colors.white,
-                          dotHeight: 10,
-                          dotWidth: 10,
-                        ),
-                      ),
-                    ),
+                    FutureBuilder<List<ProductModel>>(
+                        future: product.getAll(),
+                        builder: (_, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return ChangeNotifierProvider(
+                            create: (context) => IndexSlider(),
+                            child: CarouselSlider(
+                              items: snapshot.data!
+                                  .map((e) => CustomCarousel(productModel: e))
+                                  .toList(),
+                              options: CarouselOptions(
+                                height: size.height * 0.4,
+                                enableInfiniteScroll: false,
+                                enlargeCenterPage: true,
+                                viewportFraction: 0.7,
+                                aspectRatio: 2,
+                              ),
+                            ),
+                          );
+                        }),
                     const SizedBox(
                       height: 30,
                     ),
@@ -76,10 +73,8 @@ class _HomePageState extends State<HomePage> {
                       children: const [
                         CustomBox(icon: "assets/icons/shop.png", label: "SHOP"),
                         CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
-                        CustomBox(
-                            icon: "assets/icons/insta.png", label: "MEDIA"),
-                        CustomBox(
-                            icon: "assets/icons/order.png", label: "BOOK"),
+                        CustomBox(icon: "assets/icons/insta.png", label: "MEDIA"),
+                        CustomBox(icon: "assets/icons/order.png", label: "BOOK"),
                       ],
                     ),
                     Container(
@@ -183,7 +178,8 @@ class _HomePageState extends State<HomePage> {
                         right: size.width * 0.3,
                       ),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            Navigator.pushNamed(context, Routes.booking),
                         child: const Text("PESAN SEKARANG"),
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(size.width, size.height * 0.06),
@@ -194,102 +190,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40,),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: const Alignment(-0.9, -0.95),
-              child: Container(
-                height: size.height * 0.05,
-                width: size.height * 0.05,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(100),
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.menu,
-                      color: MyColor.grey,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Align(
-              alignment: const Alignment(0.9, -0.95),
-              child: Container(
-                height: size.height * 0.05,
-                width: size.height * 0.12,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Stack(
-                      children: [
-                        Material(
-                          color: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.notifications_outlined,
-                              color: MyColor.grey,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 3,
-                          top: 3,
-                          child: Container(
-                            height: size.height * 0.01,
-                            width: size.height * 0.01,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      height: size.height * 0.03,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {},
-                        child: const Icon(
-                          Icons.shopping_bag_outlined,
-                          color: MyColor.grey,
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 40,
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
