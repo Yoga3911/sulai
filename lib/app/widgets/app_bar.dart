@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sulai/app/services/google.dart';
+import 'package:sulai/app/view_model/auth_provider.dart';
 
 import '../constant/color.dart';
 
@@ -95,7 +97,7 @@ class CustomAppBar extends StatelessWidget {
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(100),
-                          onTap: () {},
+                          onTap: () => AuthProvider().logout(context, GoogleService()),
                           child: const Icon(
                             Icons.shopping_bag_outlined,
                             color: MyColor.grey,
