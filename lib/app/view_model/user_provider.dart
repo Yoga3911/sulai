@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/collection.dart';
@@ -12,12 +11,33 @@ class UserProvider with ChangeNotifier {
 
   set setUser(UserModel userCredential) {
     _user = userCredential;
-    notifyListeners();
   }
 
-  Future<void> getUserByEmail(String email) async {
+  Future<void> getUserByEmail({String? email}) async {
     final data = await MyCollection.user.where("email", isEqualTo: email).get();
-    inspect(data);
-    setUser = UserModel.fromJson(data.docs.first.data() as Map<String, dynamic>);
+    setUser =
+        UserModel.fromJson(data.docs.first.data() as Map<String, dynamic>);
+  }
+
+  Future<void> insertUser(
+      {String? email, String? password, String? img, String? name, String? provider}) async {
+    QuerySnapshot<Object?> account =
+        await MyCollection.user.where("email", isEqualTo: email).get();
+    final collection = MyCollection.user.doc();
+    if (account.docs.isEmpty) {
+      await collection.set(
+        UserModel(
+          id: collection.id,
+          email: email!,
+          password: password ?? "-",
+          imageUrl: img!,
+          name: name!,
+          roleId: "1",
+          provider: provider!,
+          createAt: DateTime.now(),
+          updateAt: DateTime.now(),
+        ).toJson(),
+      );
+    }
   }
 }
