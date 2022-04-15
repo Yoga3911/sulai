@@ -4,6 +4,7 @@ import 'package:sulai/app/views/home/home.dart';
 
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
+import '../views/booking/checkout.dart';
 import '../views/product/product.dart';
 
 class Routes {
@@ -14,6 +15,7 @@ class Routes {
   static const register = "/register";
   static const product = "/product";
   static const booking = "/booking";
+  static const checkout = "/checkout";
 
   static final data = <String, WidgetBuilder>{
     home: (_) => const HomePage(),
@@ -21,5 +23,6 @@ class Routes {
     register: (_) => const RegisterPage(),
     product: (_) => const ProductPage(),
     booking: (_) => const BookingPage(),
+    checkout: (_) => const CheckoutPage(),
   };
 }
