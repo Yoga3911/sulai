@@ -21,11 +21,12 @@ class MyApp extends StatelessWidget {
         initialRoute: Routes.login,
         routes: Routes.data,
         theme: ThemeData(
-            colorScheme: const ColorScheme.light(
-              primary: Color.fromARGB(255, 255, 219, 134),
-              onSurface: Colors.black,
-            ),
-            fontFamily: "Poppins"),
+          colorScheme: const ColorScheme.light(
+            primary: Color.fromARGB(255, 255, 219, 134),
+            onSurface: Colors.black,
+          ),
+          fontFamily: "Poppins",
+        ),
       ),
     );
   }

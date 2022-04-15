@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
@@ -10,14 +7,14 @@ import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/glow.dart';
 import '../../routes/route.dart';
 
-class BookingPage extends StatefulWidget {
-  const BookingPage({Key? key}) : super(key: key);
+class OrderPage extends StatefulWidget {
+  const OrderPage({Key? key}) : super(key: key);
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
-class _BookingPageState extends State<BookingPage> {
+class _OrderPageState extends State<OrderPage> {
   DateTime selectedDate = DateTime.now().add(const Duration(days: 2));
 
   _selectDate(BuildContext context) async {

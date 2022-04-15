@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sulai/app/views/booking/booking.dart';
 import 'package:sulai/app/views/home/home.dart';
 
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
-import '../views/booking/checkout.dart';
+import '../views/order/checkout.dart';
+import '../views/order/order.dart';
 import '../views/product/product.dart';
 
 class Routes {
@@ -22,7 +22,7 @@ class Routes {
     login: (_) => const LoginPage(),
     register: (_) => const RegisterPage(),
     product: (_) => const ProductPage(),
-    booking: (_) => const BookingPage(),
+    booking: (_) => const OrderPage(),
     checkout: (_) => const CheckoutPage(),
   };
 }
