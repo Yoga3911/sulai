@@ -14,7 +14,6 @@ class CustomCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      width: size.height * 0.3,
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -43,132 +42,136 @@ class CustomCarousel extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             clipBehavior: Clip.none,
             children: [
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                height: size.height * 0.16,
-                width: size.width,
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    const Text(
-                      "PROMO MINGGUAN!!!",
-                      style: TextStyle(
-                        color: Color(0xFF41E507),
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      "20 - 28 Maret 2022",
-                      style: TextStyle(color: MyColor.grey, fontSize: 12),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Image.asset("assets/icons/bag.png",
-                                fit: BoxFit.cover),
-                            const SizedBox(width: 5),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  "1 Basket Sulai",
-                                  style: TextStyle(
-                                    color: MyColor.grey,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                Text(
-                                  "12 Botol",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  height: 125,
+                  width: size.width,
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(height: 5),
+                      const Text(
+                        "PROMO MINGGUAN!!!",
+                        style: TextStyle(
+                          color: Color(0xFF41E507),
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const Text(
-                          "Diskon 20%",
-                          style: TextStyle(
-                            color: MyColor.grey,
-                            fontSize: 14,
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 20,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF41E507),
-                                borderRadius: BorderRadius.circular(2),
+                      ),
+                      const Text(
+                        "20 - 28 Maret 2022",
+                        style: TextStyle(color: MyColor.grey, fontSize: 12),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset("assets/icons/bag.png",
+                                  fit: BoxFit.cover),
+                              const SizedBox(width: 5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    "1 Basket Sulai",
+                                    style: TextStyle(
+                                      color: MyColor.grey,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    "12 Botol",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () => Navigator.pushNamed(
-                                      context, Routes.product, arguments: productModel),
-                                  child: const Center(
-                                    child: Text(
-                                      "MORE",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 12),
+                            ],
+                          ),
+                          const Text(
+                            "Diskon 20%",
+                            style: TextStyle(
+                              color: MyColor.grey,
+                              fontSize: 14,
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 20,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF41E507),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () => Navigator.pushNamed(
+                                        context, Routes.product, arguments: productModel),
+                                    child: const Center(
+                                      child: Text(
+                                        "MORE",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Container(
-                              height: 20,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(2),
+                              const SizedBox(width: 10),
+                              Container(
+                                height: 20,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: const Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 17,
+                                  color: Colors.white,
+                                ),
                               ),
-                              child: const Icon(
-                                Icons.shopping_bag_outlined,
-                                size: 17,
-                                color: Colors.white,
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const Text(
+                                "Rp 7.000",
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: MyColor.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Colors.black),
+                                // te
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const Text(
-                              "Rp 7.000",
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: MyColor.grey,
-                                  decoration: TextDecoration.lineThrough,
-                                  decorationColor: Colors.black),
-                              // te
-                            ),
-                            Text(
-                              "Rp ${currency(productModel.price)}",
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.red),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
+                              Text(
+                                "Rp ${currency(productModel.price)}",
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.red),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

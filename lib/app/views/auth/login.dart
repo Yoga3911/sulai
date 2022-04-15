@@ -1,26 +1,29 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
 import 'package:sulai/app/services/facebook.dart';
 import 'package:sulai/app/services/google.dart';
 import 'package:sulai/app/views/auth/widgets/login_field.dart';
 import 'package:sulai/app/widgets/glow.dart';
+import 'package:sulai/app/widgets/hash.dart';
 
 import '../../routes/route.dart';
 import '../../services/email.dart';
 import '../../view_model/auth_provider.dart';
-import '../../view_model/user_provider.dart';
 import '../../widgets/loading.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends HookWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
-    final user = Provider.of<UserProvider>(context);
+    // final user = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
+    final emailLogin = useTextEditingController();
+    final passLogin = useTextEditingController();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: ScrollConfiguration(
@@ -81,9 +84,9 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UsernameLogin(controller: auth.emailLogin),
+                            EmailLogin(controller: emailLogin),
                             const SizedBox(height: 20),
-                            PasswordLogin(controller: auth.passLogin),
+                            PasswordLogin(controller: passLogin),
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
@@ -92,11 +95,11 @@ class LoginPage extends StatelessWidget {
                                   builder: (_) => const CustomLoading(),
                                 );
                                 auth.login(
-                                  context,
-                                  user,
-                                  EmailService(),
-                                  email: auth.emailLogin.text,
-                                  password: auth.passLogin.text,
+                                  context: context,
+                                  social: EmailService(),
+                                  provider: "email",
+                                  email: emailLogin.text,
+                                  password: hashPass(passLogin.text),
                                 );
                               },
                               child: const Text(
@@ -171,7 +174,11 @@ class LoginPage extends StatelessWidget {
                                       context: context,
                                       builder: (_) => const CustomLoading(),
                                     );
-                                    auth.login(context, user, GoogleService());
+                                    auth.login(
+                                      context: context,
+                                      social: GoogleService(),
+                                      provider: "google",
+                                    );
                                   },
                                   icon: Image.asset("assets/icons/google.png"),
                                 ),
@@ -184,7 +191,10 @@ class LoginPage extends StatelessWidget {
                                       builder: (_) => const CustomLoading(),
                                     );
                                     auth.login(
-                                        context, user, FacebookService());
+                                      context: context,
+                                      social: FacebookService(),
+                                      provider: "facebook",
+                                    );
                                   },
                                   icon:
                                       Image.asset("assets/icons/facebook.png"),

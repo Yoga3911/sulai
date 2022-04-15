@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/color.dart';
 import 'package:sulai/app/view_model/auth_provider.dart';
@@ -7,13 +8,19 @@ import 'package:sulai/app/views/auth/widgets/register_field.dart';
 import 'package:sulai/app/widgets/glow.dart';
 import 'package:sulai/app/widgets/loading.dart';
 
-class RegisterPage extends StatelessWidget {
+import '../../widgets/hash.dart';
+
+class RegisterPage extends HookWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
     final size = MediaQuery.of(context).size;
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final nameRegis = useTextEditingController();
+    final emailRegis = useTextEditingController();
+    final pass1Regis = useTextEditingController();
+    final pass2Regis = useTextEditingController();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: ScrollConfiguration(
@@ -74,24 +81,25 @@ class RegisterPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UsernameRegister(controller: auth.nameRegis),
+                            UsernameRegister(controller: nameRegis),
                             const SizedBox(height: 20),
-                            EmailRegister(controller: auth.emailRegis),
+                            EmailRegister(controller: emailRegis),
                             const SizedBox(height: 20),
-                            PasswordRegister1(controller: auth.pass1Regis),
+                            PasswordRegister1(controller: pass1Regis),
                             const SizedBox(height: 20),
-                            PasswordRegister2(controller: auth.pass2Regis),
+                            PasswordRegister2(controller: pass2Regis),
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
                                 showDialog(
-                                    context: context,
-                                    builder: (_) => const CustomLoading());
+                                  context: context,
+                                  builder: (_) => const CustomLoading(),
+                                );
                                 auth.register(
-                                  context,
-                                  name: auth.nameRegis.text,
-                                  email: auth.emailRegis.text,
-                                  password: auth.pass1Regis.text,
+                                  context: context,
+                                  name: nameRegis.text,
+                                  email: emailRegis.text,
+                                  password: hashPass(pass1Regis.text),
                                 );
                               },
                               child: const Text(

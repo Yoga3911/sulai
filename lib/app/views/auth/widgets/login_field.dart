@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sulai/app/constant/color.dart';
 
-class UsernameLogin extends StatefulWidget {
-  const UsernameLogin({Key? key, required this.controller}) : super(key: key);
+class EmailLogin extends StatefulWidget {
+  const EmailLogin({Key? key, required this.controller}) : super(key: key);
 
   final TextEditingController controller;
 
   @override
-  State<UsernameLogin> createState() => _UsernameLogin();
+  State<EmailLogin> createState() => _EmailLogin();
 }
 
-class _UsernameLogin extends State<UsernameLogin> {
+class _EmailLogin extends State<EmailLogin> {
   Color _color = Colors.grey;
 
   final _focusNode = FocusNode();
@@ -35,13 +35,13 @@ class _UsernameLogin extends State<UsernameLogin> {
         focusNode: _focusNode,
         decoration: InputDecoration(
           prefixIcon: Icon(
-            Icons.person_rounded,
+            Icons.email_rounded,
             color: _color,
           ),
           isDense: true,
           contentPadding: const EdgeInsets.all(15),
-          hintText: "Username ...",
-          label: const Text("Username"),
+          hintText: "Email ...",
+          label: const Text("Email"),
           labelStyle: const TextStyle(color: MyColor.cream),
           hintStyle: const TextStyle(color: Colors.grey),
           border: OutlineInputBorder(
