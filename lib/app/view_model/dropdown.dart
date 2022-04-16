@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class DropDownNotifier with ChangeNotifier {
   int _rasa = 1;
@@ -25,4 +25,19 @@ class DropDownNotifier with ChangeNotifier {
   int get getKemasan => _kemasan;
   
   int get getPembayaran => _pembayaran;
+
+  DateTime selectedDate = DateTime.now().add(const Duration(days: 2));
+
+  selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now().add(const Duration(days: 2)),
+      lastDate: DateTime(2099),
+    );
+    if (picked != null && picked != selectedDate) {
+        selectedDate = picked;
+        notifyListeners();
+    }
+  }
 }

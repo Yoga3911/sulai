@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/services/email.dart';
 import 'package:sulai/app/services/social.dart';
 
-import '../constant/collection.dart';
-import '../models/user_model.dart';
 import '../routes/route.dart';
 import 'user_provider.dart';
 
@@ -45,25 +43,20 @@ class AuthProvider with ChangeNotifier {
       EmailService social = EmailService();
       social.signIn(email: email, password: password).then(
         (user) async {
-          final pref = await SharedPreferences.getInstance();
-          pref.setString("social", provider!);
+          await _user.getUserByEmail(email: email);
 
-          final account = await MyCollection.user
-              .where("email", isEqualTo: user.user!.email)
-              .get();
-
-          _user.setUser = UserModel.fromJson(
-              account.docs.first.data() as Map<String, dynamic>);
-          Navigator.pushReplacementNamed(context, Routes.home)
-              .then((_) => Navigator.pop(context));
+          Navigator.pushReplacementNamed(context, Routes.home).then(
+            (_) async {
+              final pref = await SharedPreferences.getInstance();
+              pref.setString("social", provider!);
+              Navigator.pop(context);
+            },
+          );
         },
       );
     } else if (provider != "email") {
       social!.signIn().then(
         (user) async {
-          final pref = await SharedPreferences.getInstance();
-          pref.setString("social", provider!);
-
           await _user.insertUser(
             name: user.user!.displayName,
             email: user.user!.email,
@@ -72,8 +65,14 @@ class AuthProvider with ChangeNotifier {
           );
 
           await _user.getUserByEmail(email: user.user!.email!);
-          Navigator.pushReplacementNamed(context, Routes.home)
-              .then((_) => Navigator.pop(context));
+          
+          Navigator.pushReplacementNamed(context, Routes.home).then(
+            (_) async {
+              final pref = await SharedPreferences.getInstance();
+              pref.setString("social", provider!);
+              Navigator.pop(context);
+            },
+          );
         },
       );
     }

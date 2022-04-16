@@ -19,8 +19,17 @@ class UserProvider with ChangeNotifier {
         UserModel.fromJson(data.docs.first.data() as Map<String, dynamic>);
   }
 
+  Future<UserModel> getUserById({String? id}) async {
+    final data = await MyCollection.user.doc(id).get();
+    return UserModel.fromJson(data.data() as Map<String, dynamic>);
+  }
+
   Future<void> insertUser(
-      {String? email, String? password, String? img, String? name, String? provider}) async {
+      {String? email,
+      String? password,
+      String? img,
+      String? name,
+      String? provider}) async {
     QuerySnapshot<Object?> account =
         await MyCollection.user.where("email", isEqualTo: email).get();
     final collection = MyCollection.user.doc();
