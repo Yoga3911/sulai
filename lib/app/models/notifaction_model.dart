@@ -6,6 +6,7 @@ class NotificationModel {
         required this.userId,
         required this.title,
         required this.subtitle,
+        required this.url,
         required this.createAt,
     });
 
@@ -13,6 +14,7 @@ class NotificationModel {
     final String userId;
     final String title;
     final String subtitle;
+    final String url;
     final DateTime createAt;
 
     factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
@@ -20,6 +22,7 @@ class NotificationModel {
         userId: json["user_id"],
         title: json["title"],
         subtitle: json["subtitle"],
+        url: json["url"],
         createAt: (json["create_at"] as Timestamp).toDate(),
     );
 
@@ -28,6 +31,7 @@ class NotificationModel {
         "user_id": userId,
         "title": title,
         "subtitle": subtitle,
+        "url": url,
         "create_at": createAt,
     };
 }

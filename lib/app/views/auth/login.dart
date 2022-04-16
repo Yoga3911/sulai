@@ -19,8 +19,7 @@ class LoginPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
-    // final user = Provider.of<UserProvider>(context);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final emailLogin = useTextEditingController();
     final passLogin = useTextEditingController();

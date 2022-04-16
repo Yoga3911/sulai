@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +71,7 @@ class CustomAppBar extends StatelessWidget {
                         if (notif.getCount == 0) {
                           notif.setCount = snapshot.data!.docs.length;
                         }
-                        if (notif.getCount != snapshot.data!.docs.length) {
+                        if (notif.getCount < snapshot.data!.docs.length) {
                           notif.setActive = true;
                         }
                         return Stack(

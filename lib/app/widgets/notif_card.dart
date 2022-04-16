@@ -1,19 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/notifaction_model.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/user_model.dart';
+import '../view_model/notification.dart';
 
 class NotifCard extends StatelessWidget {
   const NotifCard({Key? key, required this.notif}) : super(key: key);
 
   final NotificationModel notif;
 
+  Future<void> launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: true);
+    } else {
+      throw "Could not launce $url";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final user = Provider.of<UserProvider>(context);
+    final user = Provider.of<UserProvider>(context, listen: false);
+    final notification =
+        Provider.of<NotificationProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 15),
       padding: const EdgeInsets.all(10),
@@ -33,12 +46,18 @@ class NotifCard extends StatelessWidget {
                   future: user.getUserById(id: notif.userId),
                   builder: (_, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
+                      return const CircleAvatar(
+                        radius: 25,
+                        backgroundColor:Color(0xFFDEDBD4),
+                      );
                     }
                     return CircleAvatar(
                       radius: 25,
-                      backgroundImage: NetworkImage(snapshot.data!.imageUrl),
                       backgroundColor: const Color(0xFFDEDBD4),
+                      child: CachedNetworkImage(
+                        imageUrl: snapshot.data!.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     );
                   },
                 ),
@@ -72,9 +91,39 @@ class NotifCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          const Icon(
-            Icons.more_horiz_rounded,
-            color: Colors.grey,
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => Dialog(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      (notif.url.isNotEmpty)
+                          ? ListTile(
+                              onTap: () {
+                                launchURL(notif.url);
+                                Navigator.pop(ctx);
+                              },
+                              title: const Text("Kunjungi halaman"),
+                            )
+                          : const SizedBox(),
+                      ListTile(
+                        onTap: () {
+                          notification.deleteById(notif.id);
+                          Navigator.pop(context);
+                        },
+                        title: const Text("Hapus"),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.more_horiz_rounded,
+              color: Colors.grey,
+            ),
           )
         ],
       ),

@@ -25,7 +25,7 @@ class NotificationProvider with ChangeNotifier {
 
   Future<void> getAll() async {
     final data = await MyCollection.notification
-        .orderBy("create_at", descending: false)
+        .orderBy("create_at", descending: true)
         .get();
 
     setData = [
@@ -37,4 +37,10 @@ class NotificationProvider with ChangeNotifier {
   set setData(List<NotificationModel> data) => _notifData = data;
 
   List<NotificationModel> get getData => _notifData;
+
+  Future<void> deleteById(String id) async {
+    _notifData.removeWhere((element) => element.id == id);
+    await MyCollection.notification.doc(id).delete();
+    notifyListeners();
+  }
 }

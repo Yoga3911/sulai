@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,7 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final notif = Provider.of<NotificationProvider>(context);
+    final notif = Provider.of<NotificationProvider>(context, listen: false);
     return MainStyle(
       widget: [
         const CustomAppBar(),
@@ -54,23 +56,24 @@ class NotificationPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 5),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "NOTIFIKASI",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "Seluruh Informasi pemberitahuan anda terekam dalam laman ini.",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 8,
-                            fontStyle: FontStyle.italic,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "NOTIFIKASI",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                          Text(
+                            "Seluruh Informasi pemberitahuan anda terekam dalam laman ini.",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -79,54 +82,54 @@ class NotificationPage extends StatelessWidget {
                 future: notif.getAll(),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const SizedBox();
                   }
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: notif.getData.length,
-                    itemBuilder: (_, index) {
-                      final data = notif.getData;
-                      if (index > 0) {
-                        if (data[index].createAt != data[index - 1].createAt) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  DateFormat('EEEE, d MMM yyyy').format(
-                                    data[index].createAt,
+                  return Consumer<NotificationProvider>(
+                    builder: (_, val, __) => ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: val.getData.length,
+                      itemBuilder: (_, index) {
+                        final data = val.getData;
+                        if (index > 0) {
+                          if (data[index].createAt != data[index - 1].createAt) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    DateFormat('EEEE, d MMM yyyy').format(
+                                      data[index].createAt,
+                                    ),
+                                    style: const TextStyle(
+                                        fontStyle: FontStyle.italic),
                                   ),
-                                  style: const TextStyle(
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                NotifCard(notif: data[index]),
-                              ],
-                            ),
-                          );
-                        }
-                        return NotifCard(notif: data[index]);
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              DateFormat('EEEE, d MMM yyyy').format(
-                                data[index].createAt,
+                                  NotifCard(notif: data[index]),
+                                ],
                               ),
-                              style:
-                                  const TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                            NotifCard(notif: data[index])
-                          ],
-                        ),
-                      );
-                    },
+                            );
+                          }
+                          return NotifCard(notif: data[index]);
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                DateFormat('EEEE, d MMM yyyy').format(
+                                  data[index].createAt,
+                                ),
+                                style:
+                                    const TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              NotifCard(notif: data[index])
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               )
