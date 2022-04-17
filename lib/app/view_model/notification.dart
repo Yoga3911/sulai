@@ -18,6 +18,7 @@ class NotificationProvider with ChangeNotifier {
   int _count = 0;
 
   set setCount(int val) => _count = val;
+  set setMinusCount(int val) => _count += val;
 
   int get getCount => _count;
 
@@ -40,6 +41,7 @@ class NotificationProvider with ChangeNotifier {
 
   Future<void> deleteById(String id) async {
     _notifData.removeWhere((element) => element.id == id);
+    setMinusCount = -1;
     await MyCollection.notification.doc(id).delete();
     notifyListeners();
   }

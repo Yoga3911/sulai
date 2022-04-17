@@ -128,7 +128,7 @@ class CustomAppBar extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(100),
                         onTap: () =>
-                            AuthProvider().logout(context, GoogleService()),
+                            Navigator.pushNamed(context, Routes.orderData),
                         child: const Icon(
                           Icons.shopping_bag_outlined,
                           color: MyColor.grey,

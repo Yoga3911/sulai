@@ -4,6 +4,14 @@ class DropDownNotifier with ChangeNotifier {
   int _rasa = 1;
   int _kemasan = 1;
   int _pembayaran = 1;
+  String _image = "assets/images/sulai2.png";
+
+  set setImg(String val) {
+    _image = val;
+    notifyListeners();
+  }
+
+  String get getImg => _image;
 
   set setRasa(int val) {
     _rasa = val;

@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context);
+    final user = Provider.of<UserProvider>(context, listen: false);
     final product = Provider.of<ProductProvider>(context, listen: false);
     final getProduct = product.getAll();
     final size = MediaQuery.of(context).size;
@@ -28,26 +28,27 @@ class HomePage extends StatelessWidget {
         Column(
           children: [
             FutureBuilder<List<ProductModel>>(
-                future: getProduct,
-                builder: (_, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return CarouselSlider(
-                    items: snapshot.data!
-                        .map((e) => CustomCarousel(productModel: e))
-                        .toList(),
-                    options: CarouselOptions(
-                      height: size.height * 0.4,
-                      enableInfiniteScroll: false,
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.7,
-                      aspectRatio: 1,
-                    ),
+              future: getProduct,
+              builder: (_, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                }),
+                }
+                return CarouselSlider(
+                  items: snapshot.data!
+                      .map((e) => CustomCarousel(productModel: e))
+                      .toList(),
+                  options: CarouselOptions(
+                    height: size.height * 0.4,
+                    enableInfiniteScroll: false,
+                    enlargeCenterPage: true,
+                    viewportFraction: 0.7,
+                    aspectRatio: 1,
+                  ),
+                );
+              },
+            ),
             const SizedBox(
               height: 30,
             ),
@@ -158,7 +159,7 @@ class HomePage extends StatelessWidget {
                 right: size.width * 0.3,
               ),
               child: ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, Routes.booking),
+                onPressed: () => Navigator.pushNamed(context, Routes.order),
                 child: const Text("PESAN SEKARANG"),
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width, size.height * 0.06),

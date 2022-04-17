@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
+import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/glow.dart';
 
 import '../../constant/color.dart';
+import '../../routes/route.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class ProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProductModel productModel =
         ModalRoute.of(context)!.settings.arguments as ProductModel;
+    final dropdown = Provider.of<DropDownNotifier>(context);
     final size = MediaQuery.of(context).size;
     return Container(
       color: const Color(0xFFDEDBD4),
@@ -142,13 +146,31 @@ class ProductPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                if (productModel.name == "Sulai Original") {
+                                  dropdown.setRasa = 1;
+                                } else if (productModel.name == "Sulai Stroberi") {
+                                  dropdown.setRasa = 2;
+                                } else if (productModel.name == "Sulai Melon") {
+                                  dropdown.setRasa = 3;
+                                }
+                                if (productModel.name == "Sulai Original") {
+                                  dropdown.setImg = "assets/images/sulai2.png";
+                                } else if (productModel.name == "Sulai Stroberi") {
+                                  dropdown.setImg = "assets/images/sulai2.jpg";
+                                } else if (productModel.name == "Sulai Melon") {
+                                  dropdown.setImg = "assets/images/sulai3.jpg";
+                                }
+                                Navigator.pushNamed(context, Routes.order);
+                              },
                               child: const Text("PESAN"),
                               style: ElevatedButton.styleFrom(
-                                  primary: const Color(0xFF41E507),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  fixedSize: const Size(140, 50)),
+                                primary: const Color(0xFF41E507),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                fixedSize: const Size(140, 50),
+                              ),
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(

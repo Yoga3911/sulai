@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/notification.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
-import 'package:sulai/app/widgets/notif_card.dart';
+import 'package:sulai/app/views/notification/widgets/notif_card.dart';
 
 import '../../constant/color.dart';
 
@@ -90,9 +88,9 @@ class NotificationPage extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: val.getData.length,
                       itemBuilder: (_, index) {
-                        final data = val.getData;
                         if (index > 0) {
-                          if (data[index].createAt != data[index - 1].createAt) {
+                          if (val.getData[index].createAt !=
+                              val.getData[index - 1].createAt) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 20),
                               child: Column(
@@ -100,17 +98,17 @@ class NotificationPage extends StatelessWidget {
                                 children: [
                                   Text(
                                     DateFormat('EEEE, d MMM yyyy').format(
-                                      data[index].createAt,
+                                      val.getData[index].createAt,
                                     ),
                                     style: const TextStyle(
                                         fontStyle: FontStyle.italic),
                                   ),
-                                  NotifCard(notif: data[index]),
+                                  NotifCard(notif: val.getData[index]),
                                 ],
                               ),
                             );
                           }
-                          return NotifCard(notif: data[index]);
+                          return NotifCard(notif: val.getData[index]);
                         }
                         return Padding(
                           padding: const EdgeInsets.only(top: 20),
@@ -119,12 +117,12 @@ class NotificationPage extends StatelessWidget {
                             children: [
                               Text(
                                 DateFormat('EEEE, d MMM yyyy').format(
-                                  data[index].createAt,
+                                  val.getData[index].createAt,
                                 ),
-                                style:
-                                    const TextStyle(fontStyle: FontStyle.italic),
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic),
                               ),
-                              NotifCard(notif: data[index])
+                              NotifCard(notif: val.getData[index])
                             ],
                           ),
                         );

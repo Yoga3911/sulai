@@ -5,8 +5,8 @@ import 'package:sulai/app/models/notifaction_model.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/user_model.dart';
-import '../view_model/notification.dart';
+import '../../../models/user_model.dart';
+import '../../../view_model/notification.dart';
 
 class NotifCard extends StatelessWidget {
   const NotifCard({Key? key, required this.notif}) : super(key: key);
@@ -54,10 +54,7 @@ class NotifCard extends StatelessWidget {
                     return CircleAvatar(
                       radius: 25,
                       backgroundColor: const Color(0xFFDEDBD4),
-                      child: CachedNetworkImage(
-                        imageUrl: snapshot.data!.imageUrl,
-                        fit: BoxFit.cover,
-                      ),
+                      backgroundImage: NetworkImage(snapshot.data!.imageUrl),
                     );
                   },
                 ),
@@ -101,17 +98,17 @@ class NotifCard extends StatelessWidget {
                     children: [
                       (notif.url.isNotEmpty)
                           ? ListTile(
-                              onTap: () {
-                                launchURL(notif.url);
+                              onTap: () async {
+                                await launchURL(notif.url);
                                 Navigator.pop(ctx);
                               },
                               title: const Text("Kunjungi halaman"),
                             )
                           : const SizedBox(),
                       ListTile(
-                        onTap: () {
-                          notification.deleteById(notif.id);
-                          Navigator.pop(context);
+                        onTap: () async {
+                          await notification.deleteById(notif.id);
+                          Navigator.pop(ctx);
                         },
                         title: const Text("Hapus"),
                       ),

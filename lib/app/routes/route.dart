@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sulai/app/views/home/home.dart';
 import 'package:sulai/app/views/notification/notification.dart';
+import 'package:sulai/app/views/order/history.dart';
 
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
@@ -15,7 +16,8 @@ class Routes {
   static const login = "/login";
   static const register = "/register";
   static const product = "/product";
-  static const booking = "/booking";
+  static const order = "/order";
+  static const orderData = "/order/data";
   static const checkout = "/checkout";
   static const notification = "/notification";
 
@@ -24,7 +26,8 @@ class Routes {
     login: (_) => const LoginPage(),
     register: (_) => const RegisterPage(),
     product: (_) => const ProductPage(),
-    booking: (_) => const OrderPage(),
+    order: (_) => const OrderPage(),
+    orderData: (_) => const OrderData(),
     checkout: (_) => const CheckoutPage(),
     notification: (_) => const NotificationPage(),
   };
