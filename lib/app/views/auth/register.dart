@@ -93,6 +93,7 @@ class RegisterPage extends HookWidget {
                               onPressed: () {
                                 showDialog(
                                   context: context,
+                                  barrierDismissible: false,
                                   builder: (_) => const CustomLoading(),
                                 );
                                 auth.register(

@@ -4,6 +4,8 @@ import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 
+import '../../routes/route.dart';
+
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({Key? key}) : super(key: key);
 
@@ -382,7 +384,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
               const SizedBox(height: 10),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.home,
+                    (route) => false,
+                  ),
                   child: const Text(
                     "KONFIRMASI",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

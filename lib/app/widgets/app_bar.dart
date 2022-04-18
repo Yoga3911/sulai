@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/collection.dart';
+import 'package:sulai/app/services/google.dart';
+import 'package:sulai/app/view_model/auth_provider.dart';
 import 'package:sulai/app/view_model/notification.dart';
+import 'package:sulai/app/widgets/loading.dart';
 
 import '../constant/color.dart';
 import '../routes/route.dart';
@@ -14,6 +17,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
     return SizedBox(
       height: size.height * 0.1,
       child: Column(
@@ -38,9 +42,13 @@ class CustomAppBar extends StatelessWidget {
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(100),
-                    onTap: () {},
+                    onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.home,
+                      (route) => false,
+                    ),
                     child: const Icon(
-                      Icons.menu,
+                      Icons.home_rounded,
                       color: MyColor.grey,
                     ),
                   ),
@@ -48,7 +56,7 @@ class CustomAppBar extends StatelessWidget {
               ),
               Container(
                 height: size.height * 0.05,
-                width: size.height * 0.125,
+                width: size.height * 0.17,
                 margin: const EdgeInsets.only(right: 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -133,6 +141,48 @@ class CustomAppBar extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Container(
+                      height: size.height * 0.03,
+                      width: 2,
+                      color: Colors.grey,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (ctx) => AlertDialog(
+                            title: const Text(
+                              "Apakah anda yakin ingin keluar?",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: const Text("Batal"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => const CustomLoading(),
+                                  );
+                                  auth.logout(
+                                    context,
+                                    GoogleService(),
+                                  );
+                                },
+                                child: const Text("Ya"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.logout_rounded,
+                        color: MyColor.grey,
+                      ),
+                    )
                   ],
                 ),
               ),

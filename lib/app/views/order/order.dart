@@ -322,11 +322,12 @@ class OrderPage extends StatelessWidget {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                      fixedSize: Size(size.width * 0.3, 40),
-                      primary: const Color(0xFF41E507),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      )),
+                    fixedSize: Size(size.width * 0.3, 40),
+                    primary: const Color(0xFF41E507),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
               ],
