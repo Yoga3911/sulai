@@ -107,7 +107,9 @@ class HomePage extends StatelessWidget {
                                 child: Text(
                                   "EDIT PROFILE",
                                   style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               onTap: () {},

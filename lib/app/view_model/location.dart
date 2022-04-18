@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 
 class MyLocation with ChangeNotifier {
   String _address = "Address";
+  String _postCode = "00000";
 
   Future<Position> determinePosition() async {
     bool serviceEnabled;
@@ -38,10 +39,11 @@ class MyLocation with ChangeNotifier {
     Placemark place = placemark[0];
 
     _address =
-        "${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}";
-
+        "Jl. ${place.street}${place.subLocality}, ${place.locality}, ${place.country}";
+    _postCode = "${place.postalCode}";
     notifyListeners();
   }
 
   String get getLocation => _address;
+  String get getPostCode => _postCode;
 }
