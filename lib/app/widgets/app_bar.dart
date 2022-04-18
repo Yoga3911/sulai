@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/collection.dart';
-import 'package:sulai/app/services/google.dart';
-import 'package:sulai/app/view_model/auth_provider.dart';
 import 'package:sulai/app/view_model/notification.dart';
 
 import '../constant/color.dart';
