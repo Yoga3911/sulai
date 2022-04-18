@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
+import 'package:geocoding/geocoding.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({Key? key}) : super(key: key);
@@ -56,7 +60,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           fontSize: 10,
                           fontStyle: FontStyle.italic),
                     ),
-                    
+                    Consumer<MyLocation>(
+                      builder: (_, val, __) => Text(val.getLocation),
+                    ),
                   ],
                 ),
               )

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
+import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import '../../routes/route.dart';
@@ -11,6 +12,7 @@ class OrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final location = Provider.of<MyLocation>(context);
     final size = MediaQuery.of(context).size;
     return MainStyle(widget: [
       Column(
@@ -303,10 +305,14 @@ class OrderPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    Routes.checkout,
-                  ),
+                  onPressed: () async {
+                    await location.getAddress().then(
+                          (value) => Navigator.pushNamed(
+                            context,
+                            Routes.checkout,
+                          ),
+                        );
+                  },
                   child: const Text(
                     "PESAN",
                     style: TextStyle(
