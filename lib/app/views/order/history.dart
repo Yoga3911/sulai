@@ -25,7 +25,6 @@ class OrderData extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                width: size.width,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -61,29 +60,38 @@ class OrderData extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                children: const [
-                  OrderFilter(
-                    label: "SEMUA",
-                    color: Colors.grey,
-                    statusId: "0",
-                  ),
-                  OrderFilter(
-                    label: "PROSES",
-                    color: Color.fromARGB(255, 255, 230, 0),
-                    statusId: "1",
-                  ),
-                  OrderFilter(
-                    label: "SUKSES",
-                    color: Color.fromARGB(255, 69, 192, 73),
-                    statusId: "2",
-                  ),
-                  OrderFilter(
-                    label: "BATAL",
-                    color: Color.fromARGB(255, 218, 69, 58),
-                    statusId: "3",
-                  ),
-                ],
+              SizedBox(
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    OrderFilter(
+                      label: "SEMUA",
+                      color: Colors.grey,
+                      statusId: "0",
+                    ),
+                    OrderFilter(
+                      label: "MENUNGGU",
+                      color: Color.fromARGB(255, 255, 166, 0),
+                      statusId: "1",
+                    ),
+                    OrderFilter(
+                      label: "PROSES",
+                      color: Color.fromARGB(255, 255, 230, 0),
+                      statusId: "2",
+                    ),
+                    OrderFilter(
+                      label: "SUKSES",
+                      color: Color.fromARGB(255, 69, 192, 73),
+                      statusId: "3",
+                    ),
+                    OrderFilter(
+                      label: "BATAL",
+                      color: Color.fromARGB(255, 218, 69, 58),
+                      statusId: "4",
+                    ),
+                  ],
+                ),
               ),
               FutureBuilder(
                 future: order.getAll(user.getUser.id, statusId: "0"),
@@ -97,6 +105,9 @@ class OrderData extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: val.getData.length,
                       itemBuilder: (_, index) {
+                        val.getData.where((element) =>
+                            element.userId.contains(user.getUser.id));
+                        val.getData.sort((a, b) => b.orderId.compareTo(a.orderId));
                         return OrderCard(
                           orderModel: val.getData[index],
                         );

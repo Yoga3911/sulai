@@ -127,11 +127,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 3,
-                                          bottom: 3),
                                       decoration: BoxDecoration(
                                         color: Colors.red,
                                         borderRadius: BorderRadius.circular(10),
@@ -142,11 +137,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           onTap: () {},
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: const Text(
-                                            "Ubah Alamat",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
+                                          child: const Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 5,
+                                                bottom: 5,
+                                                left: 10,
+                                                right: 10),
+                                            child: Text(
+                                              "Ubah Alamat",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -272,11 +274,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   )
                                 ],
                               ),
-                              const Icon(
-                                Icons.info_rounded,
-                                color: Colors.grey,
-                                size: 17,
-                              )
                             ],
                           )
                         ],
@@ -306,11 +303,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   )
                                 ],
                               ),
-                              const Icon(
-                                Icons.info_rounded,
-                                color: Colors.grey,
-                                size: 17,
-                              )
                             ],
                           )
                         ],
@@ -340,11 +332,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   )
                                 ],
                               ),
-                              const Icon(
-                                Icons.info_rounded,
-                                color: Colors.grey,
-                                size: 17,
-                              )
                             ],
                           )
                         ],
@@ -382,24 +369,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.home,
-                    (route) => false,
-                  ),
-                  child: const Text(
-                    "KONFIRMASI",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF41E507),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.home,
+                      (route) => false,
+                    ),
+                    child: const Text(
+                      "BATAL",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.home,
+                      (route) => false,
+                    ),
+                    child: const Text(
+                      "KONFIRMASI",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF41E507),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10)
             ],

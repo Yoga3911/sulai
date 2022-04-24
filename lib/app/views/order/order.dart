@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
+import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import '../../routes/route.dart';
 
@@ -92,11 +95,6 @@ class OrderPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(
-                          Icons.info_rounded,
-                          color: Colors.blue,
-                        )
                       ],
                     ),
                   ),
@@ -135,11 +133,6 @@ class OrderPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(
-                          Icons.info_rounded,
-                          color: Colors.blue,
-                        )
                       ],
                     ),
                   ),
@@ -169,11 +162,6 @@ class OrderPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Icon(
-                          Icons.info_rounded,
-                          color: Colors.blue,
-                        )
                       ],
                     ),
                   ),
@@ -248,11 +236,6 @@ class OrderPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(
-                          Icons.info_rounded,
-                          color: Colors.blue,
-                        )
                       ],
                     ),
                   ),
@@ -307,12 +290,18 @@ class OrderPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      await location.getAddress().then(
-                            (value) => Navigator.pushNamed(
-                              context,
-                              Routes.checkout,
-                            ),
+                      showDialog(
+                          context: context,
+                          builder: (_) => const CustomLoading());
+                      location.getAddress().then(
+                        (value) {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                            context,
+                            Routes.checkout,
                           );
+                        },
+                      );
                     },
                     child: const Text(
                       "PESAN",

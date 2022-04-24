@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,21 +33,16 @@ class OrderCard extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                FutureBuilder<UserModel>(
-                  future: user.getUserById(id: orderModel.userId),
-                  builder: (_, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Color(0xFFDEDBD4),
-                      );
-                    }
-                    return CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(snapshot.data!.imageUrl),
-                      backgroundColor: const Color(0xFFDEDBD4),
-                    );
-                  },
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: const Color(0xFFDEDBD4),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: user.getUser.imageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Flexible(
@@ -76,12 +72,16 @@ class OrderCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5),
                                   color: (snapshot.data!.docs.first["id"] ==
                                           "1")
-                                      ? const Color.fromARGB(255, 255, 230, 0)
+                                      ? const Color.fromARGB(255, 255, 166, 0)
                                       : (snapshot.data!.docs.first["id"] == "2")
                                           ? const Color.fromARGB(
-                                              255, 69, 192, 73)
-                                          : const Color.fromARGB(
-                                              255, 218, 69, 58),
+                                              255, 255, 230, 0)
+                                          : (snapshot.data!.docs.first["id"] ==
+                                                  "3")
+                                              ? const Color.fromARGB(
+                                                  255, 69, 192, 73)
+                                              : const Color.fromARGB(
+                                                  255, 218, 69, 58),
                                 ),
                                 child: Text(
                                   snapshot.data!.docs.first["status"],

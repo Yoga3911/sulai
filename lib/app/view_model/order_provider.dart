@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,9 +11,7 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> getAll(String userId, {String? statusId}) async {
     if (statusId == "0") {
-      final data = await MyCollection.order
-          .orderBy("order_id", descending: true)
-          .get();
+      final data = await MyCollection.order.get();
       setData = [
         for (QueryDocumentSnapshot<Object?> item in data.docs)
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
@@ -33,6 +33,14 @@ class OrderProvider with ChangeNotifier {
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (statusId == "3") {
+      final data = await MyCollection.order
+          .where("status_id", isEqualTo: statusId)
+          .get();
+      setData = [
+        for (QueryDocumentSnapshot<Object?> item in data.docs)
+          OrderModel.fromJson(item.data() as Map<String, dynamic>),
+      ];
+    } else if (statusId == "4") {
       final data = await MyCollection.order
           .where("status_id", isEqualTo: statusId)
           .get();
