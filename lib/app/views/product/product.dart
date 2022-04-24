@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
@@ -48,8 +49,8 @@ class ProductPage extends StatelessWidget {
                             child: SizedBox(
                               width: size.width,
                               height: size.height * 0.25,
-                              child: Image.network(
-                                productModel.imageUrl,
+                              child: CachedNetworkImage(
+                                imageUrl: productModel.imageUrl,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -85,14 +86,11 @@ class ProductPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text(
-                            "PAKET PROMO: ",
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        const Text(
+                          "PAKET PROMO: ",
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -106,8 +104,8 @@ class ProductPage extends StatelessWidget {
                           color: const Color(0xFFF3F3F3),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "DISKON 20%",
                                 style: TextStyle(
                                   color: Colors.grey,
@@ -116,7 +114,7 @@ class ProductPage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text(
+                              Text(
                                 "Rp 25.000",
                                 style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
@@ -124,20 +122,14 @@ class ProductPage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Rp 20.000,00",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Image.asset("assets/icons/substract.png")
-                                ],
-                              )
+                              Text(
+                                "Rp 20.000,00",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              SizedBox(width: 10)
                             ],
                           ),
                         ),
@@ -149,14 +141,16 @@ class ProductPage extends StatelessWidget {
                               onPressed: () {
                                 if (productModel.name == "Sulai Original") {
                                   dropdown.setRasa = 1;
-                                } else if (productModel.name == "Sulai Stroberi") {
+                                } else if (productModel.name ==
+                                    "Sulai Stroberi") {
                                   dropdown.setRasa = 2;
                                 } else if (productModel.name == "Sulai Melon") {
                                   dropdown.setRasa = 3;
                                 }
                                 if (productModel.name == "Sulai Original") {
                                   dropdown.setImg = "assets/images/sulai2.png";
-                                } else if (productModel.name == "Sulai Stroberi") {
+                                } else if (productModel.name ==
+                                    "Sulai Stroberi") {
                                   dropdown.setImg = "assets/images/sulai2.jpg";
                                 } else if (productModel.name == "Sulai Melon") {
                                   dropdown.setImg = "assets/images/sulai3.jpg";
@@ -202,36 +196,28 @@ class ProductPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 50, right: 50),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 5,
-                width: 5,
-                decoration: const BoxDecoration(
-                    color: Colors.black, shape: BoxShape.circle),
-              ),
-              const SizedBox(width: 10),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: first),
-                    TextSpan(
-                      text: second,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
+          Container(
+            height: 5,
+            width: 5,
+            decoration: const BoxDecoration(
+                color: Colors.black, shape: BoxShape.circle),
           ),
-          Image.asset(
-            "assets/icons/substract.png",
-            color: Colors.grey,
-          )
+          const SizedBox(width: 10),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: first),
+                TextSpan(
+                  text: second,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );

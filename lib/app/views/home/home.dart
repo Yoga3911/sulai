@@ -58,7 +58,6 @@ class HomePage extends StatelessWidget {
                 CustomBox(icon: "assets/icons/shop.png", label: "SHOP"),
                 CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
                 CustomBox(icon: "assets/icons/insta.png", label: "MEDIA"),
-                CustomBox(icon: "assets/icons/order.png", label: "BOOK"),
               ],
             ),
             Container(
@@ -82,7 +81,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         Text(
                           user.getUser.name,
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
                           "Bergabung pada ${DateFormat("d MMM yyyy").format(user.getUser.createAt)}",
@@ -125,7 +124,7 @@ class HomePage extends StatelessWidget {
             const Center(
               child: Text(
                 "SELAMAT DATANG DI APLIKASI SULAI",
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
             ),
             const Padding(
@@ -135,23 +134,10 @@ class HomePage extends StatelessWidget {
                   "Untuk pemesanan harap dilakukan pada waktu yang ditentukan apabila melampaui waktu yang ditentukan, maka pesanan akan dikirim esok harinya",
                   style: TextStyle(
                     color: Color.fromARGB(255, 113, 113, 113),
-                    fontSize: 8,
+                    fontSize: 10,
                   ),
                   textAlign: TextAlign.center,
                 ),
-              ),
-            ),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Info lebih lanjut",
-                    style: TextStyle(color: Colors.blue, fontSize: 10),
-                  ),
-                  const SizedBox(height: 20),
-                  Image.asset("assets/icons/substract.png")
-                ],
               ),
             ),
             const SizedBox(height: 20),

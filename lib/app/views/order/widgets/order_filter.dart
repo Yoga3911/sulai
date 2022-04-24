@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 
+import '../../../view_model/user_provider.dart';
+
 class OrderFilter extends StatelessWidget {
   const OrderFilter({Key? key, required this.label, required this.color, required this.statusId})
       : super(key: key);
@@ -13,6 +15,7 @@ class OrderFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final order = Provider.of<OrderProvider>(context, listen: false);
+    final user = Provider.of<UserProvider>(context, listen: false);
     return Flexible(
       flex: 1,
       child: Container(
@@ -25,7 +28,7 @@ class OrderFilter extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => order.getAll("", statusId: statusId),
+            onTap: () => order.getAll(user.getUser.id, statusId: statusId),
             borderRadius: BorderRadius.circular(5),
             child: Center(
               child: Text(
