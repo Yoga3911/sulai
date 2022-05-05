@@ -20,4 +20,17 @@ class ProductProvider with ChangeNotifier {
     return ProductModel.fromJson(
         data.docs.first.data() as Map<String, dynamic>);
   }
+
+  Future<void> editProduct({
+    String? name,
+    String? productId,
+    String? image,
+  }) async {
+    await MyCollection.product.doc(productId).update(
+      {
+        "name": name,
+        "image_url": image,
+      },
+    );
+  }
 }

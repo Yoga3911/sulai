@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Container(
                                   color: const Color.fromARGB(66, 0, 0, 0),
                                 ),
-                                Icon(
+                                const Icon(
                                   Icons.image_rounded,
                                   color: Colors.white,
                                   size: 50,
@@ -232,6 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: InkWell(
                                 onTap: () async {
                                   showDialog(
+                                      barrierDismissible: false,
                                       context: context,
                                       builder: (_) => const CustomLoading());
                                   final date = DateTime.now();
@@ -249,13 +250,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                               "$_imgName${date.millisecond}",
                                         )
                                       : null;
-                                  await user.changeProfile(
-                                    name: _controller.text,
-                                    userId: user.getUser.id,
-                                    img: _imgUrl ?? user.getUser.imageUrl,
-                                  );
-                                  Navigator.pop(context);
-                                  setState(() {});
+                                  user
+                                      .changeProfile(
+                                        name: _controller.text,
+                                        userId: user.getUser.id,
+                                        img: _imgUrl ?? user.getUser.imageUrl,
+                                      )
+                                      .then((value) => Navigator.pop(context));
                                 },
                                 borderRadius: BorderRadius.circular(100),
                                 child: const Padding(
@@ -356,7 +357,8 @@ class _ProfilePageState extends State<ProfilePage> {
               )
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 20),
       ],
     );
   }

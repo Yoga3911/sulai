@@ -325,6 +325,7 @@ class _OrderPageState extends State<OrderPage> {
                             ? null
                             : () async {
                                 showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (_) => const CustomLoading(),
                                 );
@@ -334,6 +335,7 @@ class _OrderPageState extends State<OrderPage> {
                                   paymentId: dropdown.getPembayaran.toString(),
                                   quantity: int.parse(quantityController.text),
                                   sizeId: dropdown.getKemasan.toString(),
+                                  date: dropdown.selectedDate,
                                 );
                                 location.getAddress().then(
                                   (value) {

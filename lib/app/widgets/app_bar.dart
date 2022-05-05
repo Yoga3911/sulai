@@ -167,6 +167,7 @@ class CustomAppBar extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () async {
                                   showDialog(
+                                    barrierDismissible: false,
                                     context: context,
                                     builder: (_) => const CustomLoading(),
                                   );

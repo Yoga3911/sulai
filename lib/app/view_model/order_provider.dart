@@ -77,6 +77,7 @@ class OrderProvider with ChangeNotifier {
     int? quantity,
     String? sizeId,
     String? paymentId,
+    DateTime? date,
   }) async {
     final data = await MyCollection.order.get();
     final count = data.docs.length;
@@ -91,7 +92,7 @@ class OrderProvider with ChangeNotifier {
         "payment_id": paymentId,
         "status_id": "1",
         "order_id": (count + 1).toString(),
-        "order_date": DateTime.now(),
+        "order_date": date,
         "address": "-",
         "postal_code": "-",
       },

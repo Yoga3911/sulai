@@ -408,16 +408,31 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
+                                        children: [
+                                          const Text(
                                             "Metode Pembayaran",
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          Text(
+                                          (orderData.paymentId == "1")? const Text(
                                             "GoPay",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          ) : (orderData.paymentId == "2")? const Text(
+                                            "Dana",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          ) : (orderData.paymentId == "3")? const Text(
+                                            "Ovo",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          ) : const Text(
+                                            "COD",
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.grey),
@@ -591,6 +606,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       onPressed: () {
                                         showDialog(
                                             context: context,
+                                            barrierDismissible: false,
                                             builder: (_) => AlertDialog(
                                                   title: const Text("Alert"),
                                                   content: const Text(
@@ -682,6 +698,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           ElevatedButton(
                                             onPressed: () {
                                               showDialog(
+                                                barrierDismissible: false,
                                                 context: context,
                                                 builder: (_) => AlertDialog(
                                                   title: const Text("Alert"),

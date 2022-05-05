@@ -55,10 +55,22 @@ class HomePage extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                CustomBox(icon: "assets/icons/shop.png", label: "SHOP"),
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, Routes.shop),
+                  child: const CustomBox(
+                    icon: "assets/icons/shop.png",
+                    label: "SHOP",
+                  ),
+                ),
                 CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
-                CustomBox(icon: "assets/icons/insta.png", label: "MEDIA"),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, Routes.media),
+                  child: const CustomBox(
+                    icon: "assets/icons/insta.png",
+                    label: "MEDIA",
+                  ),
+                ),
               ],
             ),
             Container(
@@ -117,7 +129,8 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              onTap: () => Navigator.pushNamed(context, Routes.profile),
+                              onTap: () =>
+                                  Navigator.pushNamed(context, Routes.profile),
                             ),
                           ),
                         ),
