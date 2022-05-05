@@ -9,13 +9,15 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> getAll(String userId, {String? statusId}) async {
     if (statusId == "0") {
-      final data = await MyCollection.order.where("user_id", isEqualTo: userId).get();
+      final data =
+          await MyCollection.order.where("user_id", isEqualTo: userId).get();
       setData = [
         for (QueryDocumentSnapshot<Object?> item in data.docs)
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (statusId == "1") {
-      final data = await MyCollection.order.where("user_id", isEqualTo: userId)
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: statusId)
           .get();
       setData = [
@@ -23,7 +25,8 @@ class OrderProvider with ChangeNotifier {
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (statusId == "2") {
-      final data = await MyCollection.order.where("user_id", isEqualTo: userId)
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: statusId)
           .get();
       setData = [
@@ -31,7 +34,8 @@ class OrderProvider with ChangeNotifier {
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (statusId == "3") {
-      final data = await MyCollection.order.where("user_id", isEqualTo: userId)
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: statusId)
           .get();
       setData = [
@@ -39,7 +43,8 @@ class OrderProvider with ChangeNotifier {
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (statusId == "4") {
-      final data = await MyCollection.order.where("user_id", isEqualTo: userId)
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: statusId)
           .get();
       setData = [
@@ -61,17 +66,24 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> insertOrder(
-      {String? userId,
-      String? categoryId,
-      int? quantity,
-      String? sizeId,
-      String? paymentId}) async {
+  Future<OrderModel> getById({String? orderId}) async {
+    final data = await MyCollection.order.doc(orderId).get();
+    return OrderModel.fromJson(data.data() as Map<String, dynamic>);
+  }
+
+  Future<String> insertOrder({
+    String? userId,
+    String? categoryId,
+    int? quantity,
+    String? sizeId,
+    String? paymentId,
+  }) async {
     final data = await MyCollection.order.get();
     final count = data.docs.length;
     final order = MyCollection.order.doc();
     order.set(
       {
+        "id": order.id,
         "user_id": userId,
         "category_id": categoryId,
         "quantity": quantity,
@@ -80,8 +92,22 @@ class OrderProvider with ChangeNotifier {
         "status_id": "1",
         "order_id": (count + 1).toString(),
         "order_date": DateTime.now(),
-        "address": "-"
+        "address": "-",
+        "postal_code": "-",
       },
     );
+    return order.id;
+  }
+
+  Future<void> updateStatus(
+      {String? orderId,
+      String? statusId,
+      String? address,
+      String? postalCode}) async {
+    await MyCollection.order.doc(orderId).update({
+      "status_id": statusId,
+      "address": address,
+      "postal_code": postalCode,
+    });
   }
 }

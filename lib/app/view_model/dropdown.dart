@@ -40,7 +40,7 @@ class DropDownNotifier with ChangeNotifier {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime.now(),
+      firstDate: selectedDate,
       lastDate: DateTime(2099),
     );
     if (picked != null && picked != selectedDate) {
