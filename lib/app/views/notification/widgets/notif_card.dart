@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/notifaction_model.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../models/user_model.dart';
 import '../../../view_model/notification.dart';
 
 class NotifCard extends StatelessWidget {
@@ -41,21 +41,16 @@ class NotifCard extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                FutureBuilder<UserModel>(
-                  future: user.getUserById(id: notif.userId),
-                  builder: (_, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircleAvatar(
-                        radius: 25,
-                        backgroundColor:Color(0xFFDEDBD4),
-                      );
-                    }
-                    return CircleAvatar(
-                      radius: 25,
-                      backgroundColor: const Color(0xFFDEDBD4),
-                      backgroundImage: NetworkImage(snapshot.data!.imageUrl),
-                    );
-                  },
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: const Color(0xFFDEDBD4),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      height: double.infinity,
+                      width: double.infinity,
+                      imageUrl: user.getUser.imageUrl,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Flexible(

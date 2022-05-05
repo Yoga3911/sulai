@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sulai/app/views/home/home.dart';
+import 'package:sulai/app/views/home/main_page.dart';
 import 'package:sulai/app/views/notification/notification.dart';
 import 'package:sulai/app/views/order/history.dart';
+import 'package:sulai/app/views/profile/profile.dart';
 
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
@@ -12,6 +14,7 @@ import '../views/product/product.dart';
 class Routes {
   Routes._();
 
+  static const main = "/main";
   static const home = "/home";
   static const login = "/login";
   static const register = "/register";
@@ -20,8 +23,10 @@ class Routes {
   static const orderData = "/order/data";
   static const checkout = "/checkout";
   static const notification = "/notification";
+  static const profile = "/profile";
 
   static final data = <String, WidgetBuilder>{
+    main: (_) => const MainPage(),
     home: (_) => const HomePage(),
     login: (_) => const LoginPage(),
     register: (_) => const RegisterPage(),
@@ -30,5 +35,6 @@ class Routes {
     orderData: (_) => const OrderData(),
     checkout: (_) => const CheckoutPage(),
     notification: (_) => const NotificationPage(),
+    profile: (_) => const ProfilePage(),
   };
 }

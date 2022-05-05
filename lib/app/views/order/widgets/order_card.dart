@@ -105,14 +105,18 @@ class OrderCard extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        orderModel.title,
+                        (orderModel.categoryId == "1")
+                            ? "Susu Kedelai Original"
+                            : (orderModel.categoryId == "2")
+                                ? "Susu Kedelai Stroberi"
+                                : "Susu Kedelai Melon",
                         style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 12,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-                      Text(orderModel.subtitle),
+                      Text(orderModel.address),
                     ],
                   ),
                 ),

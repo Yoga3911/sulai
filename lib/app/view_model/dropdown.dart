@@ -31,7 +31,7 @@ class DropDownNotifier with ChangeNotifier {
   int get getRasa => _rasa;
 
   int get getKemasan => _kemasan;
-  
+
   int get getPembayaran => _pembayaran;
 
   DateTime selectedDate = DateTime.now().add(const Duration(days: 2));
@@ -44,8 +44,8 @@ class DropDownNotifier with ChangeNotifier {
       lastDate: DateTime(2099),
     );
     if (picked != null && picked != selectedDate) {
-        selectedDate = picked;
-        notifyListeners();
+      selectedDate = picked;
+      notifyListeners();
     }
   }
 }

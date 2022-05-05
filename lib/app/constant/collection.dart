@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class MyCollection {
   MyCollection._();
@@ -8,4 +9,5 @@ class MyCollection {
   static final CollectionReference notification = FirebaseFirestore.instance.collection("notification");
   static final CollectionReference order = FirebaseFirestore.instance.collection("order");
   static final CollectionReference status = FirebaseFirestore.instance.collection("status");
+  static final FirebaseStorage storage = FirebaseStorage.instance;
 }

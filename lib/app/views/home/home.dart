@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -68,8 +69,13 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        user.getUser.imageUrl,
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          height: double.infinity,
+                          width: double.infinity,
+                          imageUrl: user.getUser.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       backgroundColor: const Color(0xFFDEDBD4),
                       radius: 30,
@@ -111,7 +117,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () => Navigator.pushNamed(context, Routes.profile),
                             ),
                           ),
                         ),

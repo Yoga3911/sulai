@@ -1,21 +1,37 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/location.dart';
+import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import '../../routes/route.dart';
+import '../../view_model/user_provider.dart';
 
-class OrderPage extends StatelessWidget {
+class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
 
   @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
+  late TextEditingController quantityController;
+
+  @override
+  void initState() {
+    quantityController = TextEditingController();
+    super.initState();
+  }
+  
+  @override
   Widget build(BuildContext context) {
-    final location = Provider.of<MyLocation>(context);
+    final location = Provider.of<MyLocation>(context, listen: false);
+    final order = Provider.of<OrderProvider>(context, listen: false);
+    final user = Provider.of<UserProvider>(context, listen: false);
+    final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return MainStyle(
       widget: [
@@ -146,17 +162,18 @@ class OrderPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 28, right: 40),
                     child: Row(
-                      children: const [
+                      children: [
                         Expanded(
                           child: TextField(
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                            controller: quantityController,
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               isDense: true,
-                              contentPadding: EdgeInsets.all(13),
+                              contentPadding:  EdgeInsets.all(13),
                               hintText: "Jumlah",
                               hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
+                              border:  OutlineInputBorder(
                                 borderSide: BorderSide.none,
                               ),
                             ),
@@ -291,8 +308,16 @@ class OrderPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       showDialog(
-                          context: context,
-                          builder: (_) => const CustomLoading());
+                        context: context,
+                        builder: (_) => const CustomLoading(),
+                      );
+                      order.insertOrder(
+                        userId: user.getUser.id,
+                        categoryId: dropdown.getRasa.toString(),
+                        paymentId: dropdown.getPembayaran.toString(),
+                        quantity: int.parse(quantityController.text),
+                        sizeId: dropdown.getKemasan.toString(),
+                      );
                       location.getAddress().then(
                         (value) {
                           Navigator.pop(context);

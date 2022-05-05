@@ -1,7 +1,7 @@
 name: sulai
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -26,6 +26,7 @@ dependencies:
   geocoding: ^2.0.4
   geolocator: ^8.2.0
   google_sign_in: ^5.3.0
+  image_picker: ^0.8.5
   provider: ^6.0.2
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20

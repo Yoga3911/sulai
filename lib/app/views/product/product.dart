@@ -100,7 +100,6 @@ class ProductPage extends StatelessWidget {
                         const SizedBox(height: 20),
                         Container(
                           width: size.width,
-                          height: size.height * 0.1,
                           color: const Color(0xFFF3F3F3),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

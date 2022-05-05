@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sulai/app/constant/collection.dart';
 import 'package:sulai/app/services/email.dart';
 import 'package:sulai/app/services/social.dart';
 
@@ -43,12 +44,14 @@ class AuthProvider with ChangeNotifier {
       EmailService social = EmailService();
       social.signIn(email: email, password: password).then(
         (user) async {
-          await _user.getUserByEmail(email: email);
+          final pref = await SharedPreferences.getInstance();
+          final data =
+              await MyCollection.user.where("email", isEqualTo: email).get();
+          pref.setString("id", data.docs.first.id);
 
+          pref.setString("social", provider!);
           Navigator.pushReplacementNamed(context, Routes.home).then(
             (_) async {
-              final pref = await SharedPreferences.getInstance();
-              pref.setString("social", provider!);
               Navigator.pop(context);
             },
           );
@@ -63,13 +66,11 @@ class AuthProvider with ChangeNotifier {
             img: user.user!.photoURL,
             provider: provider,
           );
-
-          await _user.getUserByEmail(email: user.user!.email!);
-          
-          Navigator.pushReplacementNamed(context, Routes.home).then(
+          await _user.getUserByEmail(email: user.user!.email);
+          final pref = await SharedPreferences.getInstance();
+          pref.setString("social", provider!);
+          Navigator.pushReplacementNamed(context, Routes.main).then(
             (_) async {
-              final pref = await SharedPreferences.getInstance();
-              pref.setString("social", provider!);
               Navigator.pop(context);
             },
           );

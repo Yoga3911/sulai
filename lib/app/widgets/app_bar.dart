@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/constant/collection.dart';
+import 'package:sulai/app/services/email.dart';
+import 'package:sulai/app/services/facebook.dart';
 import 'package:sulai/app/services/google.dart';
 import 'package:sulai/app/view_model/auth_provider.dart';
 import 'package:sulai/app/view_model/notification.dart';
@@ -162,15 +165,34 @@ class CustomAppBar extends StatelessWidget {
                                 child: const Text("Batal"),
                               ),
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   showDialog(
                                     context: context,
                                     builder: (_) => const CustomLoading(),
                                   );
-                                  auth.logout(
-                                    context,
-                                    GoogleService(),
-                                  );
+                                  final pref =
+                                      await SharedPreferences.getInstance();
+                                  final String social = pref.getString("social")!;
+                                  switch (social) {
+                                    case "email":
+                                      auth.logout(
+                                        context,
+                                        EmailService(),
+                                      );
+                                      break;
+                                    case "facebook":
+                                      auth.logout(
+                                        context,
+                                        FacebookService(),
+                                      );
+                                      break;
+                                    case "google":
+                                      auth.logout(
+                                        context,
+                                        GoogleService(),
+                                      );
+                                      break;
+                                  }
                                 },
                                 child: const Text("Ya"),
                               ),
