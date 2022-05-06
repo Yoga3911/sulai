@@ -4,6 +4,7 @@ import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/view_model/product_provider.dart';
+import 'package:sulai/app/view_model/ulasan_provider.dart';
 
 import 'auth_provider.dart';
 import 'notification.dart';
@@ -17,4 +18,5 @@ final List<SingleChildWidget> providerData = [
   ChangeNotifierProvider(create: (_) => DropDownNotifier()),
   ChangeNotifierProvider(create: (_) => OrderProvider()),
   ChangeNotifierProvider(create: (_) => MyLocation()),
+  ChangeNotifierProvider(create: (_) => UlasanProvider()),
 ];

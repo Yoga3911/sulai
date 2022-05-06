@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                     label: "SHOP",
                   ),
                 ),
-                CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
+                const CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, Routes.media),
                   child: const CustomBox(

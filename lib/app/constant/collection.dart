@@ -9,5 +9,6 @@ class MyCollection {
   static final CollectionReference notification = FirebaseFirestore.instance.collection("notification");
   static final CollectionReference order = FirebaseFirestore.instance.collection("order");
   static final CollectionReference status = FirebaseFirestore.instance.collection("status");
+  static final CollectionReference ulasan = FirebaseFirestore.instance.collection("ulasan");
   static final FirebaseStorage storage = FirebaseStorage.instance;
 }

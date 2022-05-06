@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/collection.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/routes/route.dart';
+import 'package:sulai/app/view_model/location.dart';
+import 'package:sulai/app/widgets/loading.dart';
 
-import '../../../models/user_model.dart';
 import '../../../view_model/order_provider.dart';
 import '../../../view_model/user_provider.dart';
 
@@ -19,11 +20,23 @@ class OrderCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final user = Provider.of<UserProvider>(context, listen: false);
     final order = Provider.of<OrderProvider>(context, listen: false);
+    final location = Provider.of<MyLocation>(context, listen: false);
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, Routes.checkout, arguments: {
-        "order_id": orderModel.id,
-        "category_id": orderModel.categoryId,
-      }),
+      onTap: () async {
+        showDialog(context: context, builder: (_) => const CustomLoading());
+        if (orderModel.statusId == "1") {
+          await location.getAddress();
+        }
+        Navigator.pop(context);
+        Navigator.pushNamed(
+          context,
+          Routes.checkout,
+          arguments: {
+            "order_id": orderModel.id,
+            "category_id": orderModel.categoryId,
+          },
+        );
+      },
       child: Container(
         margin: const EdgeInsets.only(top: 15),
         padding: const EdgeInsets.all(10),

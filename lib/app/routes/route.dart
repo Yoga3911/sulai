@@ -5,6 +5,7 @@ import 'package:sulai/app/views/maps/maps.dart';
 import 'package:sulai/app/views/media/media.dart';
 import 'package:sulai/app/views/notification/notification.dart';
 import 'package:sulai/app/views/order/history.dart';
+import 'package:sulai/app/views/order/widgets/ulasan.dart';
 import 'package:sulai/app/views/product/update_product.dart';
 import 'package:sulai/app/views/profile/profile.dart';
 
@@ -32,6 +33,7 @@ class Routes {
   static const media = "/media";
   static const updateProduct = "/updateProduct";
   static const maps = "/maps";
+  static const ulasan = "/ulasan";
 
   static final data = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
@@ -48,5 +50,6 @@ class Routes {
     media: (_) => const MediaPage(),
     updateProduct: (_) => const UpdateProduct(),
     maps: (_) => const MyMaps(),
+    ulasan: (_) => const UlasanPage(),
   };
 }

@@ -14,7 +14,6 @@ class OrderData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final order = Provider.of<OrderProvider>(context, listen: false);
     final user = Provider.of<UserProvider>(context, listen: false);
     return MainStyle(

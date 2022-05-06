@@ -32,6 +32,11 @@ class UserProvider with ChangeNotifier {
     setUser = UserModel.fromJson(data.data() as Map<String, dynamic>);
   }
 
+  Future<UserModel> getById({String? userId}) async {
+    final data = await MyCollection.user.doc(userId).get();
+    return UserModel.fromJson(data.data() as Map<String, dynamic>);
+  }
+
   Future<void> insertUser(
       {String? email,
       String? password,

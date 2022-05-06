@@ -111,4 +111,10 @@ class OrderProvider with ChangeNotifier {
       "postal_code": postalCode,
     });
   }
+
+  Future<void> updateStatusState({String? statusId, String? orderId}) async {
+    await MyCollection.order.doc(orderId).update({
+      "status_id": statusId,
+    });
+  }
 }
