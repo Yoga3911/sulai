@@ -36,6 +36,13 @@ class ProductPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(
+                            offset: Offset(1, 3),
+                            blurRadius: 3,
+                            spreadRadius: 3,
+                            color: Color.fromARGB(255, 193, 193, 193))
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -124,60 +131,45 @@ class ProductPage extends StatelessWidget {
                               Text(
                                 "Rp 20.000,00",
                                 style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
                               SizedBox(width: 10)
                             ],
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                if (productModel.name == "Sulai Original") {
-                                  dropdown.setRasa = 1;
-                                } else if (productModel.name ==
-                                    "Sulai Stroberi") {
-                                  dropdown.setRasa = 2;
-                                } else if (productModel.name == "Sulai Melon") {
-                                  dropdown.setRasa = 3;
-                                }
-                                if (productModel.name == "Sulai Original") {
-                                  dropdown.setImg = "assets/images/sulai2.png";
-                                } else if (productModel.name ==
-                                    "Sulai Stroberi") {
-                                  dropdown.setImg = "assets/images/sulai2.jpg";
-                                } else if (productModel.name == "Sulai Melon") {
-                                  dropdown.setImg = "assets/images/sulai3.jpg";
-                                }
-                                Navigator.pushNamed(context, Routes.order);
-                              },
-                              child: const Text("PESAN"),
-                              style: ElevatedButton.styleFrom(
-                                primary: const Color(0xFF41E507),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                fixedSize: const Size(140, 50),
-                              ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (productModel.name == "Sulai Original") {
+                              dropdown.setRasa = 1;
+                            } else if (productModel.name == "Sulai Stroberi") {
+                              dropdown.setRasa = 2;
+                            } else if (productModel.name == "Sulai Melon") {
+                              dropdown.setRasa = 3;
+                            }
+                            if (productModel.name == "Sulai Original") {
+                              dropdown.setImg = "assets/images/sulai2.png";
+                            } else if (productModel.name == "Sulai Stroberi") {
+                              dropdown.setImg = "assets/images/sulai2.jpg";
+                            } else if (productModel.name == "Sulai Melon") {
+                              dropdown.setImg = "assets/images/sulai3.jpg";
+                            }
+                            Navigator.pushNamed(context, Routes.order);
+                          },
+                          child: const Text("PESAN"),
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFF41E507),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            const SizedBox(width: 20),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: const Icon(Icons.shopping_bag_outlined),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                fixedSize: const Size(70, 50),
-                              ),
-                            ),
-                          ],
+                            fixedSize: const Size(140, 50),
+                          ),
                         ),
+                        const SizedBox(width: 20),
                         const SizedBox(height: 20),
                       ],
                     ),

@@ -112,46 +112,28 @@ class CustomCarousel extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            height: 20,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF41E507),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () => Navigator.pushNamed(
-                                    context, Routes.product,
-                                    arguments: productModel),
-                                child: const Center(
-                                  child: Text(
-                                    "MORE",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ),
+                      Container(
+                        height: 20,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF41E507),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => Navigator.pushNamed(
+                                context, Routes.product,
+                                arguments: productModel),
+                            child: const Center(
+                              child: Text(
+                                "MORE",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Container(
-                            height: 20,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            child: const Icon(
-                              Icons.shopping_bag_outlined,
-                              size: 17,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       Column(
                         children: [

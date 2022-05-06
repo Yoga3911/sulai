@@ -7,6 +7,7 @@ import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/currency.dart';
+import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import 'package:intl/intl.dart';
 
@@ -28,6 +29,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final size = MediaQuery.of(context).size;
     final order = Provider.of<OrderProvider>(context, listen: false);
     final product = Provider.of<ProductProvider>(context, listen: false);
+    final location = Provider.of<MyLocation>(context, listen: false);
     return MainStyle(
       widget: [
         const CustomAppBar(),
@@ -235,7 +237,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                 color: Colors
                                                                     .transparent,
                                                                 child: InkWell(
-                                                                  onTap: () {},
+                                                                  onTap: () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (_) =>
+                                                                              const CustomLoading(),
+                                                                    );
+                                                                    location
+                                                                        .getAddress()
+                                                                        .then(
+                                                                          (value) {
+                                                                            Navigator.pop(context);
+                                                                             Navigator.pushNamed(
+                                                                              context,
+                                                                              Routes.maps);
+                                                                          }
+                                                                        );
+                                                                  },
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -416,27 +436,35 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          (orderData.paymentId == "1")? const Text(
-                                            "GoPay",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ) : (orderData.paymentId == "2")? const Text(
-                                            "Dana",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ) : (orderData.paymentId == "3")? const Text(
-                                            "Ovo",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ) : const Text(
-                                            "COD",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          )
+                                          (orderData.paymentId == "1")
+                                              ? const Text(
+                                                  "GoPay",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.grey),
+                                                )
+                                              : (orderData.paymentId == "2")
+                                                  ? const Text(
+                                                      "Dana",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.grey),
+                                                    )
+                                                  : (orderData.paymentId == "3")
+                                                      ? const Text(
+                                                          "Ovo",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        )
+                                                      : const Text(
+                                                          "COD",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        )
                                         ],
                                       ),
                                     )

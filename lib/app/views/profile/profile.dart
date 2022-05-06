@@ -250,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               "$_imgName${date.millisecond}",
                                         )
                                       : null;
-                                  user
+                                  await user
                                       .changeProfile(
                                         name: _controller.text,
                                         userId: user.getUser.id,

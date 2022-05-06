@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../constant/collection.dart';
 import '../../widgets/main_style.dart';
 
 class MediaPage extends StatelessWidget {
@@ -40,11 +43,22 @@ class MediaPage extends StatelessWidget {
                   backgroundColor: const Color(0xFFDEDBD4),
                   radius: 70,
                   child: ClipOval(
-                    child: Image.asset(
-                      "assets/images/admin_pp.png",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+                    child: FutureBuilder<QuerySnapshot>(
+                      future: MyCollection.user
+                          .where("role_id", isEqualTo: "2")
+                          .get(),
+                      builder: (_, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SizedBox();
+                        }
+                        return CachedNetworkImage(
+                          imageUrl: snapshot.data!.docs.first["image_url"],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      },
                     ),
                   ),
                 ),

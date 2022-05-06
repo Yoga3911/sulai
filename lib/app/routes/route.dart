@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sulai/app/views/home/home.dart';
 import 'package:sulai/app/views/home/main_page.dart';
+import 'package:sulai/app/views/maps/maps.dart';
 import 'package:sulai/app/views/media/media.dart';
 import 'package:sulai/app/views/notification/notification.dart';
 import 'package:sulai/app/views/order/history.dart';
+import 'package:sulai/app/views/product/update_product.dart';
 import 'package:sulai/app/views/profile/profile.dart';
 
 import '../views/auth/login.dart';
@@ -28,6 +30,8 @@ class Routes {
   static const profile = "/profile";
   static const shop = "/shop";
   static const media = "/media";
+  static const updateProduct = "/updateProduct";
+  static const maps = "/maps";
 
   static final data = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
@@ -42,5 +46,7 @@ class Routes {
     profile: (_) => const ProfilePage(),
     shop: (_) => const ShopPage(),
     media: (_) => const MediaPage(),
+    updateProduct: (_) => const UpdateProduct(),
+    maps: (_) => const MyMaps(),
   };
 }

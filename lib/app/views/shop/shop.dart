@@ -2,16 +2,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sulai/app/constant/collection.dart';
 import 'package:sulai/app/models/product_model.dart';
+import 'package:sulai/app/routes/route.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
-import 'package:sulai/app/widgets/loading.dart';
 
-import '../../constant/collection.dart';
 import '../../view_model/product_provider.dart';
 import '../../widgets/main_style.dart';
 
@@ -28,34 +27,6 @@ class _ShopPageState extends State<ShopPage> {
   void initState() {
     _controller = TextEditingController();
     super.initState();
-  }
-
-  File? _img;
-  String? _imgUrl;
-  String? _imgName;
-
-  Future<void> fromGallery() async {
-    XFile? result = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    if (result != null) {
-      _img = File(result.path);
-      _imgName = result.name;
-    }
-    setState(() {});
-  }
-
-  Future<void> getImgUrl({String? imgName}) async {
-    _imgUrl =
-        await MyCollection.storage.ref("products/$imgName").getDownloadURL();
-  }
-
-  Future<void> uploadImg({String? imgName, File? imgFile}) async {
-    try {
-      await MyCollection.storage.ref("products/$imgName").putFile(imgFile!);
-      log("Image uploaded");
-    } on FirebaseException catch (e) {
-      log(e.message!);
-    }
   }
 
   @override
@@ -110,11 +81,22 @@ class _ShopPageState extends State<ShopPage> {
                     backgroundColor: const Color(0xFFDEDBD4),
                     radius: 70,
                     child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/admin_pp.png",
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
+                      child: FutureBuilder<QuerySnapshot>(
+                        future: MyCollection.user
+                            .where("role_id", isEqualTo: "2")
+                            .get(),
+                        builder: (_, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          }
+                          return CachedNetworkImage(
+                            imageUrl: snapshot.data!.docs.first["image_url"],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -175,116 +157,14 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           onTap: () {
                             _controller.text = productModel.name;
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text("Edit Product"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        await fromGallery()
-                                            .then((value) => setState(() {}));
-                                      },
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: size.height * 0.2,
-                                            width: size.width,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: (_img != null)
-                                                  ? Image.file(
-                                                      _img!,
-                                                      fit: BoxFit.cover,
-                                                      height: double.infinity,
-                                                      width: double.infinity,
-                                                    )
-                                                  : CachedNetworkImage(
-                                                      fit: BoxFit.cover,
-                                                      imageUrl:
-                                                          productModel.imageUrl,
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                    ),
-                                            ),
-                                          ),
-                                          (_img != null)
-                                              ? Text("dsa")
-                                              : SizedBox(),
-                                          Container(
-                                            height: size.height * 0.2,
-                                            width: size.width,
-                                            decoration: BoxDecoration(
-                                                color: const Color.fromARGB(
-                                                    76, 0, 0, 0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                          ),
-                                          const Icon(
-                                            Icons.image_rounded,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    TextField(
-                                      controller: _controller,
-                                      autofocus: true,
-                                    )
-                                  ],
-                                ),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      _img = null;
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Batal"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => const CustomLoading(),
-                                      );
-                                      final DateTime date = DateTime.now();
-                                      (_img != null)
-                                          ? await uploadImg(
-                                              imgFile: _img,
-                                              imgName:
-                                                  "$_imgName${date.millisecond}",
-                                            )
-                                          : null;
-                                      (_img != null)
-                                          ? await getImgUrl(
-                                              imgName:
-                                                  "$_imgName${date.millisecond}",
-                                            )
-                                          : null;
-                                      product
-                                          .editProduct(
-                                        name: _controller.text,
-                                        productId: productModel.id,
-                                        image: _imgUrl ?? productModel.imageUrl,
-                                      )
-                                          .then(
-                                        (value) {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                    child: const Text("Simpan"),
-                                  ),
-                                ],
-                              ),
+                            Navigator.pushNamed(
+                              context,
+                              Routes.updateProduct,
+                              arguments: {
+                                "id": productModel.id,
+                                "name": _controller.text,
+                                "image": productModel.imageUrl,
+                              },
                             );
                           },
                         );

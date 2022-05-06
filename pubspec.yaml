@@ -26,6 +26,7 @@ dependencies:
   flutter_svg: ^1.0.3
   geocoding: ^2.0.4
   geolocator: ^8.2.0
+  google_maps_flutter: ^2.1.4
   google_sign_in: ^5.3.0
   image_picker: ^0.8.5
   intl: ^0.17.0
