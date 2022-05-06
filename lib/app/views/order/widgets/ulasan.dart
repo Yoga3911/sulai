@@ -156,7 +156,9 @@ class _UlasanPageState extends State<UlasanPage> {
                             ),
                           );
                 },
-                child: const Text("Kirim"),
+                child: (ulasanUser["ulasan"] != "")
+                    ? const Text("Ubah")
+                    : const Text("Kirim"),
               )
             ],
           ),
