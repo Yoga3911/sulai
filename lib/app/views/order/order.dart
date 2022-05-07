@@ -348,7 +348,7 @@ class _OrderPageState extends State<OrderPage> {
                                     Navigator.pushNamed(
                                         context, Routes.checkout, arguments: {
                                       "order_id": orderId,
-                                      "category_id": dropdown.getRasa.toString()
+                                      "product_id": dropdown.getRasa.toString()
                                     });
                                   },
                                 );

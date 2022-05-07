@@ -137,11 +137,7 @@ class _ShopPageState extends State<ShopPage> {
                                           .deleteProduct(
                                               productId: productModel.id)
                                           .then((value) {
-                                        Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          Routes.home,
-                                          (route) => false,
-                                        );
+                                        Navigator.pop(context);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                           content: Text(
@@ -149,6 +145,7 @@ class _ShopPageState extends State<ShopPage> {
                                           ),
                                           backgroundColor: Colors.red,
                                         ));
+                                        setState(() {});
                                       });
                                     },
                                     child: const Text("Ya"),

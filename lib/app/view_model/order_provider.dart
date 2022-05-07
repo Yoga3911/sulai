@@ -86,7 +86,7 @@ class OrderProvider with ChangeNotifier {
       {
         "id": order.id,
         "user_id": userId,
-        "category_id": categoryId,
+        "product_id": categoryId,
         "quantity": quantity,
         "size_id": sizeId,
         "payment_id": paymentId,

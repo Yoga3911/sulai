@@ -41,10 +41,20 @@ class MyLocation with ChangeNotifier {
     Placemark place = placemark[0];
 
     _address =
-        "Jl. ${place.street}${place.subLocality}, ${place.locality}, ${place.country}";
-    _postCode = "${place.postalCode}";
+        "${place.street} ${place.locality}, ${place.subAdministrativeArea}, ${place.administrativeArea}, ${place.country}";
+    _postCode = "Kode Pos: ${place.postalCode}";
     lat = position.latitude;
     long = position.longitude;
+    notifyListeners();
+  }
+
+  set setLocation(String val) {
+    _address = val;
+    notifyListeners();
+  }
+
+  set setPostCode(String val) {
+    _postCode = val;
     notifyListeners();
   }
 

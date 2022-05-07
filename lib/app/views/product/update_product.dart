@@ -79,11 +79,9 @@ class _UpdateProductState extends State<UpdateProduct> {
     if (_controller2.text.isEmpty) {
       _controller2.text = args["price"].toString();
     }
-    log(radioVal.toString());
     if (radioVal == -1) {
       radioVal = int.parse(args["size"]);
     }
-    log(radioVal.toString());
     final product = Provider.of<ProductProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -134,6 +132,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                   backgroundColor: Colors.green,
                 ),
               );
+              setState(() {});
             },
           );
         },

@@ -33,7 +33,7 @@ class OrderCard extends StatelessWidget {
           Routes.checkout,
           arguments: {
             "order_id": orderModel.id,
-            "category_id": orderModel.categoryId,
+            "product_id": orderModel.categoryId,
           },
         );
       },
@@ -60,6 +60,7 @@ class OrderCard extends StatelessWidget {
                         imageUrl: user.getUser.imageUrl,
                         width: double.infinity,
                         height: double.infinity,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),

@@ -56,7 +56,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               }
               final orderData = snapshot.data!;
               return FutureBuilder<ProductModel>(
-                future: product.getById(categoryId: args["category_id"]),
+                future: product.getById(id: args["product_id"]),
                 builder: (_, snapshot2) {
                   if (snapshot2.connectionState == ConnectionState.waiting) {
                     return const SizedBox();
@@ -215,7 +215,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    "Kode pos: ${val.getPostCode}",
+                                                    val.getPostCode,
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.grey,
