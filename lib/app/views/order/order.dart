@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,12 @@ class _OrderPageState extends State<OrderPage> {
                 child: CircularProgressIndicator(),
               );
             }
+            if (dropdown.rasa.isEmpty) {
+              dropdown.rasa = snapshot.data!.first.id;
+            }
+            if (dropdown.image.isEmpty) {
+              dropdown.image = snapshot.data!.first.imageUrl;
+            }
             return Column(
               children: [
                 const CustomAppBar(),
@@ -54,8 +61,8 @@ class _OrderPageState extends State<OrderPage> {
                   builder: (_, val, __) => SizedBox(
                     height: size.height * 0.25,
                     width: size.width,
-                    child: Image.asset(
-                      val.getImg,
+                    child: CachedNetworkImage(
+                      imageUrl: val.getImg,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -92,24 +99,22 @@ class _OrderPageState extends State<OrderPage> {
                             Expanded(
                               child: DropdownButtonHideUnderline(
                                 child: Consumer<DropDownNotifier>(
-                                  builder: (_, val, __) => DropdownButton<int>(
+                                  builder: (_, val, __) =>
+                                      DropdownButton<String>(
                                     style: const TextStyle(color: Colors.grey),
                                     value: val.getRasa,
                                     onChanged: (value) {
                                       val.setRasa = value!;
-                                      if (value == 1) {
-                                        val.setImg = "assets/images/sulai2.png";
-                                      } else if (value == 2) {
-                                        val.setImg = "assets/images/sulai2.jpg";
-                                      } else if (value == 3) {
-                                        val.setImg = "assets/images/sulai3.jpg";
-                                      }
+                                      val.setImg = snapshot
+                                          .data![snapshot.data!.indexWhere(
+                                              (element) => element.id == value)]
+                                          .imageUrl;
                                     },
                                     items: [
                                       for (ProductModel item in snapshot.data!)
                                         DropdownMenuItem(
                                           child: Text(item.name),
-                                          value: int.parse(item.categoryId),
+                                          value: item.id,
                                         ),
                                     ],
                                   ),

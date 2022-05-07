@@ -27,7 +27,7 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       floatingActionButton: (user.roleId == "2")
           ? FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, Routes.addProduct),
               child: const Icon(
                 Icons.add_rounded,
                 color: Colors.white,
@@ -132,7 +132,9 @@ class _ShopPageState extends State<ShopPage> {
                                     child: const Text("Tidak"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      product.deleteProduct(productId: productModel.id);
+                                    },
                                     child: const Text("Ya"),
                                   ),
                                 ],

@@ -38,4 +38,31 @@ class ProductProvider with ChangeNotifier {
       },
     );
   }
+
+  Future<void> addProduct({
+    String? name,
+    int? price,
+    String? image,
+    String? size,
+    String? userId,
+  }) async {
+    final doc = MyCollection.product.doc();
+    await doc.set(
+      {
+        "id": doc.id,
+        "admin_id": userId,
+        "name": name,
+        "category_id": "1",
+        "image_url": image,
+        "price": price,
+        "size_id": size,
+        "update_at": DateTime.now(),
+        "create_at": DateTime.now(),
+      },
+    );
+  }
+
+  Future<void> deleteProduct({String? productId}) async {
+    await MyCollection.product.doc(productId).delete();
+  }
 }

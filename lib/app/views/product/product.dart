@@ -144,20 +144,22 @@ class ProductPage extends StatelessWidget {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            if (productModel.name == "Sulai Original") {
-                              dropdown.setRasa = 1;
-                            } else if (productModel.name == "Sulai Stroberi") {
-                              dropdown.setRasa = 2;
-                            } else if (productModel.name == "Sulai Melon") {
-                              dropdown.setRasa = 3;
-                            }
-                            if (productModel.name == "Sulai Original") {
-                              dropdown.setImg = "assets/images/sulai2.png";
-                            } else if (productModel.name == "Sulai Stroberi") {
-                              dropdown.setImg = "assets/images/sulai2.jpg";
-                            } else if (productModel.name == "Sulai Melon") {
-                              dropdown.setImg = "assets/images/sulai3.jpg";
-                            }
+                            // if (productModel.name == "Sulai Original") {
+                            //   dropdown.setRasa = 1;
+                            // } else if (productModel.name == "Sulai Stroberi") {
+                            //   dropdown.setRasa = 2;
+                            // } else if (productModel.name == "Sulai Melon") {
+                            //   dropdown.setRasa = 3;
+                            // }
+                            dropdown.setRasa = productModel.id;
+                            dropdown.setImg = productModel.imageUrl;
+                            // if (productModel.name == "Sulai Original") {
+                            //   dropdown.setImg = "assets/images/sulai2.png";
+                            // } else if (productModel.name == "Sulai Stroberi") {
+                            //   dropdown.setImg = "assets/images/sulai2.jpg";
+                            // } else if (productModel.name == "Sulai Melon") {
+                            //   dropdown.setImg = "assets/images/sulai3.jpg";
+                            // }
                             Navigator.pushNamed(context, Routes.order);
                           },
                           child: const Text("PESAN"),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class DropDownNotifier with ChangeNotifier {
-  int _rasa = 1;
+  String rasa = "";
   int _kemasan = 1;
   int _pembayaran = 1;
-  String _image = "assets/images/sulai2.png";
+  String image = "";
 
   set setImg(String val) {
-    _image = val;
+    image = val;
     notifyListeners();
   }
 
-  String get getImg => _image;
+  String get getImg => image;
 
-  set setRasa(int val) {
-    _rasa = val;
+  set setRasa(String val) {
+    rasa = val;
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class DropDownNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  int get getRasa => _rasa;
+  String get getRasa => rasa;
 
   int get getKemasan => _kemasan;
 

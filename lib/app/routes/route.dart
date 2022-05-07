@@ -6,6 +6,7 @@ import 'package:sulai/app/views/media/media.dart';
 import 'package:sulai/app/views/notification/notification.dart';
 import 'package:sulai/app/views/order/history.dart';
 import 'package:sulai/app/views/order/widgets/ulasan.dart';
+import 'package:sulai/app/views/product/add_product.dart';
 import 'package:sulai/app/views/product/update_product.dart';
 import 'package:sulai/app/views/profile/profile.dart';
 
@@ -32,6 +33,7 @@ class Routes {
   static const shop = "/shop";
   static const media = "/media";
   static const updateProduct = "/updateProduct";
+  static const addProduct = "/addProduct";
   static const maps = "/maps";
   static const ulasan = "/ulasan";
 
@@ -49,6 +51,7 @@ class Routes {
     shop: (_) => const ShopPage(),
     media: (_) => const MediaPage(),
     updateProduct: (_) => const UpdateProduct(),
+    addProduct: (_) => const AddProduct(),
     maps: (_) => const MyMaps(),
     ulasan: (_) => const UlasanPage(),
   };

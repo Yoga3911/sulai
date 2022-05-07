@@ -7,6 +7,7 @@ import 'package:sulai/app/services/email.dart';
 import 'package:sulai/app/services/facebook.dart';
 import 'package:sulai/app/services/google.dart';
 import 'package:sulai/app/view_model/auth_provider.dart';
+import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/notification.dart';
 import 'package:sulai/app/widgets/loading.dart';
 
@@ -21,6 +22,7 @@ class CustomAppBar extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
     return SizedBox(
       height: size.height * 0.1,
       child: Column(
@@ -45,11 +47,15 @@ class CustomAppBar extends StatelessWidget {
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(100),
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      Routes.home,
-                      (route) => false,
-                    ),
+                    onTap: () {
+                      dropdown.image = "";
+                      dropdown.rasa = "";
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        Routes.home,
+                        (route) => false,
+                      );
+                    },
                     child: const Icon(
                       Icons.home_rounded,
                       color: MyColor.grey,
@@ -173,7 +179,8 @@ class CustomAppBar extends StatelessWidget {
                                   );
                                   final pref =
                                       await SharedPreferences.getInstance();
-                                  final String social = pref.getString("social")!;
+                                  final String social =
+                                      pref.getString("social")!;
                                   switch (social) {
                                     case "email":
                                       auth.logout(
