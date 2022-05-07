@@ -24,12 +24,17 @@ class ProductProvider with ChangeNotifier {
   Future<void> editProduct({
     String? name,
     String? productId,
+    int? price,
     String? image,
+    String? size,
   }) async {
     await MyCollection.product.doc(productId).update(
       {
         "name": name,
         "image_url": image,
+        "price": price,
+        "size_id": size,
+        "update_at": DateTime.now(),
       },
     );
   }

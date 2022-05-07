@@ -19,33 +19,22 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  late TextEditingController _controller;
-  @override
-  void initState() {
-    _controller = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final user = Provider.of<UserProvider>(context, listen: false).getUser;
     final product = Provider.of<ProductProvider>(context, listen: false);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-        ),
-        backgroundColor: const Color.fromARGB(255, 255, 218, 105),
-      ),
+      floatingActionButton: (user.roleId == "2")
+          ? FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+              ),
+              backgroundColor: const Color.fromARGB(255, 255, 218, 105),
+            )
+          : null,
       body: MainStyle(
         widget: [
           Image.asset(
@@ -153,14 +142,15 @@ class _ShopPageState extends State<ShopPage> {
                             color: Colors.red,
                           ),
                           onTap: () {
-                            _controller.text = productModel.name;
                             Navigator.pushNamed(
                               context,
                               Routes.updateProduct,
                               arguments: {
                                 "id": productModel.id,
-                                "name": _controller.text,
+                                "name": productModel.name,
                                 "image": productModel.imageUrl,
+                                "price": productModel.price,
+                                "size": productModel.sizeId,
                               },
                             );
                           },

@@ -322,14 +322,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     profileItem(
-                        icon: Icons.notifications_rounded, label: "Notifikasi"),
-                    const SizedBox(height: 10),
-                    const Divider(
-                      height: 2,
-                      thickness: 1,
-                    ),
-                    const SizedBox(height: 10),
-                    profileItem(
                         icon: Icons.shield_rounded, label: "Setting Privasi"),
                     const SizedBox(height: 10),
                     const Divider(
