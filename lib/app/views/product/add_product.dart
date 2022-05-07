@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,14 +22,12 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   late TextEditingController _controller1;
   late TextEditingController _controller2;
-  late TextEditingController _controller3;
   int radioVal = -1;
 
   @override
   void initState() {
     _controller1 = TextEditingController();
     _controller2 = TextEditingController();
-    _controller3 = TextEditingController();
     super.initState();
   }
 
@@ -66,7 +63,6 @@ class _AddProductState extends State<AddProduct> {
   void dispose() {
     _controller1.dispose();
     _controller2.dispose();
-    _controller3.dispose();
     super.dispose();
   }
 
@@ -88,45 +84,57 @@ class _AddProductState extends State<AddProduct> {
         title: const Text("Add Product"),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 255, 218, 105),
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (_) => const CustomLoading(),
-          );
-          final DateTime date = DateTime.now();
-          (_img != null)
-              ? await uploadImg(
-                  imgFile: _img,
-                  imgName: "$_imgName${date.millisecond}",
-                )
-              : null;
-          (_img != null)
-              ? await getImgUrl(
-                  imgName: "$_imgName${date.millisecond}",
-                )
-              : null;
-          product
-              .addProduct(
-            name: _controller1.text,
-            price: int.parse(_controller2.text),
-            image: _imgUrl,
-            userId: user.getUser.id,
-            size: radioVal.toString(),
-          )
-              .then(
-            (value) {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Add product successfully"),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-          );
-        },
+        backgroundColor: (_controller1.text.isEmpty)
+            ? Colors.grey
+            : (_controller2.text.isEmpty)
+                ? Colors.grey
+                : (radioVal == -1)
+                    ? Colors.grey
+                    : const Color.fromARGB(255, 255, 218, 105),
+        onPressed: (_controller1.text.isEmpty)
+            ? null
+            : (_controller2.text.isEmpty)
+                ? null
+                : (radioVal == -1)
+                    ? null
+                    : () async {
+                        showDialog(
+                          context: context,
+                          builder: (_) => const CustomLoading(),
+                        );
+                        final DateTime date = DateTime.now();
+                        (_img != null)
+                            ? await uploadImg(
+                                imgFile: _img,
+                                imgName: "$_imgName${date.millisecond}",
+                              )
+                            : null;
+                        (_img != null)
+                            ? await getImgUrl(
+                                imgName: "$_imgName${date.millisecond}",
+                              )
+                            : null;
+                        product
+                            .addProduct(
+                          name: _controller1.text,
+                          price: int.parse(_controller2.text),
+                          image: _imgUrl,
+                          userId: user.getUser.id,
+                          size: radioVal.toString(),
+                        )
+                            .then(
+                          (value) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Add product successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
+                        );
+                      },
         child: const Icon(
           Icons.save_rounded,
           color: Colors.white,

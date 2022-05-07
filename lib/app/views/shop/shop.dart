@@ -133,7 +133,23 @@ class _ShopPageState extends State<ShopPage> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      product.deleteProduct(productId: productModel.id);
+                                      product
+                                          .deleteProduct(
+                                              productId: productModel.id)
+                                          .then((value) {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          Routes.home,
+                                          (route) => false,
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                            "Delete product successfully",
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ));
+                                      });
                                     },
                                     child: const Text("Ya"),
                                   ),
