@@ -38,7 +38,10 @@ class _UlasanPageState extends State<UlasanPage> {
     final user = Provider.of<UserProvider>(context, listen: false).getUser;
     final ulasanUser =
         ModalRoute.of(context)?.settings.arguments ?? {"ulasan": ""};
-    _controller.text = (ulasanUser as Map<String, dynamic>)["ulasan"];
+    ulasanUser as Map<String, dynamic>;
+    if (_controller.text.isEmpty) {
+      _controller.text = ulasanUser["ulasan"];
+    }
     return MainStyle(
       widget: [
         const CustomAppBar(),
@@ -136,13 +139,11 @@ class _UlasanPageState extends State<UlasanPage> {
                           .updateDate(
                               ulasan: _controller.text,
                               ulasanId: ulasanUser["ulasan_id"])
-                          .then(
-                            (value) => Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              Routes.home,
-                              (route) => false,
-                            ),
-                          )
+                          .then((value) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(context, Routes.media);
+                        })
                       : ulasan
                           .insertData(
                             ulasan: _controller.text,

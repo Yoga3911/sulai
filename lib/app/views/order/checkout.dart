@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/models/product_model.dart';
 import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
+import 'package:sulai/app/view_model/ulasan_provider.dart';
+import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/loading.dart';
@@ -30,6 +33,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final order = Provider.of<OrderProvider>(context, listen: false);
     final product = Provider.of<ProductProvider>(context, listen: false);
     final location = Provider.of<MyLocation>(context, listen: false);
+    final ulasan = Provider.of<UlasanProvider>(context, listen: false);
+    final user = Provider.of<UserProvider>(context, listen: false);
     return MainStyle(
       widget: [
         const CustomAppBar(),
@@ -722,23 +727,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     "Tidak",
                                                   ),
                                                 ),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    order
-                                                        .updateStatusState(
-                                                            orderId: args[
-                                                                "order_id"],
-                                                            statusId: "3")
-                                                        .then(
-                                                          (value) => Navigator
-                                                              .pushReplacementNamed(
-                                                            context,
-                                                            Routes.ulasan,
-                                                          ),
+                                                FutureBuilder<
+                                                        List<
+                                                            QueryDocumentSnapshot<
+                                                                Object?>>>(
+                                                    future: ulasan.getById(
+                                                        userId:
+                                                            user.getUser.id),
+                                                    builder: (_, snapshot3) {
+                                                      if (snapshot3
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return const ElevatedButton(
+                                                          onPressed: null,
+                                                          child: Text("Ya"),
                                                         );
-                                                  },
-                                                  child: const Text("Ya"),
-                                                ),
+                                                      }
+                                                      return ElevatedButton(
+                                                        onPressed: () {
+                                                          order
+                                                              .updateStatusState(
+                                                                  orderId: args[
+                                                                      "order_id"],
+                                                                  statusId: "3")
+                                                              .then((value) {
+                                                            (snapshot3.data!
+                                                                    .isEmpty)
+                                                                ? Navigator
+                                                                    .pushReplacementNamed(
+                                                                    context,
+                                                                    Routes
+                                                                        .ulasan,
+                                                                  )
+                                                                : Navigator
+                                                                    .pushReplacementNamed(
+                                                                    context,
+                                                                    Routes.main,
+                                                                  );
+                                                          });
+                                                        },
+                                                        child: const Text("Ya"),
+                                                      );
+                                                    }),
                                               ],
                                             ),
                                           );

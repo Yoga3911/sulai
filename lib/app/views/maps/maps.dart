@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
-
-import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -34,8 +31,11 @@ class MyMapsState extends State<MyMaps> {
   }
 
   Future<void> currentPosition() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(initialLocation()));
+    if (mounted) {
+      final GoogleMapController controller = await _controller.future;
+      controller
+          .animateCamera(CameraUpdate.newCameraPosition(initialLocation()));
+    }
   }
 
   Marker getMarker() {
@@ -53,12 +53,14 @@ class MyMapsState extends State<MyMaps> {
   String? _kodePos;
 
   Future<void> getAddress(double lat, double lng) async {
-    List<Placemark> placemark = await placemarkFromCoordinates(lat, lng);
-    Placemark place = placemark[0];
+    if (mounted) {
+      List<Placemark> placemark = await placemarkFromCoordinates(lat, lng);
+      Placemark place = placemark[0];
 
-    _address =
-        "${place.street} ${place.locality}, ${place.subAdministrativeArea}, ${place.administrativeArea}, ${place.country}";
-    _kodePos = "Kode Pos: ${place.postalCode}";
+      _address =
+          "${place.street} ${place.locality}, ${place.subAdministrativeArea}, ${place.administrativeArea}, ${place.country}";
+      _kodePos = "Kode Pos: ${place.postalCode}";
+    }
   }
 
   @override

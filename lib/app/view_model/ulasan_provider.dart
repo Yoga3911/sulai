@@ -13,6 +13,12 @@ class UlasanProvider with ChangeNotifier {
     ];
   }
 
+  Future<List<QueryDocumentSnapshot<Object?>>> getById({String? userId}) async {
+    final data =
+        await MyCollection.ulasan.where("user_id", isEqualTo: userId).get();
+    return data.docs;
+  }
+
   Future<void> insertData({
     String? userId,
     String? ulasan,
