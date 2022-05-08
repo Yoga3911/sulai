@@ -50,7 +50,7 @@ class AuthProvider with ChangeNotifier {
           pref.setString("id", data.docs.first.id);
 
           pref.setString("social", provider!);
-          Navigator.pushReplacementNamed(context, Routes.home).then(
+          Navigator.pushReplacementNamed(context, Routes.main).then(
             (_) async {
               Navigator.pop(context);
             },

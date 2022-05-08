@@ -9,6 +9,7 @@ import 'package:sulai/app/views/order/widgets/ulasan.dart';
 import 'package:sulai/app/views/product/add_product.dart';
 import 'package:sulai/app/views/product/update_product.dart';
 import 'package:sulai/app/views/profile/profile.dart';
+import 'package:sulai/app/views/rekap/rekap.dart';
 
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
@@ -36,6 +37,7 @@ class Routes {
   static const addProduct = "/addProduct";
   static const maps = "/maps";
   static const ulasan = "/ulasan";
+  static const rekap = "/rekap";
 
   static final data = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
@@ -54,5 +56,6 @@ class Routes {
     addProduct: (_) => const AddProduct(),
     maps: (_) => const MyMaps(),
     ulasan: (_) => const UlasanPage(),
+    rekap: (_) => const RekapPage(),
   };
 }

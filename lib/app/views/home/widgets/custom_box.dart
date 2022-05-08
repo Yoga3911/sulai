@@ -37,7 +37,7 @@ class CustomBox extends StatelessWidget {
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset(
                 icon,
@@ -46,7 +46,7 @@ class CustomBox extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(color: Colors.white),
-              )
+              ),
             ],
           )
         ],

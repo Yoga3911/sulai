@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:isolate';
+
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -48,8 +51,6 @@ class MyMapsState extends State<MyMaps> {
   LatLng? _latLng;
   String? _address;
   String? _kodePos;
-  double? lat;
-  double? lng;
 
   Future<void> getAddress(double lat, double lng) async {
     List<Placemark> placemark = await placemarkFromCoordinates(lat, lng);
@@ -58,9 +59,6 @@ class MyMapsState extends State<MyMaps> {
     _address =
         "${place.street} ${place.locality}, ${place.subAdministrativeArea}, ${place.administrativeArea}, ${place.country}";
     _kodePos = "Kode Pos: ${place.postalCode}";
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -100,17 +98,17 @@ class MyMapsState extends State<MyMaps> {
             GoogleMap(
               onCameraMove: (cam) {
                 _latLng = LatLng(cam.target.latitude, cam.target.longitude);
-                lat = cam.target.latitude;
-                lng = cam.target.longitude;
+                getMarker();
+                setState(() {});
               },
               onCameraIdle: () {
-                currentPosition();
-                getAddress(lat ?? location.lat, lng ?? location.long);
-              },
-              onTap: (tap) {
-                _latLng = LatLng(tap.latitude, tap.longitude);
-                currentPosition();
-                getAddress(tap.latitude, tap.longitude);
+                Future.wait([
+                  currentPosition(),
+                  getAddress(
+                    _latLng?.latitude ?? location.lat,
+                    _latLng?.longitude ?? location.long,
+                  )
+                ]);
               },
               mapType: MapType.hybrid,
               markers: {getMarker()},

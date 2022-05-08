@@ -71,6 +71,15 @@ class HomePage extends StatelessWidget {
                     label: "MEDIA",
                   ),
                 ),
+                (user.getUser.roleId == "2")
+                    ? GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, Routes.rekap),
+                        child: const CustomBox(
+                          icon: "assets/icons/report.png",
+                          label: "REKAP",
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
             Container(
