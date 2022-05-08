@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/notification.dart';
+import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import 'package:sulai/app/views/notification/widgets/notif_card.dart';
@@ -14,6 +15,7 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final user = Provider.of<UserProvider>(context, listen: false);
     final notif = Provider.of<NotificationProvider>(context, listen: false);
     return MainStyle(
       widget: [
@@ -77,7 +79,7 @@ class NotificationPage extends StatelessWidget {
                 ),
               ),
               FutureBuilder(
-                future: notif.getAll(),
+                future: notif.getAll(userId: user.getUser.id),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const SizedBox();

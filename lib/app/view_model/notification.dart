@@ -24,9 +24,9 @@ class NotificationProvider with ChangeNotifier {
 
   List<NotificationModel> _notifData = [];
 
-  Future<void> getAll() async {
+  Future<void> getAll({String? userId}) async {
     final data = await MyCollection.notification
-        .orderBy("create_at", descending: true)
+        .where("user_id", isEqualTo: userId)
         .get();
 
     setData = [
@@ -35,7 +35,12 @@ class NotificationProvider with ChangeNotifier {
     ];
   }
 
-  set setData(List<NotificationModel> data) => _notifData = data;
+  set setData(List<NotificationModel> data) {
+    _notifData = data;
+    _notifData.sort(
+      (a, b) => b.createAt.compareTo(a.createAt),
+    );
+  }
 
   List<NotificationModel> get getData => _notifData;
 
