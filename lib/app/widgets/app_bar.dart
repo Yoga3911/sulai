@@ -13,6 +13,7 @@ import 'package:sulai/app/widgets/loading.dart';
 
 import '../constant/color.dart';
 import '../routes/route.dart';
+import '../view_model/order_provider.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class CustomAppBar extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    final order = Provider.of<OrderProvider>(context, listen: false);
     final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
     return SizedBox(
       height: size.height * 0.1,
@@ -50,6 +52,8 @@ class CustomAppBar extends StatelessWidget {
                     onTap: () {
                       dropdown.image = "";
                       dropdown.rasa = "";
+                      order.penjualanPerHari = 0;
+                      order.setOrderPerWeek = [];
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         Routes.home,
