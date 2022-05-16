@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
+import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 
 import '../../constant/color.dart';
@@ -230,7 +230,7 @@ class _RekapPageState extends State<RekapPage> {
                               color: Colors.white,
                             ),
                             const SizedBox(width: 10),
-                            Text(DateFormat("EEEE, dd MMM yyyy")
+                            Text(DateFormat("EEEE, dd MMM yyyy", "id_ID")
                                 .format(order.selectedDate)),
                           ],
                         ),
@@ -240,11 +240,13 @@ class _RekapPageState extends State<RekapPage> {
                   FutureBuilder(
                       future: order.getAllOrder(),
                       builder: (_, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
-                        List<int> monthData =
-                            order.countPerMonth(selectedDate: order.selectedDate);
+                        List<int> monthData = order.countPerMonth(
+                            selectedDate: order.selectedDate);
                         return Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: GetGraph(
@@ -252,18 +254,158 @@ class _RekapPageState extends State<RekapPage> {
                           ),
                         );
                       }),
-                  Center(
-                    child: Container(
-                      child: (order.penjualanPerHari == 0)? const SizedBox() : Text(order.penjualanPerHari.toString()),
+                  (order.penjualanPerHari == 0)
+                      ? const SizedBox()
+                      : Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                              child: Container(
+                                width: size.width * 0.5,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xFF4D97EA)),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Total Penjualan",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(DateFormat(
+                                              "EEEE, dd MMMM yyyy", "in_ID")
+                                          .format(order
+                                              .orderPerWeek.first.orderDate)),
+                                      Text(
+                                        order.penjualanPerHari.toString() +
+                                            " buah",
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                top: 10,
+                                bottom: 10,
+                              ),
+                              child: Container(
+                                width: size.width * 0.5,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xFF4D97EA)),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Total Pendapatan",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(DateFormat(
+                                              "EEEE, dd MMMM yyyy", "in_ID")
+                                          .format(order
+                                              .orderPerWeek.first.orderDate)),
+                                      Text(
+                                        "Rp " +
+                                            currency(order.pendapatanPerHari),
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+            child: Container(
+              width: size.width,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 3,
+                      spreadRadius: 3,
+                      color: Color.fromARGB(255, 215, 215, 215),
+                      offset: Offset(1, 3),
+                    )
+                  ]),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                    child: Text(
+                      "Rincian penjualan",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
                   Center(
                     child: Column(
                       children: order.orderPerWeek
-                          .map((e) => ListTile(
-                                title: Text("#${e.orderId}"),
-                                subtitle: Text("#${e.address}"),
-                              ))
+                          .map(
+                            (e) => ListTile(
+                              title: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text: "#${e.orderId} -",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                        text: (e.sizeId == "1")? " Plastik: ${e.quantity} buah" : " Botol: ${e.quantity} buah",
+                                        style:
+                                            const TextStyle(color: Colors.red))
+                                  ],
+                                ),
+                              ),
+                              subtitle: Text(e.address),
+                            ),
+                          )
                           .toList(),
                     ),
                   )
@@ -367,18 +509,18 @@ class _GetGraphState extends State<GetGraph> {
                         ),
                         Text(
                           (index == 0)
-                              ? "Sun"
+                              ? "Min"
                               : (index == 1)
-                                  ? "Mon"
+                                  ? "Sen"
                                   : (index == 2)
-                                      ? "Tue"
+                                      ? "Sel"
                                       : (index == 3)
-                                          ? "Wed"
+                                          ? "Rab"
                                           : (index == 4)
-                                              ? "Thu"
+                                              ? "Kam"
                                               : (index == 5)
-                                                  ? "Fri"
-                                                  : "Sat",
+                                                  ? "Jum"
+                                                  : "Sab",
                         )
                       ],
                     ),

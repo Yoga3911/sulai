@@ -33,7 +33,7 @@ class OrderCard extends StatelessWidget {
           Routes.checkout,
           arguments: {
             "order_id": orderModel.id,
-            "product_id": orderModel.categoryId,
+            "product_id": orderModel.productId
           },
         );
       },
@@ -127,9 +127,9 @@ class OrderCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          (orderModel.categoryId == "1")
+                          (orderModel.productId == "1")
                               ? "Susu Kedelai Original"
-                              : (orderModel.categoryId == "2")
+                              : (orderModel.productId == "2")
                                   ? "Susu Kedelai Stroberi"
                                   : "Susu Kedelai Melon",
                           style: const TextStyle(

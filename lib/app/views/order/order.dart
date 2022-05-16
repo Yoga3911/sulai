@@ -293,7 +293,7 @@ class _OrderPageState extends State<OrderPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      DateFormat('EEEE, d MMM yyyy')
+                                      DateFormat('EEEE, d MMM yyyy', "in_ID")
                                           .format(val.selectedDate),
                                       style:
                                           const TextStyle(color: Colors.grey),

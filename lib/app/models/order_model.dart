@@ -6,7 +6,7 @@ class OrderModel {
     required this.orderId,
     required this.statusId,
     required this.userId,
-    required this.categoryId,
+    required this.productId,
     required this.orderDate,
     required this.quantity,
     required this.sizeId,
@@ -19,7 +19,7 @@ class OrderModel {
   final String orderId;
   final String statusId;
   final String userId;
-  final String categoryId;
+  final String productId;
   final String paymentId;
   final DateTime orderDate;
   final int quantity;
@@ -32,7 +32,7 @@ class OrderModel {
         orderId: json["order_id"],
         statusId: json["status_id"],
         userId: json["user_id"],
-        categoryId: json["product_id"],
+        productId: json["product_id"],
         quantity: json["quantity"],
         sizeId: json["size_id"],
         paymentId: json["payment_id"],
@@ -46,7 +46,7 @@ class OrderModel {
         "order_id": orderId,
         "status_id": statusId,
         "user_id": userId,
-        "product_id": categoryId,
+        "product_id": productId,
         "quantity": quantity,
         "size_id": sizeId,
         "payment_id": paymentId,

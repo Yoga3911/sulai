@@ -15,10 +15,17 @@ class OrderProvider with ChangeNotifier {
   int get getSum => _sumData;
 
   int penjualanPerHari = 0;
+  int pendapatanPerHari = 0;
 
   set setOrderPerWeek(List<OrderModel> val) {
+    val.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     orderPerWeek = val;
     penjualanPerHari = orderPerWeek.fold(0, (sum, e) => sum + e.quantity);
+    pendapatanPerHari = orderPerWeek.fold(
+        0,
+        (sum, e) =>
+            sum +
+            ((e.sizeId == "1") ? (e.quantity * 5000) : (e.quantity * 10000)));
     notifyListeners();
   }
 
