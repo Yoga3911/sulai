@@ -105,8 +105,7 @@ class _OrderPageState extends State<OrderPage> {
                                     value: val.getRasa,
                                     onChanged: (value) {
                                       val.setRasa = value!;
-                                      val.setImg = snapshot
-                                          .data![snapshot.data!.indexWhere(
+                                      val.setImg = snapshot.data![snapshot.data!.indexWhere(
                                               (element) => element.id == value)]
                                           .imageUrl;
                                     },

@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget {
                       dropdown.image = "";
                       dropdown.rasa = "";
                       order.penjualanPerHari = 0;
-                      order.setOrderPerWeek = [];
+                      order.orderPerWeek = [];
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         Routes.home,

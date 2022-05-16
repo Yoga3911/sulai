@@ -13,6 +13,7 @@ import 'package:sulai/app/widgets/main_style.dart';
 
 import '../../constant/color.dart';
 import '../../routes/route.dart';
+import '../../view_model/order_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
     final product = Provider.of<ProductProvider>(context, listen: false);
+    final order = Provider.of<OrderProvider>(context, listen: false);
     final getProduct = product.getAll();
     final size = MediaQuery.of(context).size;
     return MainStyle(
@@ -36,6 +38,7 @@ class HomePage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
+                order.productData = snapshot.data!;
                 return CarouselSlider(
                   items: snapshot.data!
                       .map((e) => CustomCarousel(productModel: e))

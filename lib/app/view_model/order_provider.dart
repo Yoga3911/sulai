@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../constant/collection.dart';
 import '../models/order_model.dart';
+import '../models/product_model.dart';
 
 class OrderProvider with ChangeNotifier {
   List<OrderModel> _orderData = [];
   List<OrderModel> orderPerWeek = [];
+  List<ProductModel> productData = [];
 
   int _sumData = 0;
 
@@ -17,7 +19,7 @@ class OrderProvider with ChangeNotifier {
   int penjualanPerHari = 0;
   int pendapatanPerHari = 0;
 
-  set setOrderPerWeek(List<OrderModel> val) {
+  void setOrderPerWeek(List<OrderModel> val, List<ProductModel> product) {
     val.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     orderPerWeek = val;
     penjualanPerHari = orderPerWeek.fold(0, (sum, e) => sum + e.quantity);
@@ -25,7 +27,11 @@ class OrderProvider with ChangeNotifier {
         0,
         (sum, e) =>
             sum +
-            ((e.sizeId == "1") ? (e.quantity * 5000) : (e.quantity * 10000)));
+            ((e.quantity *
+                product
+                    .where((element) => element.sizeId == e.sizeId)
+                    .first
+                    .price)));
     notifyListeners();
   }
 
@@ -37,34 +43,7 @@ class OrderProvider with ChangeNotifier {
         for (QueryDocumentSnapshot<Object?> item in data.docs)
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
-    } else if (statusId == "1") {
-      final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
-          .where("status_id", isEqualTo: statusId)
-          .get();
-      setData = [
-        for (QueryDocumentSnapshot<Object?> item in data.docs)
-          OrderModel.fromJson(item.data() as Map<String, dynamic>),
-      ];
-    } else if (statusId == "2") {
-      final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
-          .where("status_id", isEqualTo: statusId)
-          .get();
-      setData = [
-        for (QueryDocumentSnapshot<Object?> item in data.docs)
-          OrderModel.fromJson(item.data() as Map<String, dynamic>),
-      ];
-    } else if (statusId == "3") {
-      final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
-          .where("status_id", isEqualTo: statusId)
-          .get();
-      setData = [
-        for (QueryDocumentSnapshot<Object?> item in data.docs)
-          OrderModel.fromJson(item.data() as Map<String, dynamic>),
-      ];
-    } else if (statusId == "4") {
+    } else {
       final data = await MyCollection.order
           .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: statusId)
@@ -252,7 +231,7 @@ class OrderProvider with ChangeNotifier {
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
       penjualanPerHari = 0;
-      setOrderPerWeek = [];
+      orderPerWeek = [];
       notifyListeners();
     }
   }

@@ -99,9 +99,10 @@ class _RekapPageState extends State<RekapPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final order = Provider.of<OrderProvider>(context);
+    
     return WillPopScope(
       onWillPop: () async {
-        order.setOrderPerWeek = [];
+        order.orderPerWeek = [];
         order.penjualanPerHari = 0;
         return true;
       },
@@ -462,31 +463,31 @@ class _GetGraphState extends State<GetGraph> {
                   return GestureDetector(
                     onTap: () {
                       if (index == 0) {
-                        order.setOrderPerWeek = order.sunData;
+                        order.setOrderPerWeek(order.sunData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 1) {
-                        order.setOrderPerWeek = order.monData;
+                        order.setOrderPerWeek(order.monData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 2) {
-                        order.setOrderPerWeek = order.tueData;
+                        order.setOrderPerWeek(order.tueData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 3) {
-                        order.setOrderPerWeek = order.wedData;
+                        order.setOrderPerWeek(order.wedData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 4) {
-                        order.setOrderPerWeek = order.thuData;
+                        order.setOrderPerWeek(order.thuData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 5) {
-                        order.setOrderPerWeek = order.friData;
+                        order.setOrderPerWeek(order.friData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 6) {
-                        order.setOrderPerWeek = order.satData;
+                        order.setOrderPerWeek(order.satData, order.productData);
                         setState(() {});
                         return;
                       }
