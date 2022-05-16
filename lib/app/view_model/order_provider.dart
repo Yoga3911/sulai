@@ -18,12 +18,24 @@ class OrderProvider with ChangeNotifier {
 
   int penjualanPerHari = 0;
   int pendapatanPerHari = 0;
+  int penjualanPerHari2 = 0;
+  int pendapatanPerHari2 = 0;
 
-  void setOrderPerWeek(List<OrderModel> val, List<ProductModel> product) {
+  void setOrderPerWeek(List<OrderModel> val, List<OrderModel> val2, List<ProductModel> product) {
     val.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     orderPerWeek = val;
     penjualanPerHari = orderPerWeek.fold(0, (sum, e) => sum + e.quantity);
+    penjualanPerHari2 = val2.fold(0, (sum, e) => sum + e.quantity);
     pendapatanPerHari = orderPerWeek.fold(
+        0,
+        (sum, e) =>
+            sum +
+            ((e.quantity *
+                product
+                    .where((element) => element.sizeId == e.sizeId)
+                    .first
+                    .price)));
+    pendapatanPerHari2 = val2.fold(
         0,
         (sum, e) =>
             sum +
@@ -133,6 +145,7 @@ class OrderProvider with ChangeNotifier {
   set setOrderD(List<OrderModel> val) => _orderD = val;
 
   List<OrderModel> get getOrderD => _orderD!;
+  List<OrderModel> satDataB = [];
   List<OrderModel> monData = [];
   List<OrderModel> tueData = [];
   List<OrderModel> wedData = [];
@@ -142,7 +155,17 @@ class OrderProvider with ChangeNotifier {
   List<OrderModel> sunData = [];
 
   List<int> countPerMonth({DateTime? selectedDate}) {
-    List<int> countWeek = List.generate(7, (_) => 0);
+    List<int> countWeek = List.generate(8, (_) => 0);
+    List<OrderModel> satB = getOrderD
+        .where((element) =>
+            element.orderDate.year == selectedDate!.year &&
+            element.orderDate.month == selectedDate.month &&
+            (element.orderDate.day / 7).ceil() ==
+                (selectedDate.subtract(const Duration(days: 1)).day / 7).ceil() &&
+            element.orderDate.weekday == 7)
+        .toList();
+    countWeek[7] = satB.length;
+    satDataB = satB;
     List<OrderModel> mon = getOrderD
         .where((element) =>
             element.orderDate.year == selectedDate!.year &&
@@ -230,6 +253,22 @@ class OrderProvider with ChangeNotifier {
     );
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
+      penjualanPerHari = 0;
+      orderPerWeek = [];
+      notifyListeners();
+    }
+  }
+  DateTime selectedDate2 = DateTime.now();
+
+  selectDate2(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2099),
+    );
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked.subtract(const Duration(days: 1));
       penjualanPerHari = 0;
       orderPerWeek = [];
       notifyListeners();

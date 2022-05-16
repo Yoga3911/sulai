@@ -99,7 +99,7 @@ class _RekapPageState extends State<RekapPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final order = Provider.of<OrderProvider>(context);
-    
+
     return WillPopScope(
       onWillPop: () async {
         order.orderPerWeek = [];
@@ -220,6 +220,7 @@ class _RekapPageState extends State<RekapPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           order.selectDate(context);
+                          // order.selectDate2(context);
                         },
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -259,99 +260,255 @@ class _RekapPageState extends State<RekapPage> {
                       ? const SizedBox()
                       : Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                top: 10,
-                                bottom: 10,
-                              ),
-                              child: Container(
-                                width: size.width * 0.5,
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xFF4D97EA)),
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Total Penjualan",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 15,
+                                    top: 10,
+                                    bottom: 10,
+                                  ),
+                                  child: Container(
+                                    width: size.width * 0.5,
+                                    height: size.height * 0.17,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xFF4D97EA)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Text(
+                                            "Total Penjualan",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(DateFormat(
+                                                  "EEEE, dd MMMM yyyy", "in_ID")
+                                              .format(order.orderPerWeek.first
+                                                  .orderDate)),
+                                          Text(
+                                            order.penjualanPerHari.toString() +
+                                                " buah",
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(DateFormat(
-                                              "EEEE, dd MMMM yyyy", "in_ID")
-                                          .format(order
-                                              .orderPerWeek.first.orderDate)),
-                                      Text(
-                                        order.penjualanPerHari.toString() +
-                                            " buah",
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 15,
+                                    top: 10,
+                                    bottom: 10,
+                                  ),
+                                  child: Container(
+                                    width: size.width * 0.27,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xFF4D97EA)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Text(
+                                            "Kenaikan",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Center(
+                                              child: IconButton(
+                                                  onPressed: null,
+                                                  icon: Image.asset(
+                                                    "assets/icons/stonk.png",
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  ))),
+                                          (order.penjualanPerHari2 == 0)
+                                              ? const Text(
+                                                  "100%",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  (((order.penjualanPerHari -
+                                                                      order
+                                                                          .penjualanPerHari2) /
+                                                                  order
+                                                                      .penjualanPerHari2) *
+                                                              100)
+                                                          .toStringAsFixed(1) +
+                                                      "%",
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                top: 10,
-                                bottom: 10,
-                              ),
-                              child: Container(
-                                width: size.width * 0.5,
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xFF4D97EA)),
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Total Pendapatan",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 15,
+                                    top: 10,
+                                    bottom: 10,
+                                  ),
+                                  child: Container(
+                                    height: size.height * 0.17,
+                                    width: size.width * 0.5,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xFF4D97EA)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Text(
+                                            "Total Pendapatan",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(DateFormat(
+                                                  "EEEE, dd MMMM yyyy", "in_ID")
+                                              .format(order.orderPerWeek.first
+                                                  .orderDate)),
+                                          Text(
+                                            "Rp " +
+                                                currency(
+                                                    order.pendapatanPerHari),
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(DateFormat(
-                                              "EEEE, dd MMMM yyyy", "in_ID")
-                                          .format(order
-                                              .orderPerWeek.first.orderDate)),
-                                      Text(
-                                        "Rp " +
-                                            currency(order.pendapatanPerHari),
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 15,
+                                    top: 10,
+                                    bottom: 10,
+                                  ),
+                                  child: Container(
+                                    width: size.width * 0.27,
+                                    height: size.height * 0.17,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xFF4D97EA)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Text(
+                                            "Kenaikan",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Center(
+                                              child: IconButton(
+                                                  onPressed: null,
+                                                  icon: Image.asset(
+                                                    "assets/icons/stonk.png",
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  ))),
+                                          (order.pendapatanPerHari2 == 0)
+                                              ? const Text(
+                                                  "100%",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  (((order.pendapatanPerHari -
+                                                                      order
+                                                                          .pendapatanPerHari2) /
+                                                                  order
+                                                                      .pendapatanPerHari2) *
+                                                              100)
+                                                          .toStringAsFixed(1) +
+                                                      "%",
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -398,7 +555,9 @@ class _RekapPageState extends State<RekapPage> {
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: (e.sizeId == "1")? " Plastik: ${e.quantity} buah" : " Botol: ${e.quantity} buah",
+                                        text: (e.sizeId == "1")
+                                            ? " Plastik: ${e.quantity} buah"
+                                            : " Botol: ${e.quantity} buah",
                                         style:
                                             const TextStyle(color: Colors.red))
                                   ],
@@ -463,31 +622,38 @@ class _GetGraphState extends State<GetGraph> {
                   return GestureDetector(
                     onTap: () {
                       if (index == 0) {
-                        order.setOrderPerWeek(order.sunData, order.productData);
+                        order.setOrderPerWeek(
+                            order.sunData, order.satDataB, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 1) {
-                        order.setOrderPerWeek(order.monData, order.productData);
+                        order.setOrderPerWeek(
+                            order.monData, order.sunData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 2) {
-                        order.setOrderPerWeek(order.tueData, order.productData);
+                        order.setOrderPerWeek(
+                            order.tueData, order.monData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 3) {
-                        order.setOrderPerWeek(order.wedData, order.productData);
+                        order.setOrderPerWeek(
+                            order.wedData, order.tueData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 4) {
-                        order.setOrderPerWeek(order.thuData, order.productData);
+                        order.setOrderPerWeek(
+                            order.thuData, order.wedData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 5) {
-                        order.setOrderPerWeek(order.friData, order.productData);
+                        order.setOrderPerWeek(
+                            order.friData, order.thuData, order.productData);
                         setState(() {});
                         return;
                       } else if (index == 6) {
-                        order.setOrderPerWeek(order.satData, order.productData);
+                        order.setOrderPerWeek(
+                            order.satData, order.friData, order.productData);
                         setState(() {});
                         return;
                       }
