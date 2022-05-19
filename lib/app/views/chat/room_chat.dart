@@ -107,8 +107,10 @@ class _RoomChatState extends State<RoomChat> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: AppBar(
+            elevation: 0,
             leading: IconButton(
               splashRadius: 1,
+              color: Colors.black,
               onPressed: () {
                 FirebaseFirestore.instance
                     .collection("user")
@@ -151,8 +153,10 @@ class _RoomChatState extends State<RoomChat> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.userModel.name),
-                          const SizedBox(height: 5),
+                          Text(
+                            widget.userModel.name,
+                            style: const TextStyle(color: Colors.black),
+                          ),
                           StreamBuilder<DocumentSnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection("user")
@@ -167,7 +171,10 @@ class _RoomChatState extends State<RoomChat> {
                                 return (snapshot.data!["isTyping"])
                                     ? const Text(
                                         "Sedang mengetik ...",
-                                        style: TextStyle(fontSize: 10),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.black,
+                                        ),
                                       )
                                     : (userData.isActive)
                                         ? Row(
@@ -176,7 +183,10 @@ class _RoomChatState extends State<RoomChat> {
                                             children: [
                                               const Text(
                                                 "online",
-                                                style: TextStyle(fontSize: 10),
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                               Container(
                                                 margin: const EdgeInsets.only(
@@ -196,7 +206,10 @@ class _RoomChatState extends State<RoomChat> {
                                             children: [
                                               const Text(
                                                 "offline",
-                                                style: TextStyle(fontSize: 10),
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                               Container(
                                                 margin: const EdgeInsets.only(
@@ -218,7 +231,7 @@ class _RoomChatState extends State<RoomChat> {
                 }),
           ),
           body: Container(
-            color: const Color.fromARGB(255, 30, 30, 30),
+            color: const Color(0xFFDEDBD4),
             child: StreamBuilder<QuerySnapshot>(
               stream: chat
                   .doc(widget.docId)
@@ -257,7 +270,8 @@ class _RoomChatState extends State<RoomChat> {
                                       left: 10,
                                     ),
                                     decoration: BoxDecoration(
-                                        color: Colors.yellow,
+                                        color: const Color.fromARGB(
+                                            255, 255, 219, 134),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: Text(
                                       DateFormat.yMMMd().format(
@@ -312,7 +326,12 @@ class _RoomChatState extends State<RoomChat> {
                                                                   right: 10),
                                                           decoration:
                                                               const BoxDecoration(
-                                                            color: Colors.blue,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    219,
+                                                                    134),
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .only(
@@ -354,9 +373,9 @@ class _RoomChatState extends State<RoomChat> {
                                                                   color: const Color
                                                                           .fromARGB(
                                                                       255,
-                                                                      7,
-                                                                      97,
-                                                                      171),
+                                                                      255,
+                                                                      197,
+                                                                      62),
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -424,7 +443,12 @@ class _RoomChatState extends State<RoomChat> {
                                                                   right: 10),
                                                           decoration:
                                                               const BoxDecoration(
-                                                            color: Colors.blue,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    219,
+                                                                    134),
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .only(
@@ -490,12 +514,7 @@ class _RoomChatState extends State<RoomChat> {
                                                                   right: 10),
                                                           decoration:
                                                               const BoxDecoration(
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    113,
-                                                                    113,
-                                                                    113),
+                                                            color: Colors.white,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .only(
@@ -534,12 +553,7 @@ class _RoomChatState extends State<RoomChat> {
                                                                 ),
                                                                 decoration:
                                                                     BoxDecoration(
-                                                                  color: const Color
-                                                                          .fromARGB(
-                                                                      255,
-                                                                      74,
-                                                                      74,
-                                                                      74),
+                                                                  color: const Color.fromARGB(255, 231, 231, 231),
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -566,7 +580,8 @@ class _RoomChatState extends State<RoomChat> {
                                                                         return const SizedBox();
                                                                       }
                                                                       return Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text(
                                                                             "> ${reply.data!["username"]} <",
@@ -606,12 +621,7 @@ class _RoomChatState extends State<RoomChat> {
                                                                   right: 10),
                                                           decoration:
                                                               const BoxDecoration(
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    113,
-                                                                    113,
-                                                                    113),
+                                                            color: Colors.white,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .only(
@@ -643,7 +653,7 @@ class _RoomChatState extends State<RoomChat> {
                     ),
                     (isReply)
                         ? Container(
-                            color: const Color.fromARGB(255, 62, 62, 62),
+                            color: Colors.white,
                             width: double.infinity,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -680,7 +690,7 @@ class _RoomChatState extends State<RoomChat> {
                         : const SizedBox(),
                     Container(
                       width: double.infinity,
-                      color: const Color.fromARGB(255, 62, 62, 62),
+                      color: const Color.fromARGB(255, 255, 219, 134),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -763,88 +773,90 @@ class _RoomChatState extends State<RoomChat> {
                                   return Flexible(
                                     flex: 2,
                                     child: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.send_rounded)),
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.send_rounded),
+                                    ),
                                   );
                                 }
                                 return Flexible(
                                   child: IconButton(
-                                      onPressed: () async {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
-                                        final text = _controller.text;
-                                        _controller.text = "";
+                                    onPressed: () async {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      final text = _controller.text;
+                                      _controller.text = "";
 
-                                        final msgDoc = chat
-                                            .doc(widget.docId)
-                                            .collection("message")
-                                            .doc();
-                                        await msgDoc.set({
-                                          "message": text,
-                                          "user": user.getUser.email,
-                                          "username": user.getUser.name,
-                                          "isRead": false,
-                                          "date": DateTime.now(),
-                                          "isSend": false,
-                                          "replyId": replyId,
-                                        }).whenComplete(() {
-                                          msgDoc.update({"isSend": true});
-                                        });
-                                        final unread = await FirebaseFirestore
-                                            .instance
+                                      final msgDoc = chat
+                                          .doc(widget.docId)
+                                          .collection("message")
+                                          .doc();
+                                      await msgDoc.set({
+                                        "message": text,
+                                        "user": user.getUser.email,
+                                        "username": user.getUser.name,
+                                        "isRead": false,
+                                        "date": DateTime.now(),
+                                        "isSend": false,
+                                        "replyId": replyId,
+                                      }).whenComplete(() {
+                                        msgDoc.update({"isSend": true});
+                                      });
+                                      final unread = await FirebaseFirestore
+                                          .instance
+                                          .collection("user")
+                                          .doc(widget.userModel.id)
+                                          .collection("chats")
+                                          .doc(widget.docId)
+                                          .get();
+                                      if ((snapshot3.data?.data() as Map<String,
+                                              dynamic>)["onRoom"] ==
+                                          false) {
+                                        FirebaseFirestore.instance
                                             .collection("user")
                                             .doc(widget.userModel.id)
                                             .collection("chats")
                                             .doc(widget.docId)
-                                            .get();
-                                        if ((snapshot3.data?.data() as Map<
-                                                String, dynamic>)["onRoom"] ==
-                                            false) {
-                                          FirebaseFirestore.instance
-                                              .collection("user")
-                                              .doc(widget.userModel.id)
-                                              .collection("chats")
-                                              .doc(widget.docId)
-                                              .update({
-                                            "unread": unread["unread"] + 1,
-                                            "date": DateTime.now(),
-                                          });
-                                        } else {
-                                          await FirebaseFirestore.instance
-                                              .collection("user")
-                                              .doc(widget.userModel.id)
-                                              .collection("chats")
-                                              .doc(widget.docId)
-                                              .update({
-                                            "date": DateTime.now(),
-                                          });
-                                          chat
-                                              .doc(widget.docId)
-                                              .collection("message")
-                                              .doc(msgDoc.id)
-                                              .update({
-                                            "isRead": true,
-                                          });
-                                        }
-                                        FirebaseFirestore.instance
+                                            .update({
+                                          "unread": unread["unread"] + 1,
+                                          "date": DateTime.now(),
+                                        });
+                                      } else {
+                                        await FirebaseFirestore.instance
                                             .collection("user")
-                                            .doc(user.getUser.id)
+                                            .doc(widget.userModel.id)
                                             .collection("chats")
                                             .doc(widget.docId)
                                             .update({
                                           "date": DateTime.now(),
                                         });
-                                        replyId = "";
-                                        replyMsg = "";
-                                        isReply = false;
-                                        if (_scrollController.hasClients) {
-                                          final position = _scrollController
-                                              .position.minScrollExtent;
-                                          _scrollController.jumpTo(position);
-                                        }
-                                        setState(() {});
-                                      },
-                                      icon: const Icon(Icons.send)),
+                                        chat
+                                            .doc(widget.docId)
+                                            .collection("message")
+                                            .doc(msgDoc.id)
+                                            .update({
+                                          "isRead": true,
+                                        });
+                                      }
+                                      FirebaseFirestore.instance
+                                          .collection("user")
+                                          .doc(user.getUser.id)
+                                          .collection("chats")
+                                          .doc(widget.docId)
+                                          .update({
+                                        "date": DateTime.now(),
+                                      });
+                                      replyId = "";
+                                      replyMsg = "";
+                                      isReply = false;
+                                      if (_scrollController.hasClients) {
+                                        final position = _scrollController
+                                            .position.minScrollExtent;
+                                        _scrollController.jumpTo(position);
+                                      }
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(Icons.send),
+                                  ),
                                   flex: 2,
                                 );
                               }),

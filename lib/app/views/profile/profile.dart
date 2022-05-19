@@ -383,12 +383,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    final pref = await SharedPreferences.getInstance();
+                    final user = MyCollection.user.doc(pref.getString("id"));
+                    user.update({
+                      "isActive": false,
+                    });
                     showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (_) => const CustomLoading(),
                     );
-                    final pref = await SharedPreferences.getInstance();
                     final String social = pref.getString("social")!;
                     switch (social) {
                       case "email":

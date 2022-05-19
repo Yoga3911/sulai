@@ -11,5 +11,6 @@ class MyCollection {
   static final CollectionReference status = FirebaseFirestore.instance.collection("status");
   static final CollectionReference ulasan = FirebaseFirestore.instance.collection("ulasan");
   static final CollectionReference size = FirebaseFirestore.instance.collection("size");
+  static final CollectionReference chat = FirebaseFirestore.instance.collection("chat");
   static final FirebaseStorage storage = FirebaseStorage.instance;
 }

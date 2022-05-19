@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 
+import '../../constant/collection.dart';
 import '../../constant/color.dart';
 import '../../models/user_model.dart';
 import '../../view_model/user_provider.dart';
@@ -19,7 +20,6 @@ class HomeChat extends StatefulWidget {
 }
 
 class _HomeChatState extends State<HomeChat> {
-  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -27,6 +27,93 @@ class _HomeChatState extends State<HomeChat> {
     final CollectionReference getUser =
         FirebaseFirestore.instance.collection("user");
     return Scaffold(
+      floatingActionButton: (user.roleId == "2")? null : FutureBuilder<QuerySnapshot>(
+          future: MyCollection.user.doc(user.id).collection("chats").get(),
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox();
+            }
+            return FutureBuilder<DocumentSnapshot>(
+                future: MyCollection.user.doc("mOioopdH4uZDvrxy0Ewc").get(),
+                builder: (_, snapshot2) {
+                  if (snapshot2.connectionState == ConnectionState.waiting) {
+                    return const SizedBox();
+                  }
+                  final userModel = UserModel.fromJson(
+                    snapshot2.data!.data() as Map<String, dynamic>,
+                  );
+                  return FloatingActionButton(
+                    heroTag: "home",
+                    onPressed: () {
+                      for (var i in snapshot.data!.docs) {
+                        if ((i.data() as Map<String, dynamic>)["user_id"] ==
+                            userModel.id) {
+                          MyCollection.user
+                              .doc(userModel.id)
+                              .collection("chats")
+                              .doc(i.id)
+                              .update({
+                            "unread": 0,
+                            "onRoom": true,
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => RoomChat(
+                                userModel: userModel,
+                                docId: i.id,
+                                onRoom: true,
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                      }
+                      final doc = MyCollection.chat.doc();
+                      doc.set({
+                        "members": [user.id, userModel.id]
+                      });
+                      MyCollection.user
+                          .doc(user.id)
+                          .collection("chats")
+                          .doc(doc.id)
+                          .set({
+                        "user_id": userModel.id,
+                        "unread": 0,
+                        "onRoom": false,
+                        "isTyping": false,
+                        "date": DateTime.now(),
+                      });
+                      MyCollection.user
+                          .doc(userModel.id)
+                          .collection("chats")
+                          .doc(doc.id)
+                          .set({
+                        "user_id": user.id,
+                        "unread": 0,
+                        "isTyping": false,
+                        "onRoom": true,
+                        "date": DateTime.now(),
+                      });
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => RoomChat(
+                            userModel: userModel,
+                            docId: doc.id,
+                            onRoom: true,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.chat_rounded,
+                      color: Colors.white,
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 255, 219, 134),
+                  );
+                });
+          }),
       body: MainStyle(
         widget: [
           const CustomAppBar(),
@@ -110,128 +197,113 @@ class _HomeChatState extends State<HomeChat> {
                               if (snapshot2.data!.docs.isEmpty) {
                                 return const SizedBox();
                               }
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  child: ClipOval(
-                                    child: CachedNetworkImage(
-                                      imageUrl: userModel.imageUrl,
-                                      fit: BoxFit.cover,
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                    ),
-                                  ),
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  top: 20,
+                                  bottom: 10,
                                 ),
-                                trailing: (userData["unread"] == 0)
-                                    ? const SizedBox()
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            decoration: const BoxDecoration(
-                                                color: Colors.greenAccent,
-                                                shape: BoxShape.circle),
-                                            padding: const EdgeInsets.all(4),
-                                            child: Text(
-                                              userData["unread"].toString(),
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 5),
-                                          ((DateTime.now().millisecondsSinceEpoch -
-                                                      (userData["date"]
-                                                              as Timestamp)
-                                                          .toDate()
-                                                          .millisecondsSinceEpoch) <
-                                                  86400000)
-                                              ? Text(
-                                                  DateFormat.Hm().format(
-                                                    (userData["date"]
-                                                            as Timestamp)
-                                                        .toDate(),
-                                                  ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: userModel.imageUrl,
+                                          fit: BoxFit.cover,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                        ),
+                                      ),
+                                    ),
+                                    trailing: (userData["unread"] == 0)
+                                        ? const SizedBox()
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                decoration: const BoxDecoration(
+                                                    color: Color.fromARGB(255, 255, 219, 134),
+                                                    shape: BoxShape.circle),
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Text(
+                                                  userData["unread"].toString(),
                                                   style: const TextStyle(
-                                                      fontSize: 12),
-                                                )
-                                              : ((DateTime.now()
-                                                              .millisecondsSinceEpoch -
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                              ((DateTime.now().millisecondsSinceEpoch -
                                                           (userData["date"]
                                                                   as Timestamp)
                                                               .toDate()
                                                               .millisecondsSinceEpoch) <
-                                                      172800000)
-                                                  ? const Text(
-                                                      "Kemarin",
-                                                      style: TextStyle(
-                                                          fontSize: 12),
-                                                    )
-                                                  : Text(
-                                                      DateFormat("dd/MM/yyyy")
-                                                          .format(
+                                                      86400000)
+                                                  ? Text(
+                                                      DateFormat.Hm().format(
                                                         (userData["date"]
                                                                 as Timestamp)
                                                             .toDate(),
                                                       ),
                                                       style: const TextStyle(
                                                           fontSize: 12),
-                                                    ),
-                                        ],
-                                      ),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      userModel.name,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 3),
-                                    ((userData["isTyping"]))
-                                        ? const Text(
-                                            "Sedang mengetik ...",
-                                            style: TextStyle(fontSize: 12),
-                                          )
-                                        : (user.email !=
-                                                (snapshot2.data!.docs.last
-                                                        .data()
-                                                    as Map<String,
-                                                        dynamic>)["user"])
-                                            ? Flexible(
-                                                child: Text(
-                                                  (snapshot2.data!.docs.last
-                                                          .data()
-                                                      as Map<String,
-                                                          dynamic>)["message"],
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              )
-                                            : Row(
-                                                children: [
-                                                  ((snapshot2.data!.docs.last
-                                                                  .data()
-                                                              as Map<String,
-                                                                  dynamic>)[
-                                                          "isRead"])
-                                                      ? const Icon(
-                                                          Icons.check,
-                                                          color: Colors.blue,
-                                                          size: 20,
+                                                    )
+                                                  : ((DateTime.now()
+                                                                  .millisecondsSinceEpoch -
+                                                              (userData["date"]
+                                                                      as Timestamp)
+                                                                  .toDate()
+                                                                  .millisecondsSinceEpoch) <
+                                                          172800000)
+                                                      ? const Text(
+                                                          "Kemarin",
+                                                          style: TextStyle(
+                                                              fontSize: 12),
                                                         )
-                                                      : const Icon(
-                                                          Icons.check,
-                                                          size: 20,
+                                                      : Text(
+                                                          DateFormat(
+                                                                  "dd/MM/yyyy")
+                                                              .format(
+                                                            (userData["date"]
+                                                                    as Timestamp)
+                                                                .toDate(),
+                                                          ),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
                                                         ),
-                                                  const SizedBox(width: 5),
-                                                  Flexible(
+                                            ],
+                                          ),
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          userModel.name,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        ((userData["isTyping"]))
+                                            ? const Text(
+                                                "Sedang mengetik ...",
+                                                style: TextStyle(fontSize: 12),
+                                              )
+                                            : (user.email !=
+                                                    (snapshot2.data!.docs.last
+                                                            .data()
+                                                        as Map<String,
+                                                            dynamic>)["user"])
+                                                ? Flexible(
                                                     child: Text(
                                                       (snapshot2.data!.docs.last
                                                                   .data()
@@ -244,41 +316,78 @@ class _HomeChatState extends State<HomeChat> {
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     ),
-                                                  ),
-                                                ],
-                                              )
-                                  ],
-                                ),
-                                onTap: () {
-                                  FirebaseFirestore.instance
-                                      .collection("user")
-                                      .doc(userModel.id)
-                                      .collection("chats")
-                                      .doc(snapshot.data!.docs[index].id)
-                                      .update({
-                                    "onRoom": true,
-                                  });
-                                  FirebaseFirestore.instance
-                                      .collection("user")
-                                      .doc(user.id)
-                                      .collection("chats")
-                                      .doc(snapshot.data!.docs[index].id)
-                                      .update({
-                                    "unread": 0,
-                                  });
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => RoomChat(
-                                        userModel: userModel,
-                                        docId: snapshot.data!.docs[index].id,
-                                        onRoom: (snapshot.data!.docs[index]
-                                                .data()
-                                            as Map<String, dynamic>)["onRoom"],
-                                      ),
+                                                  )
+                                                : Row(
+                                                    children: [
+                                                      ((snapshot2.data!.docs.last
+                                                                      .data()
+                                                                  as Map<String,
+                                                                      dynamic>)[
+                                                              "isRead"])
+                                                          ? const Icon(
+                                                              Icons.check,
+                                                              color:
+                                                                  Colors.blue,
+                                                              size: 20,
+                                                            )
+                                                          : const Icon(
+                                                              Icons.check,
+                                                              size: 20,
+                                                            ),
+                                                      const SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          (snapshot2.data!.docs.last
+                                                                      .data()
+                                                                  as Map<String,
+                                                                      dynamic>)[
+                                                              "message"],
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                      ],
                                     ),
-                                  );
-                                },
+                                    onTap: () {
+                                      FirebaseFirestore.instance
+                                          .collection("user")
+                                          .doc(userModel.id)
+                                          .collection("chats")
+                                          .doc(snapshot.data!.docs[index].id)
+                                          .update({
+                                        "onRoom": true,
+                                      });
+                                      FirebaseFirestore.instance
+                                          .collection("user")
+                                          .doc(user.id)
+                                          .collection("chats")
+                                          .doc(snapshot.data!.docs[index].id)
+                                          .update({
+                                        "unread": 0,
+                                      });
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => RoomChat(
+                                            userModel: userModel,
+                                            docId:
+                                                snapshot.data!.docs[index].id,
+                                            onRoom: (snapshot.data!.docs[index]
+                                                        .data()
+                                                    as Map<String, dynamic>)[
+                                                "onRoom"],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               );
                             },
                           );
