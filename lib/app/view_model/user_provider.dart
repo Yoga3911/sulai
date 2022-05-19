@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +32,10 @@ class UserProvider with ChangeNotifier {
     final pref = await SharedPreferences.getInstance();
     final data = await MyCollection.user.doc(pref.getString("id")).get();
     setUser = UserModel.fromJson(data.data() as Map<String, dynamic>);
+    final userD = MyCollection.user.doc(pref.getString("id"));
+    userD.update({
+      "isActive": true,
+    });
   }
 
   Future<UserModel> getById({String? userId}) async {
@@ -42,25 +48,27 @@ class UserProvider with ChangeNotifier {
       String? password,
       String? img,
       String? name,
+      bool? isActive,
       String? provider}) async {
     QuerySnapshot<Object?> account =
         await MyCollection.user.where("email", isEqualTo: email).get();
     final collection = MyCollection.user.doc();
 
     if (account.docs.isEmpty) {
-      await collection.set(
-        UserModel(
-          id: collection.id,
-          email: email!,
-          password: password ?? "-",
-          imageUrl: img!,
-          name: name!,
-          roleId: "1",
-          provider: provider!,
-          createAt: DateTime.now(),
-          updateAt: DateTime.now(),
-        ).toJson(),
-      );
+      log("empty");
+      final user = UserModel(
+        id: collection.id,
+        email: email!,
+        password: password ?? "-",
+        imageUrl: img!,
+        name: name!,
+        roleId: "1",
+        isActive: isActive!,
+        provider: provider!,
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
+      ).toJson();
+      await collection.set(user);
     }
   }
 

@@ -647,7 +647,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     (value) => Navigator
                                                         .pushNamedAndRemoveUntil(
                                                       context,
-                                                      Routes.home,
+                                                      Routes.main,
                                                       (route) => false,
                                                     ),
                                                   ),
@@ -683,7 +683,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             (value) => Navigator
                                                 .pushNamedAndRemoveUntil(
                                               context,
-                                              Routes.home,
+                                              Routes.main,
                                               (route) => false,
                                             ),
                                           );

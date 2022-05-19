@@ -66,7 +66,10 @@ class HomePage extends StatelessWidget {
                     label: "SHOP",
                   ),
                 ),
-                const CustomBox(icon: "assets/icons/chat.png", label: "CHAT"),
+                GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, Routes.homeChat),
+                    child: const CustomBox(
+                        icon: "assets/icons/chat.png", label: "CHAT")),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, Routes.media),
                   child: const CustomBox(
@@ -74,15 +77,14 @@ class HomePage extends StatelessWidget {
                     label: "MEDIA",
                   ),
                 ),
-                (user.getUser.roleId == "2")
-                    ? GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, Routes.rekap),
-                        child: const CustomBox(
-                          icon: "assets/icons/report.png",
-                          label: "REKAP",
-                        ),
-                      )
-                    : const SizedBox(),
+                if (user.getUser.roleId == "2")
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, Routes.rekap),
+                    child: const CustomBox(
+                      icon: "assets/icons/report.png",
+                      label: "REKAP",
+                    ),
+                  )
               ],
             ),
             Container(

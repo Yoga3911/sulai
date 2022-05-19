@@ -23,6 +23,7 @@ class AuthProvider with ChangeNotifier {
           img: _blank,
           name: name,
           provider: "email",
+          isActive: false
         );
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -65,6 +66,7 @@ class AuthProvider with ChangeNotifier {
             email: user.user!.email,
             img: user.user!.photoURL,
             provider: provider,
+            isActive: false,
           );
           await _user.getUserByEmail(email: user.user!.email);
           final pref = await SharedPreferences.getInstance();

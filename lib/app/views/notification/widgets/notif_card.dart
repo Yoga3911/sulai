@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sulai/app/constant/collection.dart';
 import 'package:sulai/app/models/notifaction_model.dart';
-import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../view_model/notification.dart';
@@ -23,7 +24,6 @@ class NotifCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final user = Provider.of<UserProvider>(context, listen: false);
     final notification =
         Provider.of<NotificationProvider>(context, listen: false);
     return Container(
@@ -41,16 +41,27 @@ class NotifCard extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: const Color(0xFFDEDBD4),
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      height: double.infinity,
-                      width: double.infinity,
-                      imageUrl: user.getUser.imageUrl,
-                    ),
-                  ),
+                FutureBuilder<DocumentSnapshot>(
+                  future: MyCollection.user.doc(notif.adminId).get(),
+                  builder: (_, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Color(0xFFDEDBD4),
+                      );
+                    }
+                    return CircleAvatar(
+                      radius: 25,
+                      backgroundColor: const Color(0xFFDEDBD4),
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          height: double.infinity,
+                          width: double.infinity,
+                          imageUrl: (snapshot.data!.data() as Map<String, dynamic>)["image_url"],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 10),
                 Flexible(

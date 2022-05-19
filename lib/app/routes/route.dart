@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sulai/app/views/chat/home_chat.dart';
 import 'package:sulai/app/views/home/home.dart';
 import 'package:sulai/app/views/home/main_page.dart';
 import 'package:sulai/app/views/maps/maps.dart';
@@ -38,6 +39,7 @@ class Routes {
   static const maps = "/maps";
   static const ulasan = "/ulasan";
   static const rekap = "/rekap";
+  static const homeChat = "/homeChat";
 
   static final data = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
@@ -57,5 +59,6 @@ class Routes {
     maps: (_) => const MyMaps(),
     ulasan: (_) => const UlasanPage(),
     rekap: (_) => const RekapPage(),
+    homeChat: (_) => const HomeChat(),
   };
 }

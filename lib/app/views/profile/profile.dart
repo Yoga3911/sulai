@@ -6,11 +6,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 
 import '../../constant/collection.dart';
+import '../../services/email.dart';
+import '../../services/facebook.dart';
+import '../../services/google.dart';
+import '../../view_model/auth_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -70,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
+
     final size = MediaQuery.of(context).size;
     return MainStyle(
       widget: [
@@ -337,7 +343,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 10),
                     profileItem(
-                        icon: Icons.ios_share_rounded, label: "Review Kami"),
+                      icon: Icons.logout_rounded,
+                      label: "Logout",
+                    ),
                     const SizedBox(height: 10),
                     const Divider(
                       height: 2,
@@ -355,9 +363,61 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget profileItem({IconData? icon, String? label, Widget? route}) {
+  Widget profileItem({IconData? icon, String? label, String? action}) {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        if (label == "Logout") {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => AlertDialog(
+              title: const Text(
+                "Apakah anda yakin ingin keluar?",
+                style: TextStyle(fontSize: 16),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text("Batal"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (_) => const CustomLoading(),
+                    );
+                    final pref = await SharedPreferences.getInstance();
+                    final String social = pref.getString("social")!;
+                    switch (social) {
+                      case "email":
+                        auth.logout(
+                          context,
+                          EmailService(),
+                        );
+                        break;
+                      case "facebook":
+                        auth.logout(
+                          context,
+                          FacebookService(),
+                        );
+                        break;
+                      case "google":
+                        auth.logout(
+                          context,
+                          GoogleService(),
+                        );
+                        break;
+                    }
+                  },
+                  child: const Text("Ya"),
+                ),
+              ],
+            ),
+          );
+        }
+      },
       child: Row(
         children: [
           Icon(

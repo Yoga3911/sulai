@@ -1,28 +1,122 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/constant/collection.dart';
-import 'package:sulai/app/services/email.dart';
-import 'package:sulai/app/services/facebook.dart';
-import 'package:sulai/app/services/google.dart';
-import 'package:sulai/app/view_model/auth_provider.dart';
+
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/notification.dart';
-import 'package:sulai/app/widgets/loading.dart';
 
 import '../constant/color.dart';
 import '../routes/route.dart';
 import '../view_model/order_provider.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatefulWidget {
   const CustomAppBar({Key? key}) : super(key: key);
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  String _connectionStatus = "";
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    switch (result) {
+      case ConnectivityResult.mobile:
+        _connectionStatus = "Mobile";
+        break;
+      case ConnectivityResult.ethernet:
+        _connectionStatus = "Ethernet";
+        break;
+      case ConnectivityResult.bluetooth:
+        _connectionStatus = "Bluetooth";
+        break;
+      case ConnectivityResult.wifi:
+        _connectionStatus = "Wifi";
+        break;
+      case ConnectivityResult.none:
+        _connectionStatus = "No internet connection";
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "No internet connection",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        // showDialog(
+        //   barrierDismissible: false,
+        //   context: context,
+        //   builder: (_) => AlertDialog(
+        //     title: Text("Text"),
+        //     content: Text("Cobaaa"),
+        //     actions: [
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           Navigator.pop(context);
+        //           if (_connectionStatus == "None") {
+        //             _updateConnectionStatus(result);
+        //           }
+        //         },
+        //         child: Text("Try"),
+        //       )
+        //     ],
+        //   ),
+        // );
+        // if (_connectivity.onConnectivityChanged != ConnectionState.none) {
+        //   Navigator.pop(context);
+        // }
+        break;
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+
     final order = Provider.of<OrderProvider>(context, listen: false);
     final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
     return SizedBox(
@@ -56,7 +150,7 @@ class CustomAppBar extends StatelessWidget {
                       order.orderPerWeek = [];
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        Routes.home,
+                        Routes.main,
                         (route) => false,
                       );
                     },
@@ -159,64 +253,20 @@ class CustomAppBar extends StatelessWidget {
                       width: 2,
                       color: Colors.grey,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (ctx) => AlertDialog(
-                            title: const Text(
-                              "Apakah anda yakin ingin keluar?",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(ctx),
-                                child: const Text("Batal"),
+                    (_connectionStatus == "Wifi")
+                        ? const Icon(
+                            Icons.wifi_rounded,
+                            color: MyColor.blue,
+                          )
+                        : (_connectionStatus == "Mobile")
+                            ? const Icon(
+                                Icons.signal_cellular_alt_rounded,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.airplanemode_active_rounded,
+                                color: Colors.red,
                               ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (_) => const CustomLoading(),
-                                  );
-                                  final pref =
-                                      await SharedPreferences.getInstance();
-                                  final String social =
-                                      pref.getString("social")!;
-                                  switch (social) {
-                                    case "email":
-                                      auth.logout(
-                                        context,
-                                        EmailService(),
-                                      );
-                                      break;
-                                    case "facebook":
-                                      auth.logout(
-                                        context,
-                                        FacebookService(),
-                                      );
-                                      break;
-                                    case "google":
-                                      auth.logout(
-                                        context,
-                                        GoogleService(),
-                                      );
-                                      break;
-                                  }
-                                },
-                                child: const Text("Ya"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.logout_rounded,
-                        color: MyColor.grey,
-                      ),
-                    )
                   ],
                 ),
               ),

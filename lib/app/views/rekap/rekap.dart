@@ -355,7 +355,7 @@ class _RekapPageState extends State<RekapPage> {
                                                   ))),
                                           (order.penjualanPerHari2 == 0)
                                               ? const Text(
-                                                  "100%",
+                                                  "0%",
                                                   style: TextStyle(
                                                     color: Colors.red,
                                                     fontWeight: FontWeight.bold,
@@ -481,7 +481,7 @@ class _RekapPageState extends State<RekapPage> {
                                                   ))),
                                           (order.pendapatanPerHari2 == 0)
                                               ? const Text(
-                                                  "100%",
+                                                  "0%",
                                                   style: TextStyle(
                                                     color: Colors.red,
                                                     fontWeight: FontWeight.bold,
@@ -624,39 +624,26 @@ class _GetGraphState extends State<GetGraph> {
                       if (index == 0) {
                         order.setOrderPerWeek(
                             order.sunData, order.satDataB, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 1) {
                         order.setOrderPerWeek(
                             order.monData, order.sunData, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 2) {
                         order.setOrderPerWeek(
                             order.tueData, order.monData, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 3) {
                         order.setOrderPerWeek(
                             order.wedData, order.tueData, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 4) {
                         order.setOrderPerWeek(
                             order.thuData, order.wedData, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 5) {
                         order.setOrderPerWeek(
                             order.friData, order.thuData, order.productData);
-                        setState(() {});
-                        return;
                       } else if (index == 6) {
                         order.setOrderPerWeek(
                             order.satData, order.friData, order.productData);
-                        setState(() {});
-                        return;
                       }
+                      setState(() {});
                     },
                     child: Column(
                       children: [
