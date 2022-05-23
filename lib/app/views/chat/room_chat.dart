@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/user_model.dart';
 import '../../view_model/user_provider.dart';
@@ -553,7 +556,12 @@ class _RoomChatState extends State<RoomChat> {
                                                                 ),
                                                                 decoration:
                                                                     BoxDecoration(
-                                                                  color: const Color.fromARGB(255, 231, 231, 231),
+                                                                  color: const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      231,
+                                                                      231,
+                                                                      231),
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -801,6 +809,39 @@ class _RoomChatState extends State<RoomChat> {
                                       }).whenComplete(() {
                                         msgDoc.update({"isSend": true});
                                       });
+                                      try {
+                                        final data = json.encode({
+                                          "to":
+                                              "/topics/" + user.getUser.id,
+                                          "notification": {
+                                            "title": user.getUser.name,
+                                            "body": text,
+                                          },
+                                          "data": {
+                                            "type": "0rder",
+                                            "id": "28",
+                                            "click_action":
+                                                "FLUTTER_NOTIFICATION_CLICK"
+                                          }
+                                        });
+
+                                        final fcmUrl = Uri.parse(
+                                            "https://fcm.googleapis.com/fcm/send");
+                                        final result = await http.post(
+                                          fcmUrl,
+                                          encoding: Encoding.getByName("utf-8"),
+                                          body: data,
+                                          headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization":
+                                                "key=AAAARIU6kW4:APA91bFZ65iO10Qzuq0TSije6j8Dgze9GlyiMoUwfGbIyqKzIRJxFfexW9f4eXv8GKQX_kvMhe-Gmw6kC9b5YwlCd30mfBLX3sdQsUM3EevdQGPvsWxFfW68cLeFRo0HBgynctvs0C1Z",
+                                          },
+                                        );
+                                        log(result.body);
+                                      } catch (e) {
+                                        log(e.toString());
+                                      }
+
                                       final unread = await FirebaseFirestore
                                           .instance
                                           .collection("user")

@@ -5,21 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "sulai",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "sulai (profile mode)",
+            "name": "HP 1",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "deviceId": "emulator-5554"
         },
         {
-            "name": "sulai (release mode)",
+            "name": "HP 2",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "deviceId": "emulator-5556"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "All Devices",
+            "configurations": [
+                "HP 1",
+                "HP 2"
+            ]
         }
     ]
 }

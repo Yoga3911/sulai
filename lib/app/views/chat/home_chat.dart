@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -27,93 +28,101 @@ class _HomeChatState extends State<HomeChat> {
     final CollectionReference getUser =
         FirebaseFirestore.instance.collection("user");
     return Scaffold(
-      floatingActionButton: (user.roleId == "2")? null : FutureBuilder<QuerySnapshot>(
-          future: MyCollection.user.doc(user.id).collection("chats").get(),
-          builder: (_, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox();
-            }
-            return FutureBuilder<DocumentSnapshot>(
-                future: MyCollection.user.doc("mOioopdH4uZDvrxy0Ewc").get(),
-                builder: (_, snapshot2) {
-                  if (snapshot2.connectionState == ConnectionState.waiting) {
-                    return const SizedBox();
-                  }
-                  final userModel = UserModel.fromJson(
-                    snapshot2.data!.data() as Map<String, dynamic>,
-                  );
-                  return FloatingActionButton(
-                    heroTag: "home",
-                    onPressed: () {
-                      for (var i in snapshot.data!.docs) {
-                        if ((i.data() as Map<String, dynamic>)["user_id"] ==
-                            userModel.id) {
+      floatingActionButton: (user.roleId == "2")
+          ? null
+          : FutureBuilder<QuerySnapshot>(
+              future: MyCollection.user.doc(user.id).collection("chats").get(),
+              builder: (_, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                }
+                return FutureBuilder<DocumentSnapshot>(
+                    future: MyCollection.user.doc("mOioopdH4uZDvrxy0Ewc").get(),
+                    builder: (_, snapshot2) {
+                      if (snapshot2.connectionState ==
+                          ConnectionState.waiting) {
+                        return const SizedBox();
+                      }
+                      final userModel = UserModel.fromJson(
+                        snapshot2.data!.data() as Map<String, dynamic>,
+                      );
+                      return FloatingActionButton(
+                        heroTag: "home",
+                        onPressed: () {
+                          for (var i in snapshot.data!.docs) {
+                            if ((i.data() as Map<String, dynamic>)["user_id"] ==
+                                userModel.id) {
+                              MyCollection.user
+                                  .doc(userModel.id)
+                                  .collection("chats")
+                                  .doc(i.id)
+                                  .update({
+                                "unread": 0,
+                                "onRoom": true,
+                              });
+                              FirebaseMessaging.instance
+                                  .subscribeToTopic(user.id);
+                              FirebaseMessaging.instance
+                                  .subscribeToTopic(snapshot.data!.docs.first["user_id"]);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => RoomChat(
+                                    userModel: userModel,
+                                    docId: i.id,
+                                    onRoom: true,
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+                          }
+                          final doc = MyCollection.chat.doc();
+                          doc.set({
+                            "members": [user.id, userModel.id]
+                          });
+                          MyCollection.user
+                              .doc(user.id)
+                              .collection("chats")
+                              .doc(doc.id)
+                              .set({
+                            "user_id": userModel.id,
+                            "unread": 0,
+                            "onRoom": false,
+                            "isTyping": false,
+                            "date": DateTime.now(),
+                          });
                           MyCollection.user
                               .doc(userModel.id)
                               .collection("chats")
-                              .doc(i.id)
-                              .update({
+                              .doc(doc.id)
+                              .set({
+                            "user_id": user.id,
                             "unread": 0,
+                            "isTyping": false,
                             "onRoom": true,
+                            "date": DateTime.now(),
                           });
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (_) => RoomChat(
                                 userModel: userModel,
-                                docId: i.id,
+                                docId: doc.id,
                                 onRoom: true,
                               ),
                             ),
                           );
-                          return;
-                        }
-                      }
-                      final doc = MyCollection.chat.doc();
-                      doc.set({
-                        "members": [user.id, userModel.id]
-                      });
-                      MyCollection.user
-                          .doc(user.id)
-                          .collection("chats")
-                          .doc(doc.id)
-                          .set({
-                        "user_id": userModel.id,
-                        "unread": 0,
-                        "onRoom": false,
-                        "isTyping": false,
-                        "date": DateTime.now(),
-                      });
-                      MyCollection.user
-                          .doc(userModel.id)
-                          .collection("chats")
-                          .doc(doc.id)
-                          .set({
-                        "user_id": user.id,
-                        "unread": 0,
-                        "isTyping": false,
-                        "onRoom": true,
-                        "date": DateTime.now(),
-                      });
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => RoomChat(
-                            userModel: userModel,
-                            docId: doc.id,
-                            onRoom: true,
-                          ),
+                        },
+                        child: const Icon(
+                          Icons.chat_rounded,
+                          color: Colors.white,
                         ),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 219, 134),
                       );
-                    },
-                    child: const Icon(
-                      Icons.chat_rounded,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 255, 219, 134),
-                  );
-                });
-          }),
+                    });
+              }),
       body: MainStyle(
         widget: [
           const CustomAppBar(),
@@ -152,11 +161,12 @@ class _HomeChatState extends State<HomeChat> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           ),
+          const SizedBox(height: 15),
           Column(
             children: [
               StreamBuilder<QuerySnapshot>(
@@ -201,8 +211,7 @@ class _HomeChatState extends State<HomeChat> {
                                 padding: const EdgeInsets.only(
                                   left: 20,
                                   right: 20,
-                                  top: 20,
-                                  bottom: 10,
+                                  top: 10,
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -227,7 +236,8 @@ class _HomeChatState extends State<HomeChat> {
                                             children: [
                                               Container(
                                                 decoration: const BoxDecoration(
-                                                    color: Color.fromARGB(255, 255, 219, 134),
+                                                    color: Color.fromARGB(
+                                                        255, 255, 219, 134),
                                                     shape: BoxShape.circle),
                                                 padding:
                                                     const EdgeInsets.all(8),
@@ -355,6 +365,8 @@ class _HomeChatState extends State<HomeChat> {
                                       ],
                                     ),
                                     onTap: () {
+                                      FirebaseMessaging.instance.subscribeToTopic(snapshot.data!.docs.first["user_id"]);
+                                      FirebaseMessaging.instance.subscribeToTopic(user.id);
                                       FirebaseFirestore.instance
                                           .collection("user")
                                           .doc(userModel.id)

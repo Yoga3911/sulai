@@ -5,6 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/routes/route.dart';
 import 'package:sulai/app/view_model/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // ignore: avoid_print
+  print("Handling a background message");
+}
 
 void selectRoute() async {
   final pref = await SharedPreferences.getInstance();
@@ -18,6 +24,7 @@ void selectRoute() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessaging.instance.getToken();
   initializeDateFormatting("in_ID", "");
   selectRoute();
 }

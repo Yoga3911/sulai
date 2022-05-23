@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/models/product_model.dart';
@@ -688,13 +687,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         address: val.getLocation,
                                         postalCode: val.getPostCode,
                                       );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => WebviewScaffold(
-                                              url: orderData.invoiceUrl),
-                                        ),
-                                      );
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (_) => WebviewScaffold(
+                                      //         url: orderData.invoiceUrl),
+                                      //   ),
+                                      // );
                                     },
                                     child: const Text(
                                       "KONFIRMASI",

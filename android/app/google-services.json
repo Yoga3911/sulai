@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "294292984174",
+    "firebase_url": "https://sulai-a79f0-default-rtdb.firebaseio.com",
     "project_id": "sulai-a79f0",
     "storage_bucket": "sulai-a79f0.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "294292984174-6mlgb0sgq2udt6pj1u7p9os798vj36f8.apps.googleusercontent.com",
+          "client_id": "294292984174-j72qrj5l856v5kcj0of0v9pa84p29g2l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.project.sulai",
