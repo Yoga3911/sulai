@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: providerData,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: route,
         routes: Routes.data,
         theme: ThemeData(

@@ -12,6 +12,8 @@ class OrderModel {
     required this.sizeId,
     required this.paymentId,
     required this.address,
+    required this.invoiceId,
+    required this.invoiceUrl,
     required this.postalCode,
   });
 
@@ -25,6 +27,8 @@ class OrderModel {
   final int quantity;
   final String sizeId;
   final String address;
+  final String invoiceId;
+  final String invoiceUrl;
   final String postalCode;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -37,8 +41,10 @@ class OrderModel {
         sizeId: json["size_id"],
         paymentId: json["payment_id"],
         address: json["address"],
-        postalCode: json["postal_code"],
         orderDate: (json["order_date"] as Timestamp).toDate(),
+        postalCode: json["postal_code"],
+        invoiceId: json["invoice_id"],
+        invoiceUrl: json["invoice_url"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,6 +58,8 @@ class OrderModel {
         "payment_id": paymentId,
         "address": address,
         "postal_code": postalCode,
+        "invoice_id": invoiceId,
+        "invoice_url": invoiceUrl,
         "order_date": orderDate,
       };
 }

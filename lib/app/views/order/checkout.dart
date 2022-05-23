@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/models/product_model.dart';
@@ -13,6 +14,7 @@ import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../routes/route.dart';
 import '../../view_model/product_provider.dart';
@@ -25,6 +27,14 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  Future<void> launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: true);
+    } else {
+      throw "Could not launce $url";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -671,22 +681,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Consumer<MyLocation>(
                                   builder: (_, val, __) => ElevatedButton(
-                                    onPressed: () {
-                                      order
-                                          .updateStatus(
-                                            orderId: args["order_id"],
-                                            statusId: "2",
-                                            address: val.getLocation,
-                                            postalCode: val.getPostCode,
-                                          )
-                                          .then(
-                                            (value) => Navigator
-                                                .pushNamedAndRemoveUntil(
-                                              context,
-                                              Routes.main,
-                                              (route) => false,
-                                            ),
-                                          );
+                                    onPressed: () async {
+                                      order.updateStatus(
+                                        orderId: args["order_id"],
+                                        statusId: "2",
+                                        address: val.getLocation,
+                                        postalCode: val.getPostCode,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => WebviewScaffold(
+                                              url: orderData.invoiceUrl),
+                                        ),
+                                      );
                                     },
                                     child: const Text(
                                       "KONFIRMASI",

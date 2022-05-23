@@ -21,7 +21,8 @@ class OrderProvider with ChangeNotifier {
   int penjualanPerHari2 = 0;
   int pendapatanPerHari2 = 0;
 
-  void setOrderPerWeek(List<OrderModel> val, List<OrderModel> val2, List<ProductModel> product) {
+  void setOrderPerWeek(
+      List<OrderModel> val, List<OrderModel> val2, List<ProductModel> product) {
     val.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     orderPerWeek = val;
     penjualanPerHari = orderPerWeek.fold(0, (sum, e) => sum + e.quantity);
@@ -91,6 +92,8 @@ class OrderProvider with ChangeNotifier {
     String? sizeId,
     String? paymentId,
     DateTime? date,
+    String? invoiceId,
+    String? invoiceUrl,
   }) async {
     final data = await MyCollection.order.get();
     final count = data.docs.length;
@@ -106,6 +109,8 @@ class OrderProvider with ChangeNotifier {
         "status_id": "1",
         "order_id": (count + 1).toString(),
         "order_date": date,
+        "invoice_id": invoiceId,
+        "invoice_url": invoiceUrl,
         "address": "-",
         "postal_code": "-",
       },
@@ -118,6 +123,12 @@ class OrderProvider with ChangeNotifier {
       String? statusId,
       String? address,
       String? postalCode}) async {
+    if (address == null && postalCode == null) {
+      await MyCollection.order.doc(orderId).update({
+        "status_id": statusId,
+      });
+      return;
+    }
     await MyCollection.order.doc(orderId).update({
       "status_id": statusId,
       "address": address,
@@ -161,10 +172,11 @@ class OrderProvider with ChangeNotifier {
             element.orderDate.year == selectedDate!.year &&
             element.orderDate.month == selectedDate.month &&
             (element.orderDate.day / 7).ceil() ==
-                (selectedDate.subtract(const Duration(days: 1)).day / 7).ceil() &&
+                (selectedDate.subtract(const Duration(days: 1)).day / 7)
+                    .ceil() &&
             element.orderDate.weekday == 7)
         .toList();
-    countWeek[7] = satB.length;
+    countWeek[7] = satB.where((element) => element.statusId == "3").length;
     satDataB = satB;
     List<OrderModel> mon = getOrderD
         .where((element) =>
@@ -174,7 +186,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 1)
         .toList();
-    countWeek[1] = mon.length;
+    countWeek[1] = mon.where((element) => element.statusId == "3").length;
     monData = mon;
     List<OrderModel> tue = getOrderD
         .where((element) =>
@@ -184,7 +196,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 2)
         .toList();
-    countWeek[2] = tue.length;
+    countWeek[2] = tue.where((element) => element.statusId == "3").length;
     tueData = tue;
     List<OrderModel> wed = getOrderD
         .where((element) =>
@@ -194,7 +206,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 3)
         .toList();
-    countWeek[3] = wed.length;
+    countWeek[3] = wed.where((element) => element.statusId == "3").length;
     wedData = wed;
     List<OrderModel> thu = getOrderD
         .where((element) =>
@@ -204,7 +216,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 4)
         .toList();
-    countWeek[4] = thu.length;
+    countWeek[4] = thu.where((element) => element.statusId == "3").length;
     thuData = thu;
     List<OrderModel> fri = getOrderD
         .where((element) =>
@@ -214,7 +226,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 5)
         .toList();
-    countWeek[5] = fri.length;
+    countWeek[5] = fri.where((element) => element.statusId == "3").length;
     friData = fri;
     List<OrderModel> sat = getOrderD
         .where((element) =>
@@ -224,7 +236,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 6)
         .toList();
-    countWeek[6] = sat.length;
+    countWeek[6] = sat.where((element) => element.statusId == "3").length;
     satData = sat;
     List<OrderModel> sun = getOrderD
         .where((element) =>
@@ -234,7 +246,7 @@ class OrderProvider with ChangeNotifier {
                 (selectedDate.day / 7).ceil() &&
             element.orderDate.weekday == 7)
         .toList();
-    countWeek[0] = sun.length;
+    countWeek[0] = sun.where((element) => element.statusId == "3").length;
     sunData = sun;
     setSum = countWeek
         .map((order) => order)
@@ -258,6 +270,7 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   DateTime selectedDate2 = DateTime.now();
 
   selectDate2(BuildContext context) async {

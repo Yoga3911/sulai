@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
+import 'package:sulai/app/services/payment.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
@@ -105,7 +106,8 @@ class _OrderPageState extends State<OrderPage> {
                                     value: val.getRasa,
                                     onChanged: (value) {
                                       val.setRasa = value!;
-                                      val.setImg = snapshot.data![snapshot.data!.indexWhere(
+                                      val.setImg = snapshot
+                                          .data![snapshot.data!.indexWhere(
                                               (element) => element.id == value)]
                                           .imageUrl;
                                     },
@@ -333,24 +335,28 @@ class _OrderPageState extends State<OrderPage> {
                                   context: context,
                                   builder: (_) => const CustomLoading(),
                                 );
-                                String orderId = await order.insertOrder(
+                                PaymentService.createInvoice().then((value) async {
+                                  String orderId = await order.insertOrder(
                                   userId: user.getUser.id,
                                   categoryId: dropdown.getRasa.toString(),
                                   paymentId: dropdown.getPembayaran.toString(),
                                   quantity: int.parse(quantityController.text),
                                   sizeId: dropdown.getKemasan.toString(),
                                   date: dropdown.selectedDate,
+                                  invoiceId: value["id"],
+                                  invoiceUrl: value["invoice_url"],
                                 );
                                 location.getAddress().then(
                                   (value) {
                                     Navigator.pop(context);
-                                    Navigator.pushNamed(
+                                    Navigator.pushReplacementNamed(
                                         context, Routes.checkout, arguments: {
                                       "order_id": orderId,
                                       "product_id": dropdown.getRasa.toString()
                                     });
                                   },
                                 );
+                                });
                               },
                         child: const Text(
                           "PESAN",
