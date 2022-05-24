@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -36,15 +35,18 @@ class _HomeChatState extends State<HomeChat> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
                 }
-                return FutureBuilder<DocumentSnapshot>(
-                    future: MyCollection.user.doc("mOioopdH4uZDvrxy0Ewc").get(),
+                return FutureBuilder<QuerySnapshot>(
+                    future: MyCollection.user
+                        .where("role_id", isEqualTo: "2")
+                        .get(),
                     builder: (_, snapshot2) {
                       if (snapshot2.connectionState ==
                           ConnectionState.waiting) {
                         return const SizedBox();
                       }
                       final userModel = UserModel.fromJson(
-                        snapshot2.data!.data() as Map<String, dynamic>,
+                        snapshot2.data!.docs.first.data()
+                            as Map<String, dynamic>,
                       );
                       return FloatingActionButton(
                         heroTag: "home",
@@ -60,10 +62,7 @@ class _HomeChatState extends State<HomeChat> {
                                 "unread": 0,
                                 "onRoom": true,
                               });
-                              FirebaseMessaging.instance
-                                  .subscribeToTopic(user.id);
-                              FirebaseMessaging.instance
-                                  .subscribeToTopic(snapshot.data!.docs.first["user_id"]);
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -103,6 +102,7 @@ class _HomeChatState extends State<HomeChat> {
                             "onRoom": true,
                             "date": DateTime.now(),
                           });
+                          // FirebaseMessaging.instance.subscribeToTopic(doc.id);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -365,8 +365,9 @@ class _HomeChatState extends State<HomeChat> {
                                       ],
                                     ),
                                     onTap: () {
-                                      FirebaseMessaging.instance.subscribeToTopic(snapshot.data!.docs.first["user_id"]);
-                                      FirebaseMessaging.instance.subscribeToTopic(user.id);
+                                      // FirebaseMessaging.instance
+                                      //     .subscribeToTopic(
+                                      //         snapshot.data!.docs[index].id);
                                       FirebaseFirestore.instance
                                           .collection("user")
                                           .doc(userModel.id)

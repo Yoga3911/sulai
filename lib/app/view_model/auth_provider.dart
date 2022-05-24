@@ -13,18 +13,21 @@ class AuthProvider with ChangeNotifier {
       "https://firebasestorage.googleapis.com/v0/b/sulai-a79f0.appspot.com/o/profile.png?alt=media&token=a1d307af-90c1-4199-8703-28e43579bb7e";
 
   void register(
-      {BuildContext? context, String? name, String? email, String? password}) {
+      {BuildContext? context,
+      String? name,
+      String? email,
+      String? password}) async {
     final _user = Provider.of<UserProvider>(context!, listen: false);
     EmailService().signUp(email: email!, password: password!).then(
       (user) async {
         _user.insertUser(
-          email: email,
-          password: password,
-          img: _blank,
-          name: name,
-          provider: "email",
-          isActive: false
-        );
+            email: email,
+            fcmToken: "-",
+            password: password,
+            img: _blank,
+            name: name,
+            provider: "email",
+            isActive: false);
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.login,
@@ -39,17 +42,19 @@ class AuthProvider with ChangeNotifier {
       SocialService? social,
       String? provider,
       String email = "blank@gmail.com",
-      String password = "123456"}) {
+      String password = "123456"}) async {
     final _user = Provider.of<UserProvider>(context!, listen: false);
+    final pref = await SharedPreferences.getInstance();
     if (provider == "email") {
       EmailService social = EmailService();
       social.signIn(email: email, password: password).then(
         (user) async {
-          final pref = await SharedPreferences.getInstance();
           final data =
               await MyCollection.user.where("email", isEqualTo: email).get();
+          MyCollection.user
+              .doc(data.docs.first.id)
+              .update({"fcm_token": pref.getString("fcmToken")});
           pref.setString("id", data.docs.first.id);
-
           pref.setString("social", provider!);
           Navigator.pushReplacementNamed(context, Routes.main).then(
             (_) async {
@@ -62,6 +67,7 @@ class AuthProvider with ChangeNotifier {
       social!.signIn().then(
         (user) async {
           await _user.insertUser(
+            fcmToken: "-",
             name: user.user!.displayName,
             email: user.user!.email,
             img: user.user!.photoURL,
@@ -69,7 +75,7 @@ class AuthProvider with ChangeNotifier {
             isActive: false,
           );
           await _user.getUserByEmail(email: user.user!.email);
-          final pref = await SharedPreferences.getInstance();
+
           pref.setString("social", provider!);
           Navigator.pushReplacementNamed(context, Routes.main).then(
             (_) async {

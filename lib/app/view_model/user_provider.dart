@@ -35,6 +35,7 @@ class UserProvider with ChangeNotifier {
     final userD = MyCollection.user.doc(pref.getString("id"));
     userD.update({
       "isActive": true,
+      "fcm_token": pref.getString("fcmToken")
     });
   }
 
@@ -45,6 +46,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> insertUser(
       {String? email,
+      String? fcmToken,
       String? password,
       String? img,
       String? name,
@@ -57,6 +59,7 @@ class UserProvider with ChangeNotifier {
     if (account.docs.isEmpty) {
       log("empty");
       final user = UserModel(
+        fcmToken: fcmToken!,
         id: collection.id,
         email: email!,
         password: password ?? "-",

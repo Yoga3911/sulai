@@ -150,64 +150,70 @@ class _MediaPageState extends State<MediaPage> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-          ),
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: 10,
-              bottom: 10,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 3,
-                  spreadRadius: 3,
-                  offset: Offset(1, 3),
-                  color: Colors.grey,
-                )
-              ],
-            ),
-            child: FutureBuilder<QuerySnapshot>(
-              future: MyCollection.ulasan
-                  .where("user_id", isEqualTo: user.getUser.id)
-                  .get(),
-              builder: (_, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
-                }
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text((snapshot.data!.docs.first.data()
-                          as Map<String, dynamic>)["ulasan"]),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _controller.text = (snapshot.data!.docs.first.data()
-                            as Map<String, dynamic>)["ulasan"];
-                        Navigator.pushNamed(context, Routes.ulasan, arguments: {
-                          "ulasan": _controller.text,
-                          "ulasan_id": (snapshot.data!.docs.first.data()
-                              as Map<String, dynamic>)["id"]
-                        });
-                      },
-                      icon: const Icon(Icons.edit_rounded),
-                    )
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
+        (user.getUser.roleId == "2")
+            ? const SizedBox()
+            : Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    right: 15,
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 3,
+                        spreadRadius: 3,
+                        offset: Offset(1, 3),
+                        color: Colors.grey,
+                      )
+                    ],
+                  ),
+                  child: FutureBuilder<QuerySnapshot>(
+                    future: MyCollection.ulasan
+                        .where("user_id", isEqualTo: user.getUser.id)
+                        .get(),
+                    builder: (_, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox();
+                      }
+                      if (snapshot.data!.docs.isNotEmpty) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text((snapshot.data!.docs.first.data()
+                                  as Map<String, dynamic>)["ulasan"]),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _controller.text = (snapshot.data!.docs.first
+                                    .data() as Map<String, dynamic>)["ulasan"];
+                                Navigator.pushNamed(context, Routes.ulasan,
+                                    arguments: {
+                                      "ulasan": _controller.text,
+                                      "ulasan_id": (snapshot.data!.docs.first
+                                          .data() as Map<String, dynamic>)["id"]
+                                    });
+                              },
+                              icon: const Icon(Icons.edit_rounded),
+                            )
+                          ],
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                ),
+              ),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
           padding: const EdgeInsets.only(

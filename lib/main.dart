@@ -1,3 +1,4 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -12,8 +13,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message");
 }
 
-void selectRoute() async {
+void selectRoute(String fcmToken) async {
   final pref = await SharedPreferences.getInstance();
+  pref.setString("fcmToken", fcmToken);
   if (pref.getString("id") != null) {
     runApp(const MyApp(route: Routes.main));
   } else if (pref.getString("id") == null) {
@@ -24,9 +26,9 @@ void selectRoute() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseMessaging.instance.getToken();
+  final token = await FirebaseMessaging.instance.getToken();
   initializeDateFormatting("in_ID", "");
-  selectRoute();
+  selectRoute(token!);
 }
 
 class MyApp extends StatelessWidget {

@@ -811,8 +811,8 @@ class _RoomChatState extends State<RoomChat> {
                                       });
                                       try {
                                         final data = json.encode({
-                                          "to":
-                                              "/topics/" + user.getUser.id,
+                                          "to": widget.userModel.fcmToken,
+                                          "priority": "high",
                                           "notification": {
                                             "title": user.getUser.name,
                                             "body": text,
@@ -820,6 +820,7 @@ class _RoomChatState extends State<RoomChat> {
                                           "data": {
                                             "type": "0rder",
                                             "id": "28",
+                                            "badge": 1,
                                             "click_action":
                                                 "FLUTTER_NOTIFICATION_CLICK"
                                           }
@@ -827,7 +828,7 @@ class _RoomChatState extends State<RoomChat> {
 
                                         final fcmUrl = Uri.parse(
                                             "https://fcm.googleapis.com/fcm/send");
-                                        final result = await http.post(
+                                        await http.post(
                                           fcmUrl,
                                           encoding: Encoding.getByName("utf-8"),
                                           body: data,
@@ -837,7 +838,6 @@ class _RoomChatState extends State<RoomChat> {
                                                 "key=AAAARIU6kW4:APA91bFZ65iO10Qzuq0TSije6j8Dgze9GlyiMoUwfGbIyqKzIRJxFfexW9f4eXv8GKQX_kvMhe-Gmw6kC9b5YwlCd30mfBLX3sdQsUM3EevdQGPvsWxFfW68cLeFRo0HBgynctvs0C1Z",
                                           },
                                         );
-                                        log(result.body);
                                       } catch (e) {
                                         log(e.toString());
                                       }
