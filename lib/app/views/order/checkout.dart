@@ -28,7 +28,11 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> launchURL(String url) async {
     if (await canLaunch(url)) {
-      await launch(url, forceWebView: true);
+      await launch(
+        url,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
     } else {
       throw "Could not launce $url";
     }
@@ -444,7 +448,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                       (orderData.paymentId == "1")
                                           ? const Text(
-                                              "GoPay",
+                                              "Ovo",
                                               style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.grey),
@@ -458,17 +462,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 )
                                               : (orderData.paymentId == "3")
                                                   ? const Text(
-                                                      "Ovo",
+                                                      "LinkAja",
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           color: Colors.grey),
                                                     )
-                                                  : const Text(
-                                                      "COD",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.grey),
-                                                    )
+                                                  : (orderData.paymentId == "4")
+                                                      ? const Text(
+                                                          "Shopee Pay",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        )
+                                                      : const Text(
+                                                          "Sakuku",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        )
                                     ],
                                   ),
                                 )
@@ -681,12 +694,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 Consumer<MyLocation>(
                                   builder: (_, val, __) => ElevatedButton(
                                     onPressed: () async {
+                                      await launchURL(orderData.checkoutUrl);
                                       order.updateStatus(
                                         orderId: args["order_id"],
                                         statusId: "2",
                                         address: val.getLocation,
                                         postalCode: val.getPostCode,
                                       );
+
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(

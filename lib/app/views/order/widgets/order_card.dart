@@ -126,18 +126,22 @@ class OrderCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          (orderModel.productId == "1")
-                              ? "Susu Kedelai Original"
-                              : (orderModel.productId == "2")
-                                  ? "Susu Kedelai Stroberi"
-                                  : "Susu Kedelai Melon",
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
+                        FutureBuilder<QuerySnapshot>(
+                          future: MyCollection.product.where("id", isEqualTo: orderModel.productId).get(),
+                          builder: (_, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          }
+                          return Text(
+                            (snapshot.data!.docs.first.data() as Map<String, dynamic>)["name"],
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          );
+                        }),
                         Text(orderModel.address),
                       ],
                     ),

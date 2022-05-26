@@ -102,7 +102,8 @@ class _OrderPageState extends State<OrderPage> {
                                 child: Consumer<DropDownNotifier>(
                                   builder: (_, val, __) =>
                                       DropdownButton<String>(
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 58, 58, 58)),
                                     value: val.getRasa,
                                     onChanged: (value) {
                                       val.setRasa = value!;
@@ -141,7 +142,8 @@ class _OrderPageState extends State<OrderPage> {
                               child: DropdownButtonHideUnderline(
                                 child: Consumer<DropDownNotifier>(
                                   builder: (_, val, __) => DropdownButton<int>(
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 58, 58, 58)),
                                     value: val.getKemasan,
                                     onChanged: (value) {
                                       val.setKemasan = value!;
@@ -186,13 +188,15 @@ class _OrderPageState extends State<OrderPage> {
                                   setState(() {});
                                 },
                                 style: const TextStyle(
-                                    color: Colors.grey, fontSize: 14),
+                                    color: Color.fromARGB(255, 58, 58, 58),
+                                    fontSize: 14),
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(13),
                                   hintText: "Jumlah",
-                                  hintStyle: TextStyle(color: Colors.grey),
+                                  hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 58, 58, 58)),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide.none,
                                   ),
@@ -218,20 +222,18 @@ class _OrderPageState extends State<OrderPage> {
                               child: DropdownButtonHideUnderline(
                                 child: Consumer<DropDownNotifier>(
                                   builder: (_, val, __) => DropdownButton<int>(
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 58, 58, 58)),
                                     value: val.getPembayaran,
                                     onChanged: (value) {
                                       val.setPembayaran = value!;
                                     },
-                                    items: [
+                                    items: const [
                                       DropdownMenuItem(
                                         child: SizedBox(
                                           height: 20,
                                           width: 60,
-                                          child: Image.asset(
-                                            "assets/images/gopay.png",
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: Text("Ovo"),
                                         ),
                                         value: 1,
                                       ),
@@ -239,10 +241,7 @@ class _OrderPageState extends State<OrderPage> {
                                         child: SizedBox(
                                           height: 20,
                                           width: 60,
-                                          child: Image.asset(
-                                            "assets/images/ovo.png",
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: Text("Dana"),
                                         ),
                                         value: 2,
                                       ),
@@ -250,10 +249,7 @@ class _OrderPageState extends State<OrderPage> {
                                         child: SizedBox(
                                           height: 20,
                                           width: 60,
-                                          child: Image.asset(
-                                            "assets/images/dana.png",
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: Text("LinkAja"),
                                         ),
                                         value: 3,
                                       ),
@@ -261,12 +257,17 @@ class _OrderPageState extends State<OrderPage> {
                                         child: SizedBox(
                                           height: 20,
                                           width: 60,
-                                          child: Image.asset(
-                                            "assets/images/cod.png",
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: Text("Shopee Pay"),
                                         ),
                                         value: 4,
+                                      ),
+                                      DropdownMenuItem(
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 60,
+                                          child: Text("Sakuku"),
+                                        ),
+                                        value: 5,
                                       ),
                                     ],
                                   ),
@@ -296,8 +297,9 @@ class _OrderPageState extends State<OrderPage> {
                                     child: Text(
                                       DateFormat('EEEE, d MMM yyyy', "in_ID")
                                           .format(val.selectedDate),
-                                      style:
-                                          const TextStyle(color: Colors.grey),
+                                      style: const TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 58, 58, 58)),
                                     ),
                                   ),
                                   const Icon(
@@ -335,27 +337,46 @@ class _OrderPageState extends State<OrderPage> {
                                   context: context,
                                   builder: (_) => const CustomLoading(),
                                 );
-                                PaymentService.createInvoice().then((value) async {
+                                int price = 0;
+                                if (dropdown.getRasa == "1") {
+                                  price = snapshot.data!
+                                      .where((element) => element.sizeId == "1")
+                                      .first
+                                      .price;
+                                } else {
+                                  price = snapshot.data!
+                                      .where((element) => element.sizeId == "2")
+                                      .first
+                                      .price;
+                                }
+                                PaymentService.createInvoice(
+                                        price:
+                                            int.parse(quantityController.text) *
+                                                price,
+                                        method: "ID_DANA")
+                                    .then((value) async {
                                   String orderId = await order.insertOrder(
-                                  userId: user.getUser.id,
-                                  categoryId: dropdown.getRasa.toString(),
-                                  paymentId: dropdown.getPembayaran.toString(),
-                                  quantity: int.parse(quantityController.text),
-                                  sizeId: dropdown.getKemasan.toString(),
-                                  date: dropdown.selectedDate,
-                                  invoiceId: value["id"],
-                                  invoiceUrl: value["invoice_url"],
-                                );
-                                location.getAddress().then(
-                                  (value) {
-                                    Navigator.pop(context);
-                                    Navigator.pushReplacementNamed(
-                                        context, Routes.checkout, arguments: {
-                                      "order_id": orderId,
-                                      "product_id": dropdown.getRasa.toString()
-                                    });
-                                  },
-                                );
+                                    userId: user.getUser.id,
+                                    categoryId: dropdown.getRasa.toString(),
+                                    paymentId:
+                                        dropdown.getPembayaran.toString(),
+                                    quantity:
+                                        int.parse(quantityController.text),
+                                    sizeId: dropdown.getKemasan.toString(),
+                                    date: dropdown.selectedDate,
+                                    checkoutUrl: value["checkout_url"],
+                                  );
+                                  location.getAddress().then(
+                                    (value) {
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacementNamed(
+                                          context, Routes.checkout, arguments: {
+                                        "order_id": orderId,
+                                        "product_id":
+                                            dropdown.getRasa.toString()
+                                      });
+                                    },
+                                  );
                                 });
                               },
                         child: const Text(

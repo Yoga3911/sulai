@@ -272,7 +272,7 @@ class _MediaPageState extends State<MediaPage> {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(snapshot2.data!.name),
+                                Flexible(child: Text(snapshot2.data!.name, overflow: TextOverflow.ellipsis,)),
                                 Text(
                                   DateFormat("dd-MM-yyyy").format(
                                     snapshot.data![index].date,

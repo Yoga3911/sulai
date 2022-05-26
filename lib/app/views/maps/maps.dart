@@ -112,7 +112,7 @@ class MyMapsState extends State<MyMaps> {
                   )
                 ]);
               },
-              mapType: MapType.hybrid,
+              mapType: MapType.normal,
               markers: {getMarker()},
               initialCameraPosition: initialLocation(),
               onMapCreated: (GoogleMapController controller) {

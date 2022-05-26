@@ -12,8 +12,7 @@ class OrderModel {
     required this.sizeId,
     required this.paymentId,
     required this.address,
-    required this.invoiceId,
-    required this.invoiceUrl,
+    required this.checkoutUrl,
     required this.postalCode,
   });
 
@@ -27,8 +26,7 @@ class OrderModel {
   final int quantity;
   final String sizeId;
   final String address;
-  final String invoiceId;
-  final String invoiceUrl;
+  final String checkoutUrl;
   final String postalCode;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -43,8 +41,7 @@ class OrderModel {
         address: json["address"],
         orderDate: (json["order_date"] as Timestamp).toDate(),
         postalCode: json["postal_code"],
-        invoiceId: json["invoice_id"],
-        invoiceUrl: json["invoice_url"],
+        checkoutUrl: json["checkout_url"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,8 +55,7 @@ class OrderModel {
         "payment_id": paymentId,
         "address": address,
         "postal_code": postalCode,
-        "invoice_id": invoiceId,
-        "invoice_url": invoiceUrl,
+        "checkout_url": checkoutUrl,
         "order_date": orderDate,
       };
 }

@@ -5,44 +5,34 @@ import 'package:http/http.dart' as http;
 
 class PaymentService {
   PaymentService._();
-  static Future<Map<String, String>> createInvoice() async {
+  static Future<Map<String, String>> createInvoice({
+    required int price,
+    required String method,
+  }) async {
     final invoiceUrl =
-        Uri.parse("https://paa-payment.herokuapp.com/api/v1/invoice");
+        Uri.parse("https://paa-payment.herokuapp.com/api/v1/ewallet");
     try {
-      final body = json.encode({
-        "given_names": "Ekooo",
-        "email": "eko@gmail.com",
-        "mobile_number": "+62988328121",
-        "address": "Jl Mawar",
-        "items": [
-          {
-            "name": "Laptop Asus ROG",
-            "price": 20000000,
-            "quantity": 2,
-            "category": "Laptop",
-          },
-          {
-            "name": "Laptop Lenovo Legion",
-            "price": 22000000,
-            "quantity": 1,
-            "category": "Laptop",
-          },
-        ]
-      });
+      final body = json.encode(
+        {
+          "price": price,
+          "method": method,
+        },
+      );
       final response = await http.post(
         invoiceUrl,
         headers: {
-          "content-type": "application/json",
-          "accept": "application/json",
+          "Content-Type": "application/json",
+          "Accept": "application/json",
         },
         body: body,
       );
       if (response.statusCode == 200) {
         log("Pesanan berhasil dibuat");
-        final data = (json.decode(response.body) as Map<String, dynamic>)["data"];
+        final data =
+            (json.decode(response.body) as Map<String, dynamic>)["data"];
         return {
           "id": data["id"],
-          "invoice_url": data["invoice_url"],
+          "checkout_url": data["actions"]["mobile_web_checkout_url"],
         };
       }
     } catch (e) {
