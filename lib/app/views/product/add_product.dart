@@ -129,6 +129,7 @@ class _AddProductState extends State<AddProduct> {
                               (value) {
                                 Navigator.pop(context);
                                 Navigator.pop(context);
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text("Add product successfully"),
@@ -244,7 +245,7 @@ class _AddProductState extends State<AddProduct> {
                                 width: double.infinity,
                               )
                             : Container(
-                                color: const Color.fromARGB(84, 0, 0, 0),
+                                color: const Color.fromARGB(83, 104, 104, 104),
                               )),
                   ),
                   Container(

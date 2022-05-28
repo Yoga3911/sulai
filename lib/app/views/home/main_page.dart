@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/views/home/home.dart';
+import 'package:sulai/app/views/pin/pin.dart';
 
 import '../../constant/collection.dart';
 
@@ -54,7 +55,9 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
               return const SizedBox();
             }
 
-            return const HomePage();
+            return (user.getUser.pin == "-")
+                ? const PinPage()
+                : const HomePage();
           }),
     );
   }

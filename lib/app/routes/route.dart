@@ -7,6 +7,8 @@ import 'package:sulai/app/views/media/media.dart';
 import 'package:sulai/app/views/notification/notification.dart';
 import 'package:sulai/app/views/order/history.dart';
 import 'package:sulai/app/views/order/widgets/ulasan.dart';
+import 'package:sulai/app/views/pin/pin.dart';
+import 'package:sulai/app/views/pin/pin_pembayaran.dart';
 import 'package:sulai/app/views/product/add_product.dart';
 import 'package:sulai/app/views/product/update_product.dart';
 import 'package:sulai/app/views/profile/profile.dart';
@@ -40,6 +42,8 @@ class Routes {
   static const ulasan = "/ulasan";
   static const rekap = "/rekap";
   static const homeChat = "/homeChat";
+  static const pin = "/pin";
+  static const pinPayment = "/pinPayment";
 
   static final data = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
@@ -60,5 +64,7 @@ class Routes {
     ulasan: (_) => const UlasanPage(),
     rekap: (_) => const RekapPage(),
     homeChat: (_) => const HomeChat(),
+    pin: (_) => const PinPage(),
+    pinPayment: (_) => const PaymentPinPage(),
   };
 }

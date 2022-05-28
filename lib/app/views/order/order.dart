@@ -23,12 +23,21 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   late TextEditingController quantityController;
+  late TextEditingController phoneController;
   bool isEmpty = true;
 
   @override
   void initState() {
     quantityController = TextEditingController();
+    phoneController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    phoneController.dispose();
+    super.dispose();
   }
 
   @override
@@ -285,6 +294,61 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       Consumer<DropDownNotifier>(
+                        builder: (_, val, __) => (val.getPembayaran == 1)
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 28, right: 40),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextField(
+                                            controller: phoneController,
+                                            onChanged: (_) {
+                                              if (quantityController
+                                                  .text.isEmpty) {
+                                                isEmpty = true;
+                                              } else {
+                                                isEmpty = false;
+                                              }
+                                              setState(() {});
+                                            },
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 58, 58, 58),
+                                                fontSize: 14),
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(13),
+                                              hintText: "Masukkan nomor",
+                                              hintStyle: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 58, 58, 58)),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 20),
+                                    child: Divider(
+                                      height: 2,
+                                      thickness: 2,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                      ),
+                      Consumer<DropDownNotifier>(
                         builder: (_, val, __) => GestureDetector(
                           onTap: () => val.selectDate(context),
                           child: Padding(
@@ -328,70 +392,91 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: (isEmpty)
-                            ? null
-                            : () async {
-                                showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (_) => const CustomLoading(),
-                                );
-                                int price = 0;
-                                if (dropdown.getRasa == "1") {
-                                  price = snapshot.data!
-                                      .where((element) => element.sizeId == "1")
-                                      .first
-                                      .price;
-                                } else {
-                                  price = snapshot.data!
-                                      .where((element) => element.sizeId == "2")
-                                      .first
-                                      .price;
-                                }
-                                PaymentService.createInvoice(
-                                        price:
-                                            int.parse(quantityController.text) *
-                                                price,
-                                        method: "ID_DANA")
-                                    .then((value) async {
-                                  String orderId = await order.insertOrder(
-                                    userId: user.getUser.id,
-                                    categoryId: dropdown.getRasa.toString(),
-                                    paymentId:
-                                        dropdown.getPembayaran.toString(),
-                                    quantity:
-                                        int.parse(quantityController.text),
-                                    sizeId: dropdown.getKemasan.toString(),
-                                    date: dropdown.selectedDate,
-                                    checkoutUrl: value["checkout_url"],
+                      Consumer<DropDownNotifier>(
+                        builder: (_, val, __) => ElevatedButton(
+                          onPressed: (quantityController.text.isEmpty ||
+                                  (val.getPembayaran == 1 &&
+                                      phoneController.text.isEmpty))
+                              ? null
+                              : () async {
+                                  showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (_) => const CustomLoading(),
                                   );
-                                  location.getAddress().then(
-                                    (value) {
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacementNamed(
-                                          context, Routes.checkout, arguments: {
-                                        "order_id": orderId,
-                                        "product_id":
-                                            dropdown.getRasa.toString()
-                                      });
+                                  int price = 0;
+                                  if (dropdown.getRasa == "1") {
+                                    price = snapshot.data!
+                                        .where(
+                                            (element) => element.sizeId == "1")
+                                        .first
+                                        .price;
+                                  } else {
+                                    price = snapshot.data!
+                                        .where(
+                                            (element) => element.sizeId == "2")
+                                        .first
+                                        .price;
+                                  }
+                                  PaymentService.createPayment(
+                                    phone: (dropdown.getPembayaran == 1)
+                                        ? phoneController.text
+                                        : "",
+                                    price: int.parse(quantityController.text) *
+                                        price,
+                                    method: (dropdown.getPembayaran == 1)
+                                        ? "ID_OVO"
+                                        : (dropdown.getPembayaran == 2)
+                                            ? "ID_DANA"
+                                            : (dropdown.getPembayaran == 3)
+                                                ? "ID_LINKAJA"
+                                                : (dropdown.getPembayaran == 4)
+                                                    ? "ID_SHOPEEPAY"
+                                                    : "ID_SAKUKU",
+                                  ).then(
+                                    (value) async {
+                                      String orderId = await order.insertOrder(
+                                        userId: user.getUser.id,
+                                        categoryId: dropdown.getRasa.toString(),
+                                        paymentId:
+                                            dropdown.getPembayaran.toString(),
+                                        quantity:
+                                            int.parse(quantityController.text),
+                                        sizeId: dropdown.getKemasan.toString(),
+                                        date: dropdown.selectedDate,
+                                        checkoutUrl: value["checkout_url"],
+                                      );
+                                      location.getAddress().then(
+                                        (value) {
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacementNamed(
+                                            context,
+                                            Routes.checkout,
+                                            arguments: {
+                                              "order_id": orderId,
+                                              "product_id":
+                                                  dropdown.getRasa.toString()
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                   );
-                                });
-                              },
-                        child: const Text(
-                          "PESAN",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
+                                },
+                          child: const Text(
+                            "PESAN",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(size.width * 0.3, 40),
-                          primary: const Color(0xFF41E507),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: Size(size.width * 0.3, 40),
+                            primary: const Color(0xFF41E507),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                           ),
                         ),
                       ),

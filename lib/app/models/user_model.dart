@@ -13,6 +13,7 @@ class UserModel {
     required this.createAt,
     required this.updateAt,
     required this.isActive,
+    required this.pin,
   });
 
   final String fcmToken;
@@ -26,6 +27,7 @@ class UserModel {
   final DateTime createAt;
   final DateTime updateAt;
   final bool isActive;
+  final String pin;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         fcmToken: json["fcm_token"],
@@ -35,6 +37,7 @@ class UserModel {
         imageUrl: json["image_url"],
         name: json["name"],
         roleId: json["role_id"],
+        pin: json["pin"],
         provider: json["provider"],
         isActive: json["isActive"],
         createAt: (json["create_at"] as Timestamp).toDate(),
@@ -51,6 +54,7 @@ class UserModel {
         "role_id": roleId,
         "isActive": isActive,
         "provider": provider,
+        "pin": pin,
         "create_at": createAt,
         "update_at": updateAt,
       };

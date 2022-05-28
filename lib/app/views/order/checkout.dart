@@ -13,7 +13,6 @@ import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../routes/route.dart';
 import '../../view_model/product_provider.dart';
@@ -26,18 +25,6 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  Future<void> launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceWebView: true,
-        enableJavaScript: true,
-      );
-    } else {
-      throw "Could not launce $url";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final args =
@@ -693,28 +680,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Consumer<MyLocation>(
                                   builder: (_, val, __) => ElevatedButton(
-                                    onPressed: () async {
-                                      await launchURL(orderData.checkoutUrl);
-                                      order.updateStatus(
-                                        orderId: args["order_id"],
-                                        statusId: "2",
-                                        address: val.getLocation,
-                                        postalCode: val.getPostCode,
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.pinPayment,
+                                        arguments: {
+                                          "order_data": orderData,
+                                          "order_id": args["order_id"],
+                                          "address": val.getLocation,
+                                          "post_code": val.getPostCode,
+                                        },
                                       );
-
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (_) => WebviewScaffold(
-                                      //         url: orderData.invoiceUrl),
-                                      //   ),
-                                      // );
+                                      
                                     },
                                     child: const Text(
                                       "KONFIRMASI",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       primary: const Color(0xFF41E507),

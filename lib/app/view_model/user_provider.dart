@@ -33,10 +33,7 @@ class UserProvider with ChangeNotifier {
     final data = await MyCollection.user.doc(pref.getString("id")).get();
     setUser = UserModel.fromJson(data.data() as Map<String, dynamic>);
     final userD = MyCollection.user.doc(pref.getString("id"));
-    userD.update({
-      "isActive": true,
-      "fcm_token": pref.getString("fcmToken")
-    });
+    userD.update({"isActive": true, "fcm_token": pref.getString("fcmToken")});
   }
 
   Future<UserModel> getById({String? userId}) async {
@@ -57,7 +54,6 @@ class UserProvider with ChangeNotifier {
     final collection = MyCollection.user.doc();
 
     if (account.docs.isEmpty) {
-      log("empty");
       final user = UserModel(
         fcmToken: fcmToken!,
         id: collection.id,
@@ -66,6 +62,7 @@ class UserProvider with ChangeNotifier {
         imageUrl: img!,
         name: name!,
         roleId: "1",
+        pin: "-",
         isActive: isActive!,
         provider: provider!,
         createAt: DateTime.now(),
@@ -87,5 +84,26 @@ class UserProvider with ChangeNotifier {
       },
     );
     await getUserById();
+  }
+
+  Future<void> insertPin({
+    required String pin,
+    required String userId,
+  }) async {
+    await MyCollection.user.doc(userId).update(
+      {
+        "pin": pin,
+      },
+    );
+  }
+
+  Future<bool> getPin({required String pin, required String userId}) async {
+    final data = await MyCollection.user.doc(userId).get();
+
+    if ((data.data() as Map<String, dynamic>)["pin"] != pin) {
+      log("Pin tidak valid");
+      return false;
+    }
+    return true;
   }
 }
