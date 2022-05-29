@@ -322,6 +322,7 @@ class _RekapPageState extends State<RekapPage> {
                                   ),
                                   child: Container(
                                     width: size.width * 0.27,
+                                    height: size.height * 0.17,
                                     padding: const EdgeInsets.all(2),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),

@@ -103,7 +103,8 @@ class NotificationPage extends StatelessWidget {
                                       val.getData[index].createAt,
                                     ),
                                     style: const TextStyle(
-                                        fontStyle: FontStyle.italic),
+                                      fontStyle: FontStyle.italic,
+                                    ),
                                   ),
                                   NotifCard(notif: val.getData[index]),
                                 ],
@@ -122,7 +123,8 @@ class NotificationPage extends StatelessWidget {
                                   val.getData[index].createAt,
                                 ),
                                 style: const TextStyle(
-                                    fontStyle: FontStyle.italic),
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
                               NotifCard(notif: val.getData[index])
                             ],

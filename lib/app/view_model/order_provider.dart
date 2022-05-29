@@ -247,7 +247,7 @@ class OrderProvider with ChangeNotifier {
     countWeek[0] = sun.where((element) => element.statusId == "3").length;
     sunData = sun;
     int sum = 0;
-    for (int i = 1; i < countWeek.length; i++) {
+    for (int i = 0; i < countWeek.length - 1; i++) {
       sum += countWeek[i];
     }
     setSum = sum;

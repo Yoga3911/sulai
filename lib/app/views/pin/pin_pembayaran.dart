@@ -130,11 +130,8 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
                         animationDuration: const Duration(milliseconds: 300),
                         enableActiveFill: true,
                         controller: pin,
-                        onCompleted: (v) {
-                          debugPrint("Completed");
-                        },
+                        onCompleted: (v) {},
                         onChanged: (value) {
-                          debugPrint(value);
                           setState(() {
                             currentText = value;
                           });
@@ -165,27 +162,14 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
                                       address: args["address"],
                                       postalCode: args["post_code"],
                                     );
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "Pembayaran berhasil. Kembali ke beranda dalam 3 detik"),
-                                        backgroundColor: Colors.green,
-                                        duration: Duration(seconds: 3),
-                                      ),
-                                    );
-
-                                    await Future.delayed(
-                                        const Duration(seconds: 3));
-
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      Routes.main,
-                                      (route) => false,
-                                    );
                                   })
                                 : null;
 
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.main,
+                              (route) => false,
+                            );
                             return;
                           }
                           Navigator.pop(context);

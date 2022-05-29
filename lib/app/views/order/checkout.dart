@@ -13,6 +13,7 @@ import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import 'package:intl/intl.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../routes/route.dart';
 import '../../view_model/product_provider.dart';
@@ -114,9 +115,133 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         ),
                         ),
                       ),
+                      (orderData.statusId == "2" || orderData.statusId == "3")
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Column(
+                                children: [
+                                  TimelineTile(
+                                    isFirst: true,
+                                    indicatorStyle: IndicatorStyle(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 5, top: 5),
+                                      width: 20,
+                                      iconStyle: IconStyle(
+                                        iconData: Icons.done_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      color: Colors.green,
+                                    ),
+                                    alignment: TimelineAlign.start,
+                                    endChild: Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 80,
+                                      ),
+                                      child: const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("Menunggu konfirmasi penjual"),
+                                      ),
+                                    ),
+                                  ),
+                                  TimelineTile(
+                                    indicatorStyle: IndicatorStyle(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 5, top: 5),
+                                      width: 20,
+                                      iconStyle: IconStyle(
+                                        iconData: Icons.done_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      color: Colors.green,
+                                      
+                                    ),
+                                    alignment: TimelineAlign.start,
+                                    endChild: Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 80,
+                                      ),
+                                      child: const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            "Sulai dalam proses pembuatan"),
+                                      ),
+                                    ),
+                                  ),
+                                  TimelineTile(
+                                    indicatorStyle: IndicatorStyle(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 5, top: 5),
+                                      width: 20,
+                                      iconStyle: IconStyle(
+                                        iconData: Icons.done_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      color: Colors.green,
+                                      indicator: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            shape: BoxShape.circle),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    ),
+                                    alignment: TimelineAlign.start,
+                                    endChild: Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 80,
+                                      ),
+                                      child: const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            "Sulai sedang dalam pengiriman"),
+                                      ),
+                                    ),
+                                  ),
+                                  TimelineTile(
+                                    isLast: true,
+                                    indicatorStyle: IndicatorStyle(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 5, top: 5),
+                                      width: 20,
+                                      iconStyle: (orderData.statusId == "3")
+                                          ? IconStyle(
+                                              iconData: Icons.done_rounded,
+                                              color: Colors.white,
+                                            )
+                                          : null,
+                                      color: (orderData.statusId == "3")
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                    alignment: TimelineAlign.start,
+                                    endChild: Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 80,
+                                      ),
+                                      child: const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("Sulai sudah diterima"),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 20, bottom: 20),
+                        padding: (orderData.statusId == "2" ||
+                                orderData.statusId == "3")
+                            ? const EdgeInsets.only(
+                                left: 15, right: 15, bottom: 20)
+                            : const EdgeInsets.only(
+                                left: 15, right: 15, top: 20, bottom: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -691,7 +816,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           "post_code": val.getPostCode,
                                         },
                                       );
-                                      
                                     },
                                     child: const Text(
                                       "KONFIRMASI",

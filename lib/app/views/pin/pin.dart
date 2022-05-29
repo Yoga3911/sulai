@@ -98,6 +98,10 @@ class _PinPageState extends State<PinPage> {
                               const Color.fromARGB(255, 190, 190, 190),
                           inactiveFillColor:
                               const Color.fromARGB(255, 214, 214, 214),
+                          selectedColor:
+                              const Color.fromARGB(255, 255, 207, 96),
+                          selectedFillColor:
+                              const Color.fromARGB(255, 255, 219, 134),
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(5),
                           fieldHeight: 50,
@@ -107,11 +111,8 @@ class _PinPageState extends State<PinPage> {
                         animationDuration: const Duration(milliseconds: 300),
                         enableActiveFill: true,
                         controller: pin,
-                        onCompleted: (v) {
-                          debugPrint("Completed");
-                        },
+                        onCompleted: (v) {},
                         onChanged: (value) {
-                          debugPrint(value);
                           setState(() {
                             currentText = value;
                           });
