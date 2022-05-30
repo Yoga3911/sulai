@@ -6,6 +6,7 @@ class ProductModel {
         required this.name,
         required this.imageUrl,
         required this.price,
+        required this.discount,
         required this.adminId,
         required this.categoryId,
         required this.sizeId,
@@ -17,6 +18,7 @@ class ProductModel {
     final String name;
     final String imageUrl;
     final int price;
+    final int discount;
     final String adminId;
     final String categoryId;
     final String sizeId;
@@ -28,6 +30,7 @@ class ProductModel {
         name: json["name"],
         imageUrl: json["image_url"],
         price: json["price"],
+        discount: json["discount"],
         adminId: json["admin_id"],
         categoryId: json["category_id"],
         sizeId: json["size_id"],
@@ -40,6 +43,7 @@ class ProductModel {
         "name": name,
         "image_url": imageUrl,
         "price": price,
+        "discount": discount,
         "admin_id": adminId,
         "category_id": categoryId,
         "size_id": sizeId,

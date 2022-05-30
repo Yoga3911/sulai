@@ -1,4 +1,4 @@
-String currency(int price) {
+String currency(num price) {
   final String reversed = price.toString().split("").reversed.join();
   String reverseC = "";
   int step = 0;

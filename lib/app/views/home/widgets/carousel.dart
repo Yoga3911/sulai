@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sulai/app/models/product_model.dart';
 
-import '../../../constant/color.dart';
 import '../../../routes/route.dart';
 import '../../../widgets/currency.dart';
 
@@ -67,7 +66,7 @@ class CustomCarousel extends StatelessWidget {
                   ),
                   const Text(
                     "20 - 28 Maret 2022",
-                    style: TextStyle(color: MyColor.grey, fontSize: 12),
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   const SizedBox(height: 5),
                   Row(
@@ -84,7 +83,7 @@ class CustomCarousel extends StatelessWidget {
                               Text(
                                 "1 Basket Sulai",
                                 style: TextStyle(
-                                  color: MyColor.grey,
+                                  color: Colors.grey,
                                   fontSize: 10,
                                 ),
                               ),
@@ -99,10 +98,10 @@ class CustomCarousel extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const Text(
-                        "Diskon 20%",
-                        style: TextStyle(
-                          color: MyColor.grey,
+                      Text(
+                        "Diskon " + productModel.discount.toString() + "%",
+                        style: const TextStyle(
+                          color: Colors.grey,
                           fontSize: 14,
                         ),
                       )
@@ -137,17 +136,17 @@ class CustomCarousel extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                          const Text(
-                            "Rp 7.000",
-                            style: TextStyle(
+                          Text(
+                            "Rp ${currency((productModel.price * 12).round())}",
+                            style: const TextStyle(
                                 fontSize: 10,
-                                color: MyColor.grey,
+                                color: Colors.grey,
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: Colors.black),
                             // te
                           ),
                           Text(
-                            "Rp ${currency(productModel.price)}",
+                            "Rp ${currency((productModel.price * 12 * (100 - productModel.discount) / 100).round())}",
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.red),
                           )

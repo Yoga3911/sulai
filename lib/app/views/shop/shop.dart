@@ -170,7 +170,7 @@ class _ShopPageState extends State<ShopPage> {
                                 "price": productModel.price,
                                 "size": productModel.sizeId,
                               },
-                            );
+                            ).then((value) => setState(() {}));
                           },
                         );
                       },

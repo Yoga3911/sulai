@@ -228,13 +228,11 @@ class _HomeChatState extends State<HomeChat> {
                                         ),
                                       ),
                                     ),
-                                    trailing: (userData["unread"] == 0)
-                                        ? const SizedBox()
-                                        : Column(
+                                    trailing: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Container(
+                                              (userData["unread"] == 0)? const SizedBox() : Container(
                                                 decoration: const BoxDecoration(
                                                     color: Color.fromARGB(
                                                         255, 255, 219, 134),
@@ -249,12 +247,16 @@ class _HomeChatState extends State<HomeChat> {
                                                   ),
                                                 ),
                                               ),
-                                              ((DateTime.now().millisecondsSinceEpoch -
+                                              ((DateTime.now()
+                                                                  .month ==
+                                                              (userData["date"]
+                                                                      as Timestamp)
+                                                                  .toDate()
+                                                                  .month) && DateTime.now()
+                                                                  .day ==
                                                           (userData["date"]
-                                                                  as Timestamp)
-                                                              .toDate()
-                                                              .millisecondsSinceEpoch) <
-                                                      86400000)
+                                                                      as Timestamp)
+                                                                  .toDate().day)
                                                   ? Text(
                                                       DateFormat.Hm().format(
                                                         (userData["date"]
@@ -265,12 +267,15 @@ class _HomeChatState extends State<HomeChat> {
                                                           fontSize: 12),
                                                     )
                                                   : ((DateTime.now()
-                                                                  .millisecondsSinceEpoch -
+                                                                  .month ==
                                                               (userData["date"]
                                                                       as Timestamp)
                                                                   .toDate()
-                                                                  .millisecondsSinceEpoch) <
-                                                          172800000)
+                                                                  .month) && DateTime.now()
+                                                                  .day -
+                                                          (userData["date"]
+                                                                      as Timestamp)
+                                                                  .toDate().day == 1)
                                                       ? const Text(
                                                           "Kemarin",
                                                           style: TextStyle(

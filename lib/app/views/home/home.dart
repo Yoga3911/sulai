@@ -120,7 +120,7 @@ class HomePage extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 12,
                             overflow: TextOverflow.ellipsis,
-                            color: MyColor.grey,
+                            color: Colors.grey,
                             fontStyle: FontStyle.italic,
                           ),
                         ),

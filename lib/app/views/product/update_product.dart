@@ -132,7 +132,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                   backgroundColor: Colors.green,
                 ),
               );
-              setState(() {});
+              FocusManager.instance.primaryFocus?.unfocus();
             },
           );
         },

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
+import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/glow.dart';
 
 import '../../constant/color.dart';
@@ -101,8 +102,9 @@ class ProductPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        info("Susu Kedelai kemasan ", "botol"),
-                        info("Rasa Original", ""),
+                        info("Susu Kedelai kemasan ",
+                            (productModel.sizeId == "1") ? "Plastik" : "Botol"),
+                        info(productModel.name, ""),
                         info("1 basket ", "( 12 botol )"),
                         const SizedBox(height: 20),
                         Container(
@@ -110,10 +112,10 @@ class ProductPage extends StatelessWidget {
                           color: const Color(0xFFF3F3F3),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
+                            children: [
                               Text(
-                                "DISKON 20%",
-                                style: TextStyle(
+                                "DISKON " + productModel.discount.toString() + "%",
+                                style: const TextStyle(
                                   color: Colors.grey,
                                   fontStyle: FontStyle.italic,
                                   fontSize: 18,
@@ -121,23 +123,26 @@ class ProductPage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Rp 25.000",
-                                style: TextStyle(
+                                "Rp " + currency(productModel.price * 12),
+                                style: const TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                "Rp 20.000,00",
-                                style: TextStyle(
+                                "Rp " +
+                                    currency(
+                                        (productModel.price * 12 * (100 - productModel.discount) / 100)
+                                            .round()),
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
-                              SizedBox(width: 10)
+                              const SizedBox(width: 10)
                             ],
                           ),
                         ),
