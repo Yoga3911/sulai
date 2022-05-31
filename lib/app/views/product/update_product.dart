@@ -23,13 +23,14 @@ class _UpdateProductState extends State<UpdateProduct> {
   late TextEditingController _controller1;
   late TextEditingController _controller2;
   late TextEditingController _controller3;
-  int radioVal = -1;
+  late TextEditingController _controller4;
 
   @override
   void initState() {
     _controller1 = TextEditingController();
     _controller2 = TextEditingController();
     _controller3 = TextEditingController();
+    _controller4 = TextEditingController();
     super.initState();
   }
 
@@ -66,6 +67,7 @@ class _UpdateProductState extends State<UpdateProduct> {
     _controller1.dispose();
     _controller2.dispose();
     _controller3.dispose();
+    _controller4.dispose();
     super.dispose();
   }
 
@@ -79,9 +81,15 @@ class _UpdateProductState extends State<UpdateProduct> {
     if (_controller2.text.isEmpty) {
       _controller2.text = args["price"].toString();
     }
-    if (radioVal == -1) {
-      radioVal = int.parse(args["size"]);
+    if (_controller3.text.isEmpty) {
+      _controller3.text = args["discount"].toString();
     }
+    if (_controller4.text.isEmpty) {
+      _controller4.text = args["disc_prod"].toString();
+    }
+    // if (radioVal == -1) {
+    //   radioVal = int.parse(args["size"]);
+    // }
     final product = Provider.of<ProductProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -93,49 +101,68 @@ class _UpdateProductState extends State<UpdateProduct> {
             Icons.arrow_back_ios_rounded,
           ),
         ),
-        title: const Text("Edit Product"),
+        title: (args["size"] == "1")? Text(_controller1.text + " (Plastik)") : Text(_controller1.text + " (Botol)"),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 255, 218, 105),
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (_) => const CustomLoading(),
-          );
-          final DateTime date = DateTime.now();
-          (_img != null)
-              ? await uploadImg(
-                  imgFile: _img,
-                  imgName: "$_imgName${date.millisecond}",
-                )
-              : null;
-          (_img != null)
-              ? await getImgUrl(
-                  imgName: "$_imgName${date.millisecond}",
-                )
-              : null;
-          product
-              .editProduct(
-            name: _controller1.text,
-            price: int.parse(_controller2.text),
-            productId: args["id"],
-            image: _imgUrl ?? args["image"],
-            size: radioVal.toString(),
-          )
-              .then(
-            (value) {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Update product successfully"),
-                  backgroundColor: Colors.green,
-                ),
-              );
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-          );
-        },
+        backgroundColor: (_controller1.text.isEmpty)
+            ? Colors.grey
+            : (_controller2.text.isEmpty)
+                ? Colors.grey
+                : (_controller3.text.isEmpty)
+                    ? Colors.grey
+                    : (_controller4.text.isEmpty)
+                        ? Colors.grey
+                        : const Color.fromARGB(255, 255, 218, 105),
+        onPressed: (_controller1.text.isEmpty)
+            ? null
+            : (_controller2.text.isEmpty)
+                ? null
+                : (_controller3.text.isEmpty)
+                    ? null
+                    : (_controller4.text.isEmpty)
+                        ? null
+                        : () async {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const CustomLoading(),
+                            );
+                            final DateTime date = DateTime.now();
+                            (_img != null)
+                                ? await uploadImg(
+                                    imgFile: _img,
+                                    imgName: "$_imgName${date.millisecond}",
+                                  )
+                                : null;
+                            (_img != null)
+                                ? await getImgUrl(
+                                    imgName: "$_imgName${date.millisecond}",
+                                  )
+                                : null;
+                            product
+                                .editProduct(
+                              name: _controller1.text,
+                              price: int.parse(_controller2.text),
+                              productId: args["id"],
+                              discount: int.parse(_controller3.text),
+                              discProd: int.parse(_controller4.text),
+                              image: _imgUrl ?? args["image"],
+                              // size: radioVal.toString(),
+                            )
+                                .then(
+                              (value) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text("Update product successfully"),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                            );
+                          },
         child: const Icon(
           Icons.save_rounded,
           color: Colors.white,
@@ -161,66 +188,75 @@ class _UpdateProductState extends State<UpdateProduct> {
                   contentPadding: const EdgeInsets.all(13)),
             ),
           ),
-          const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: Text("Harga Produk")),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-            child: TextField(
-              controller: _controller2,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.price_change_rounded),
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none),
-                  isDense: true,
-                  contentPadding: const EdgeInsets.all(13)),
-            ),
-          ),
-          const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: Text("Ukuran Produk")),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Radio<int>(
-                      value: 1,
-                      activeColor: const Color.fromARGB(255, 255, 218, 105),
-                      groupValue: radioVal,
-                      onChanged: (val) {
-                        radioVal = val!;
-                        setState(() {});
-                      },
-                    ),
-                    const Text("220 ml")
-                  ],
+          const SizedBox(height: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Text("Harga Produk")),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+                child: TextField(
+                  controller: _controller2,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.price_change_rounded),
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.all(13)),
                 ),
-                Row(
-                  children: [
-                    Radio<int>(
-                      value: 2,
-                      activeColor: const Color.fromARGB(255, 255, 218, 105),
-                      groupValue: radioVal,
-                      onChanged: (val) {
-                        radioVal = val!;
-                        setState(() {});
-                      },
-                    ),
-                    const Text("600 ml")
-                  ],
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Text("Diskon Produk %")),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+                child: TextField(
+                  controller: _controller3,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.discount_rounded),
+                      helperText: "Beri nilai 0 jika tidak ada diskon",
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.all(13)),
                 ),
-              ],
-            ),
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Text("Jumlah pembelian produk diskon")),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+                child: TextField(
+                  controller: _controller4,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      prefixIcon:
+                          const Icon(Icons.production_quantity_limits_rounded),
+                      helperText: "Beri nilai 0 jika tidak ada diskon",
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.all(13)),
+                ),
+              ),
+            ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
             child: GestureDetector(
               onTap: () async {
                 await fromGallery().then((value) => setState(() {}));

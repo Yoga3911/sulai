@@ -79,8 +79,8 @@ class CustomCarousel extends StatelessWidget {
                           const SizedBox(width: 5),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "1 Basket Sulai",
                                 style: TextStyle(
                                   color: Colors.grey,
@@ -88,8 +88,8 @@ class CustomCarousel extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "12 Botol",
-                                style: TextStyle(
+                                (productModel.sizeId == "1")? productModel.discProd.toString() + " Plastik" : productModel.discProd.toString() + " Botol",
+                                style: const TextStyle(
                                   color: Colors.blue,
                                   fontSize: 10,
                                 ),
@@ -137,7 +137,7 @@ class CustomCarousel extends StatelessWidget {
                       Column(
                         children: [
                           Text(
-                            "Rp ${currency((productModel.price * 12).round())}",
+                            "Rp ${currency((productModel.price * productModel.discProd).round())}",
                             style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.grey,
@@ -146,7 +146,7 @@ class CustomCarousel extends StatelessWidget {
                             // te
                           ),
                           Text(
-                            "Rp ${currency((productModel.price * 12 * (100 - productModel.discount) / 100).round())}",
+                            "Rp ${currency((productModel.price * productModel.discProd * (100 - productModel.discount) / 100).round())}",
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.red),
                           )

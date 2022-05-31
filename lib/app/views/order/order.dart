@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +27,8 @@ class _OrderPageState extends State<OrderPage> {
   late TextEditingController quantityController;
   late TextEditingController phoneController;
   bool isEmpty = true;
+  String? sizeId;
+  bool isInit = false;
 
   @override
   void initState() {
@@ -42,6 +46,14 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments ?? "";
+    ProductModel? productModel;
+    if (args != "") {
+      productModel = (args as Map<String, dynamic>)["product"] as ProductModel;
+      if (quantityController.text.isEmpty) {
+        quantityController.text = productModel.discProd.toString();
+      }
+    }
     final location = Provider.of<MyLocation>(context, listen: false);
     final order = Provider.of<OrderProvider>(context, listen: false);
     final user = Provider.of<UserProvider>(context, listen: false);
@@ -63,6 +75,10 @@ class _OrderPageState extends State<OrderPage> {
             }
             if (dropdown.image.isEmpty) {
               dropdown.image = snapshot.data!.first.imageUrl;
+            }
+            if (!isInit) {
+              sizeId = snapshot.data!.first.sizeId;
+              isInit = true;
             }
             return Column(
               children: [
@@ -101,6 +117,18 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 40),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Sulai",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 40, right: 40),
                         child: Row(
@@ -116,6 +144,10 @@ class _OrderPageState extends State<OrderPage> {
                                     value: val.getRasa,
                                     onChanged: (value) {
                                       val.setRasa = value!;
+                                      sizeId = snapshot
+                                          .data![snapshot.data!.indexWhere(
+                                              (element) => element.id == value)]
+                                          .sizeId;
                                       val.setImg = snapshot
                                           .data![snapshot.data!.indexWhere(
                                               (element) => element.id == value)]
@@ -124,7 +156,9 @@ class _OrderPageState extends State<OrderPage> {
                                     items: [
                                       for (ProductModel item in snapshot.data!)
                                         DropdownMenuItem(
-                                          child: Text(item.name),
+                                          child: (item.sizeId == "1")
+                                              ? Text(item.name + " 220 ml")
+                                              : Text(item.name + " 600 ml"),
                                           value: item.id,
                                         ),
                                     ],
@@ -142,43 +176,16 @@ class _OrderPageState extends State<OrderPage> {
                           thickness: 2,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40, right: 40),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: DropdownButtonHideUnderline(
-                                child: Consumer<DropDownNotifier>(
-                                  builder: (_, val, __) => DropdownButton<int>(
-                                    style: const TextStyle(
-                                        color: Color.fromARGB(255, 58, 58, 58)),
-                                    value: val.getKemasan,
-                                    onChanged: (value) {
-                                      val.setKemasan = value!;
-                                    },
-                                    items: const [
-                                      DropdownMenuItem(
-                                        child: Text("220mL"),
-                                        value: 1,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text("600mL"),
-                                        value: 2,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       const Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Divider(
-                          height: 2,
-                          thickness: 2,
+                        padding: EdgeInsets.only(left: 40, top: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Jumlah sulai",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
@@ -220,6 +227,18 @@ class _OrderPageState extends State<OrderPage> {
                         child: Divider(
                           height: 2,
                           thickness: 2,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 40, top: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Metode Pembayaran",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
@@ -297,6 +316,18 @@ class _OrderPageState extends State<OrderPage> {
                         builder: (_, val, __) => (val.getPembayaran == 1)
                             ? Column(
                                 children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 40, top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Nomer OVO",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 28, right: 40),
@@ -348,6 +379,18 @@ class _OrderPageState extends State<OrderPage> {
                               )
                             : const SizedBox(),
                       ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 40, top: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Tanggal Pemesanan",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                       Consumer<DropDownNotifier>(
                         builder: (_, val, __) => GestureDetector(
                           onTap: () => val.selectDate(context),
@@ -368,7 +411,7 @@ class _OrderPageState extends State<OrderPage> {
                                   ),
                                   const Icon(
                                     Icons.date_range_rounded,
-                                    color: Colors.blue,
+                                    color: Color.fromARGB(255, 255, 219, 134),
                                   )
                                 ],
                               ),
@@ -435,6 +478,7 @@ class _OrderPageState extends State<OrderPage> {
                                                     : "ID_SAKUKU",
                                   ).then(
                                     (value) async {
+                                      log(sizeId!);
                                       String orderId = await order.insertOrder(
                                         userId: user.getUser.id,
                                         categoryId: dropdown.getRasa.toString(),
@@ -442,7 +486,7 @@ class _OrderPageState extends State<OrderPage> {
                                             dropdown.getPembayaran.toString(),
                                         quantity:
                                             int.parse(quantityController.text),
-                                        sizeId: dropdown.getKemasan.toString(),
+                                        sizeId: sizeId,
                                         date: dropdown.selectedDate,
                                         checkoutUrl: value["checkout_url"],
                                       );

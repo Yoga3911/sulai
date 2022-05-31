@@ -105,7 +105,11 @@ class ProductPage extends StatelessWidget {
                         info("Susu Kedelai kemasan ",
                             (productModel.sizeId == "1") ? "Plastik" : "Botol"),
                         info(productModel.name, ""),
-                        info("1 basket ", "( 12 botol )"),
+                        info(
+                            "1 basket ",
+                            (productModel.sizeId == "1")
+                                ? "( ${productModel.discProd} plastik )"
+                                : "( ${productModel.discProd} botol )"),
                         const SizedBox(height: 20),
                         Container(
                           width: size.width,
@@ -114,7 +118,9 @@ class ProductPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                "DISKON " + productModel.discount.toString() + "%",
+                                "DISKON " +
+                                    productModel.discount.toString() +
+                                    "%",
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   fontStyle: FontStyle.italic,
@@ -123,7 +129,9 @@ class ProductPage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Rp " + currency(productModel.price * 12),
+                                "Rp " +
+                                    currency(productModel.price *
+                                        productModel.discProd),
                                 style: const TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey,
@@ -132,9 +140,11 @@ class ProductPage extends StatelessWidget {
                               ),
                               Text(
                                 "Rp " +
-                                    currency(
-                                        (productModel.price * 12 * (100 - productModel.discount) / 100)
-                                            .round()),
+                                    currency((productModel.price *
+                                            productModel.discProd *
+                                            (100 - productModel.discount) /
+                                            100)
+                                        .round()),
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
@@ -151,7 +161,8 @@ class ProductPage extends StatelessWidget {
                           onPressed: () {
                             dropdown.setRasa = productModel.id;
                             dropdown.setImg = productModel.imageUrl;
-                            Navigator.pushNamed(context, Routes.order);
+                            Navigator.pushNamed(context, Routes.order,
+                                arguments: {"product": productModel});
                           },
                           child: const Text("PESAN"),
                           style: ElevatedButton.styleFrom(

@@ -15,9 +15,14 @@ import '../../constant/color.dart';
 import '../../routes/route.dart';
 import '../../view_model/order_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
@@ -40,7 +45,7 @@ class HomePage extends StatelessWidget {
                 }
                 order.productData = snapshot.data!;
                 return CarouselSlider(
-                  items: snapshot.data!
+                  items: snapshot.data!.where((element) => element.discount > 0)
                       .map((e) => CustomCarousel(productModel: e))
                       .toList(),
                   options: CarouselOptions(
@@ -60,7 +65,10 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, Routes.shop),
+                  onTap: () =>
+                      Navigator.pushNamed(context, Routes.shop).then((_) {
+                    setState(() {});
+                  }),
                   child: const CustomBox(
                     icon: "assets/icons/shop.png",
                     label: "SHOP",

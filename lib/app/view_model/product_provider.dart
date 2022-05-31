@@ -27,12 +27,16 @@ class ProductProvider with ChangeNotifier {
     int? price,
     String? image,
     String? size,
+    int? discount,
+    int? discProd,
   }) async {
     await MyCollection.product.doc(productId).update(
       {
         "name": name,
         "image_url": image,
         "price": price,
+        "discount": discount,
+        "disc_prod": discProd,
         "size_id": size,
         "update_at": DateTime.now(),
       },
@@ -45,6 +49,8 @@ class ProductProvider with ChangeNotifier {
     String? image,
     String? size,
     String? userId,
+    int? discount,
+    int? discProd,
   }) async {
     final doc = MyCollection.product.doc();
     await doc.set(
@@ -55,6 +61,8 @@ class ProductProvider with ChangeNotifier {
         "category_id": "1",
         "image_url": image,
         "price": price,
+        "discount": discount,
+        "disc_prod": discProd,
         "size_id": size,
         "update_at": DateTime.now(),
         "create_at": DateTime.now(),

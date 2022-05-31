@@ -7,6 +7,7 @@ class ProductModel {
         required this.imageUrl,
         required this.price,
         required this.discount,
+        required this.discProd,
         required this.adminId,
         required this.categoryId,
         required this.sizeId,
@@ -19,6 +20,7 @@ class ProductModel {
     final String imageUrl;
     final int price;
     final int discount;
+    final int discProd;
     final String adminId;
     final String categoryId;
     final String sizeId;
@@ -31,6 +33,7 @@ class ProductModel {
         imageUrl: json["image_url"],
         price: json["price"],
         discount: json["discount"],
+        discProd: json["disc_prod"],
         adminId: json["admin_id"],
         categoryId: json["category_id"],
         sizeId: json["size_id"],
@@ -44,6 +47,7 @@ class ProductModel {
         "image_url": imageUrl,
         "price": price,
         "discount": discount,
+        "disc_prod": discProd,
         "admin_id": adminId,
         "category_id": categoryId,
         "size_id": sizeId,

@@ -168,6 +168,11 @@ class _ShopPageState extends State<ShopPage> {
                                 "name": productModel.name,
                                 "image": productModel.imageUrl,
                                 "price": productModel.price,
+                                "discount": productModel.discount,
+                                "disc_prod": productModel.discProd,
+                                "price2": productModel.price,
+                                "discount2": productModel.discount,
+                                "disc_prod2": productModel.discProd,
                                 "size": productModel.sizeId,
                               },
                             ).then((value) => setState(() {}));

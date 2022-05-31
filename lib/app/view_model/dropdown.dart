@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DropDownNotifier with ChangeNotifier {
   String rasa = "";
-  int _kemasan = 1;
+  String _kemasan = "";
   int _pembayaran = 1;
   String image = "";
 
@@ -18,7 +18,7 @@ class DropDownNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set setKemasan(int val) {
+  set setKemasan(String val) {
     _kemasan = val;
     notifyListeners();
   }
@@ -30,7 +30,7 @@ class DropDownNotifier with ChangeNotifier {
 
   String get getRasa => rasa;
 
-  int get getKemasan => _kemasan;
+  String get getKemasan => _kemasan;
 
   int get getPembayaran => _pembayaran;
 
