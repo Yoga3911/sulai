@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/routes/route.dart';
+import 'package:sulai/app/view_model/notification.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
@@ -28,7 +30,6 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceWebView: true,
         enableJavaScript: true,
       );
     } else {
@@ -40,6 +41,7 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
     final order = Provider.of<OrderProvider>(context, listen: false);
+    final notif = Provider.of<NotificationProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
@@ -164,6 +166,12 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
                                     );
                                   })
                                 : null;
+                            notif.insertNotif(
+                              userId: user.getUser.id,
+                              adminId: "mOioopdH4uZDvrxy0Ewc",
+                              title: "Pembayaran berhasil",
+                              subtitle: "Silahkan tunggu konfirmasi dari admin",
+                            );
 
                             Navigator.pushNamedAndRemoveUntil(
                               context,

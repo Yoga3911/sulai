@@ -10,6 +10,7 @@ import 'package:sulai/app/constant/collection.dart';
 
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/notification.dart';
+import 'package:sulai/app/view_model/user_provider.dart';
 
 import '../constant/color.dart';
 import '../routes/route.dart';
@@ -173,7 +174,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     StreamBuilder<QuerySnapshot>(
-                      stream: MyCollection.notification.snapshots(),
+                      stream: MyCollection.notification
+                          .where(
+                            "user_id",
+                            isEqualTo: context.read<UserProvider>().getUser.id,
+                          )
+                          .snapshots(),
                       builder: (_, snapshot) {
                         if (!snapshot.hasData) {
                           return const Icon(
@@ -181,11 +187,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             color: MyColor.grey,
                           );
                         }
-                        if (notif.getCount == 0) {
+                        if (!notif.isOpen) {
                           notif.setCount = snapshot.data!.docs.length;
+                          notif.isOpen = true;
                         }
                         if (notif.getCount < snapshot.data!.docs.length) {
                           notif.setActive = true;
+                          notif.setCount = snapshot.data!.docs.length;
                         }
                         return Stack(
                           children: [

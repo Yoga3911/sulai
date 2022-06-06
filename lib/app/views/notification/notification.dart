@@ -91,8 +91,8 @@ class NotificationPage extends StatelessWidget {
                       itemCount: val.getData.length,
                       itemBuilder: (_, index) {
                         if (index > 0) {
-                          if (val.getData[index].createAt !=
-                              val.getData[index - 1].createAt) {
+                          if (val.getData[index].createAt.day !=
+                              val.getData[index - 1].createAt.day) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 20),
                               child: Column(

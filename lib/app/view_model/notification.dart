@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sulai/app/constant/collection.dart';
@@ -5,6 +7,8 @@ import 'package:sulai/app/models/notifaction_model.dart';
 
 class NotificationProvider with ChangeNotifier {
   bool _isActive = false;
+
+  bool isOpen = false;
 
   set setActive(bool val) => _isActive = val;
 
@@ -48,6 +52,26 @@ class NotificationProvider with ChangeNotifier {
     _notifData.removeWhere((element) => element.id == id);
     setMinusCount = -1;
     await MyCollection.notification.doc(id).delete();
+    log("Hapuss");
     notifyListeners();
+  }
+
+  Future<void> insertNotif(
+      {required String userId,
+      required String adminId,
+      required String title,
+      required String subtitle}) async {
+    final docId = MyCollection.notification.doc();
+    docId.set(
+      NotificationModel(
+        id: docId.id,
+        userId: userId,
+        adminId: adminId,
+        title: title,
+        subtitle: subtitle,
+        url: "-",
+        createAt: DateTime.now(),
+      ).toJson(),
+    );
   }
 }

@@ -57,7 +57,8 @@ class NotifCard extends StatelessWidget {
                         child: CachedNetworkImage(
                           height: double.infinity,
                           width: double.infinity,
-                          imageUrl: (snapshot.data!.data() as Map<String, dynamic>)["image_url"],
+                          imageUrl: (snapshot.data!.data()
+                              as Map<String, dynamic>)["image_url"],
                         ),
                       ),
                     );
@@ -101,15 +102,6 @@ class NotifCard extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      (notif.url.isNotEmpty)
-                          ? ListTile(
-                              onTap: () async {
-                                await launchURL(notif.url);
-                                Navigator.pop(ctx);
-                              },
-                              title: const Text("Kunjungi halaman"),
-                            )
-                          : const SizedBox(),
                       ListTile(
                         onTap: () async {
                           await notification.deleteById(notif.id);

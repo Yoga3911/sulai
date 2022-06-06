@@ -9,6 +9,7 @@ environment:
   sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
+  another_flushbar: ^1.10.29
   cached_network_image: ^3.2.0
   carousel_slider: ^4.0.0
   cloud_firestore: ^3.1.10
@@ -39,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.13
   timeline_tile: ^2.0.0
   url_launcher: ^6.0.20
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_lints: ^1.0.0

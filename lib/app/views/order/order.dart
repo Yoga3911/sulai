@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
@@ -207,6 +208,10 @@ class _OrderPageState extends State<OrderPage> {
                                     color: Color.fromARGB(255, 58, 58, 58),
                                     fontSize: 14),
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"))
+                                ],
                                 decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(13),
