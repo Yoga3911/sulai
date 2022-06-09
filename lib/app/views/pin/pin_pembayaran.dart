@@ -171,22 +171,35 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
                                     ),
                                   )
                                 : null;
-                            notif.insertNotif(
-                              userId: user.getUser.id,
-                              adminId: "mOioopdH4uZDvrxy0Ewc",
-                              title: "Pembayaran berhasil",
-                              subtitle: "Silahkan tunggu konfirmasi dari admin",
-                            );
+
                             await PaymentService.getPayment(
                               chargeId: orderData.chargeId,
                             ).then(
                               (value) {
                                 if (value.isNotEmpty) {
                                   order.updatePaymentStatus(
-                                      orderId: orderData.id,
-                                      status: value,
-                                      address: args["address"],
-                                      postalCode: args["post_code"]);
+                                    orderId: orderData.id,
+                                    status: value,
+                                    address: args["address"],
+                                    postalCode: args["post_code"],
+                                  );
+                                  if (value == "SUCCEEDED") {
+                                    notif.insertNotif(
+                                      userId: user.getUser.id,
+                                      adminId: "mOioopdH4uZDvrxy0Ewc",
+                                      title: "Pembayaran berhasil",
+                                      subtitle:
+                                          "Silahkan tunggu konfirmasi dari admin",
+                                    );
+                                  } else if (value == "PENDING") {
+                                    notif.insertNotif(
+                                      userId: user.getUser.id,
+                                      adminId: "mOioopdH4uZDvrxy0Ewc",
+                                      title: "Belum melakukan pembayaran",
+                                      subtitle:
+                                          "Segera lakukan pembayaran dengan metode yang telah dipilih",
+                                    );
+                                  }
                                 }
                               },
                             );

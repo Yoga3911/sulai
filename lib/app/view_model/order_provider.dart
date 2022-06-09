@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +7,7 @@ import '../models/product_model.dart';
 
 class OrderProvider with ChangeNotifier {
   List<OrderModel> _orderData = [];
+  List<OrderModel> _orderDataProc = [];
   List<OrderModel> orderPerWeek = [];
   List<ProductModel> productData = [];
 
@@ -74,7 +74,45 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getAllProc(String userId, {String? processId}) async {
+    if (processId == "0") {
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
+          .where("status_id", isEqualTo: "2")
+          .get();
+      setDataProc = [
+        for (QueryDocumentSnapshot<Object?> item in data.docs)
+          OrderModel.fromJson(item.data() as Map<String, dynamic>),
+      ];
+    } else if (processId == "4") {
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
+          .where("process_id", isEqualTo: processId)
+          .get();
+      setDataProc = [
+        for (QueryDocumentSnapshot<Object?> item in data.docs)
+          OrderModel.fromJson(item.data() as Map<String, dynamic>),
+      ];
+    } else {
+      final data = await MyCollection.order
+          .where("user_id", isEqualTo: userId)
+          .where("status_id", isEqualTo: "2")
+          .where("process_id", isEqualTo: processId)
+          .get();
+      setDataProc = [
+        for (QueryDocumentSnapshot<Object?> item in data.docs)
+          OrderModel.fromJson(item.data() as Map<String, dynamic>),
+      ];
+    }
+  }
+
+  set setDataProc(List<OrderModel> data) {
+    _orderDataProc = data;
+    notifyListeners();
+  }
+
   List<OrderModel> get getData => _orderData;
+  List<OrderModel> get getDataProc => _orderDataProc;
   Future<void> deleteById(String id) async {
     _orderData.removeWhere((element) => element.id == id);
     await MyCollection.order.doc(id).delete();
@@ -164,9 +202,25 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateStatusState({String? statusId, String? orderId}) async {
+  Future<void> updateStatusState({
+    String? statusId,
+    String? orderId,
+    String? processId,
+  }) async {
+    if (processId != null) {
+      await MyCollection.order
+          .doc(orderId)
+          .update({"status_id": statusId, "process_id": processId});
+    } else {
+      await MyCollection.order.doc(orderId).update({
+        "status_id": statusId,
+      });
+    }
+  }
+
+  Future<void> updateProcessState({String? processId, String? orderId}) async {
     await MyCollection.order.doc(orderId).update({
-      "status_id": statusId,
+      "process_id": processId,
     });
   }
 

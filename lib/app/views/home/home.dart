@@ -45,7 +45,8 @@ class _HomePageState extends State<HomePage> {
                 }
                 order.productData = snapshot.data!;
                 return CarouselSlider(
-                  items: snapshot.data!.where((element) => element.discount > 0)
+                  items: snapshot.data!
+                      .where((element) => element.discount > 0)
                       .map((e) => CustomCarousel(productModel: e))
                       .toList(),
                   options: CarouselOptions(
@@ -182,23 +183,26 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.only(
-                left: size.width * 0.3,
-                right: size.width * 0.3,
-              ),
-              child: ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, Routes.order),
-                child: const Text("PESAN SEKARANG"),
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width, size.height * 0.06),
-                  primary: const Color(0xFF41E507),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-              ),
-            ),
+            (user.getUser.roleId == "1")
+                ? Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.3,
+                      right: size.width * 0.3,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, Routes.order),
+                      child: const Text("PESAN SEKARANG"),
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(size.width, size.height * 0.06),
+                        primary: const Color(0xFF41E507),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
             const SizedBox(
               height: 40,
             ),

@@ -7,6 +7,7 @@ import 'package:sulai/app/models/ulasan_model.dart';
 import 'package:sulai/app/models/user_model.dart';
 import 'package:sulai/app/routes/route.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
+import 'package:sulai/app/views/media/media_ig.dart';
 
 import '../../constant/collection.dart';
 import '../../view_model/ulasan_provider.dart';
@@ -134,18 +135,28 @@ class _MediaPageState extends State<MediaPage> {
                 height: size.height * 0.15,
                 child: Image.asset("assets/images/insta.png"),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    "@SULAIMANIA",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  SizedBox(width: 10),
-                  Icon(Icons.ios_share_rounded)
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MediaIG(),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "@SULAIMANIA",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(Icons.ios_share_rounded)
+                  ],
+                ),
               )
             ],
           ),
@@ -272,7 +283,11 @@ class _MediaPageState extends State<MediaPage> {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Flexible(child: Text(snapshot2.data!.name, overflow: TextOverflow.ellipsis,)),
+                                Flexible(
+                                    child: Text(
+                                  snapshot2.data!.name,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                                 Text(
                                   DateFormat("dd-MM-yyyy").format(
                                     snapshot.data![index].date,

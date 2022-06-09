@@ -117,7 +117,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
-
+    final user = Provider.of<UserProvider>(context);
     final order = Provider.of<OrderProvider>(context, listen: false);
     final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
     return SizedBox(
@@ -164,7 +164,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               Container(
                 height: size.height * 0.05,
-                width: size.height * 0.17,
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 margin: const EdgeInsets.only(right: 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -173,74 +173,86 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    StreamBuilder<QuerySnapshot>(
-                      stream: MyCollection.notification
-                          .where(
-                            "user_id",
-                            isEqualTo: context.read<UserProvider>().getUser.id,
-                          )
-                          .snapshots(),
-                      builder: (_, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Icon(
-                            Icons.notifications_outlined,
-                            color: MyColor.grey,
-                          );
-                        }
-                        if (!notif.isOpen) {
-                          notif.setCount = snapshot.data!.docs.length;
-                          notif.isOpen = true;
-                        }
-                        if (notif.getCount < snapshot.data!.docs.length) {
-                          notif.setActive = true;
-                          notif.setCount = snapshot.data!.docs.length;
-                        }
-                        return Stack(
-                          children: [
-                            Material(
-                              color: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
-                                  notif.setCount = snapshot.data!.docs.length;
-                                  notif.setActiveRef = false;
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.notification,
-                                  );
-                                },
-                                child: const Icon(
+                    (user.getUser.roleId == "1")
+                        ? StreamBuilder<QuerySnapshot>(
+                            stream: MyCollection.notification
+                                .where(
+                                  "user_id",
+                                  isEqualTo:
+                                      context.read<UserProvider>().getUser.id,
+                                )
+                                .snapshots(),
+                            builder: (_, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Icon(
                                   Icons.notifications_outlined,
                                   color: MyColor.grey,
-                                ),
-                              ),
-                            ),
-                            notif.getActive
-                                ? Positioned(
-                                    right: 3,
-                                    top: 3,
-                                    child: Container(
-                                      height: size.height * 0.01,
-                                      width: size.height * 0.01,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
+                                );
+                              }
+                              if (!notif.isOpen) {
+                                notif.setCount = snapshot.data!.docs.length;
+                                notif.isOpen = true;
+                              }
+                              if (notif.getCount < snapshot.data!.docs.length) {
+                                notif.setActive = true;
+                                notif.setCount = snapshot.data!.docs.length;
+                              }
+                              return Stack(
+                                children: [
+                                  Material(
+                                    color: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(100),
+                                      onTap: () {
+                                        notif.setCount =
+                                            snapshot.data!.docs.length;
+                                        notif.setActiveRef = false;
+                                        Navigator.pushNamed(
+                                          context,
+                                          Routes.notification,
+                                        );
+                                      },
+                                      child: const Icon(
+                                        Icons.notifications_outlined,
+                                        color: MyColor.grey,
                                       ),
                                     ),
-                                  )
-                                : const SizedBox()
-                          ],
-                        );
-                      },
-                    ),
-                    Container(
-                      height: size.height * 0.03,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
+                                  ),
+                                  notif.getActive
+                                      ? Positioned(
+                                          right: 3,
+                                          top: 3,
+                                          child: Container(
+                                            height: size.height * 0.01,
+                                            width: size.height * 0.01,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox()
+                                ],
+                              );
+                            },
+                          )
+                        : const SizedBox(),
+                    (user.getUser.roleId == "1")
+                        ? const SizedBox(width: 8)
+                        : const SizedBox(),
+                    (user.getUser.roleId == "1")
+                        ? Container(
+                            height: size.height * 0.03,
+                            width: 2,
+                            color: Colors.grey,
+                          )
+                        : const SizedBox(),
+                    (user.getUser.roleId == "1")
+                        ? const SizedBox(width: 8)
+                        : const SizedBox(),
                     Material(
                       color: Colors.transparent,
                       shape: RoundedRectangleBorder(
@@ -248,19 +260,25 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(100),
-                        onTap: () =>
-                            Navigator.pushNamed(context, Routes.orderData),
+                        onTap: () {
+                          (user.getUser.roleId == "2")
+                              ? Navigator.pushNamed(
+                                  context, Routes.orderDataAdmin)
+                              : Navigator.pushNamed(context, Routes.orderData);
+                        },
                         child: const Icon(
                           Icons.shopping_bag_outlined,
                           color: MyColor.grey,
                         ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Container(
                       height: size.height * 0.03,
                       width: 2,
                       color: Colors.grey,
                     ),
+                    const SizedBox(width: 8),
                     (_connectionStatus == "Wifi")
                         ? const Icon(
                             Icons.wifi_rounded,

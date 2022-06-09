@@ -17,6 +17,8 @@ import 'package:sulai/app/views/rekap/rekap.dart';
 import '../views/auth/login.dart';
 import '../views/auth/register.dart';
 import '../views/order/checkout.dart';
+import '../views/order/checkout_admin.dart';
+import '../views/order/history_admin.dart';
 import '../views/order/order.dart';
 import '../views/product/product.dart';
 import '../views/shop/shop.dart';
@@ -31,7 +33,9 @@ class Routes {
   static const product = "/product";
   static const order = "/order";
   static const orderData = "/order/data";
+  static const orderDataAdmin = "/order/dataAdmin";
   static const checkout = "/checkout";
+  static const checkoutAdmin = "/checkoutAdmin";
   static const notification = "/notification";
   static const profile = "/profile";
   static const shop = "/shop";
@@ -53,7 +57,9 @@ class Routes {
     product: (_) => const ProductPage(),
     order: (_) => const OrderPage(),
     orderData: (_) => const OrderData(),
+    orderDataAdmin: (_) => const OrderDataAdmin(),
     checkout: (_) => const CheckoutPage(),
+    checkoutAdmin: (_) => const CheckoutAdminPage(),
     notification: (_) => const NotificationPage(),
     profile: (_) => const ProfilePage(),
     shop: (_) => const ShopPage(),

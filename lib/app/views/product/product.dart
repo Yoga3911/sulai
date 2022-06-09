@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
+import 'package:sulai/app/view_model/user_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/glow.dart';
@@ -157,23 +158,24 @@ class ProductPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            dropdown.setRasa = productModel.id;
-                            dropdown.setImg = productModel.imageUrl;
-                            Navigator.pushNamed(context, Routes.order,
-                                arguments: {"product": productModel});
-                          },
-                          child: const Text("PESAN"),
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFF41E507),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            fixedSize: const Size(140, 50),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
+                        (context.read<UserProvider>().getUser.roleId == "1")
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  dropdown.setRasa = productModel.id;
+                                  dropdown.setImg = productModel.imageUrl;
+                                  Navigator.pushNamed(context, Routes.order,
+                                      arguments: {"product": productModel});
+                                },
+                                child: const Text("PESAN"),
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF41E507),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  fixedSize: const Size(120, 40),
+                                ),
+                              )
+                            : const SizedBox(),
                         const SizedBox(height: 20),
                       ],
                     ),
