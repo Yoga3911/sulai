@@ -414,6 +414,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         );
                         break;
                     }
+                    pref.remove("id");
+                    pref.remove("social");
                   },
                   child: const Text("Ya"),
                 ),

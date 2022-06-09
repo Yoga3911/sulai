@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sulai/app/services/social.dart';
 
 class EmailService extends SocialService {
-  Future<void> signUp(
+  Future<dynamic> signUp(
       {String email = "email", String password = "password"}) async {
     try {
       await FirebaseAuth.instance
@@ -17,17 +17,18 @@ class EmailService extends SocialService {
 
       log("Register success");
 
-      return;
+      return "";
     } on FirebaseAuthException catch (e) {
-      assert(
-          e.code != "weak-password", "Password yang anda masukkan tidak aman");
-      assert(e.code != "email-already-in-use", "Email sudah terdaftar");
-      rethrow;
+      if (e.code == "email-already-in-use") {
+        return "Email telah terdaftar, silahkan gunakan email lain";
+      } else if (e.code == "weak-password") {
+        return "Password terlalu lemah";
+      }
     }
   }
 
   @override
-  Future<UserCredential> signIn(
+  Future<dynamic> signIn(
       {String email = "email@gmail.com", String password = "password"}) async {
     try {
       final UserCredential user = await FirebaseAuth.instance
@@ -35,9 +36,11 @@ class EmailService extends SocialService {
       log("Login success");
       return user;
     } on FirebaseAuthException catch (e) {
-      assert(e.code != "user-not-found", "User tidak ditemukan");
-      assert(e.code != "wrong-password", "Password salah");
-      rethrow;
+      if (e.code == "user-not-found") {
+        return "User tidak ditemukan";
+      } else if (e.code == "wrong-password") {
+        return "Password salah";
+      }
     }
   }
 

@@ -80,7 +80,7 @@ class _PinPageState extends State<PinPage> {
                   children: [
                     const SizedBox(height: 10),
                     const Text(
-                      "MASUKKAN PIN",
+                      "DAFTARKAN PIN",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,

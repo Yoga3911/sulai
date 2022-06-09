@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,16 @@ class AuthProvider with ChangeNotifier {
     final _user = Provider.of<UserProvider>(context!, listen: false);
     EmailService().signUp(email: email!, password: password!).then(
       (user) async {
+        if (user.toString().length > 1) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(user),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
         _user.insertUser(
             email: email,
             fcmToken: "-",
@@ -28,6 +39,13 @@ class AuthProvider with ChangeNotifier {
             name: name,
             provider: "email",
             isActive: false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Register berhasil"),
+            backgroundColor: Colors.green,
+          ),
+        );
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.login,
@@ -49,17 +67,29 @@ class AuthProvider with ChangeNotifier {
       EmailService social = EmailService();
       social.signIn(email: email, password: password).then(
         (user) async {
-          final data =
-              await MyCollection.user.where("email", isEqualTo: email).get();
-          MyCollection.user
-              .doc(data.docs.first.id)
-              .update({"fcm_token": pref.getString("fcmToken")});
-          pref.setString("id", data.docs.first.id);
-          pref.setString("social", provider!);
-          Navigator.pushReplacementNamed(context, Routes.main).then(
-            (_) async {
-              Navigator.pop(context);
-            },
+          if (user.runtimeType == UserCredential) {
+            final data =
+                await MyCollection.user.where("email", isEqualTo: email).get();
+            MyCollection.user
+                .doc(data.docs.first.id)
+                .update({"fcm_token": pref.getString("fcmToken")});
+            pref.setString("id", data.docs.first.id);
+            pref.setString("social", provider!);
+            Navigator.pushReplacementNamed(context, Routes.main).then(
+              (_) async {
+                Navigator.pop(context);
+              },
+            );
+            return;
+          }
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                user.toString(),
+              ),
+              backgroundColor: Colors.red,
+            ),
           );
         },
       );

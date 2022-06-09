@@ -91,6 +91,43 @@ class RegisterPage extends HookWidget {
                             const SizedBox(height: 25),
                             ElevatedButton(
                               onPressed: () {
+                                if (nameRegis.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text("Username tidak boleh kosong"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                } else if (emailRegis.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Email tidak boleh kosong"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                } else if (pass1Regis.text.isEmpty ||
+                                    pass2Regis.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text("Password tidak boleh kosong"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                } else if (pass1Regis.text != pass2Regis.text) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "Password dan Konfirmasi password tidak sama"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
                                 showDialog(
                                   context: context,
                                   barrierDismissible: false,
