@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class PaymentService {
   PaymentService._();
+
   static Future<Map<String, String>> createPayment({
     required int price,
     required String method,
@@ -64,5 +65,34 @@ class PaymentService {
       rethrow;
     }
     return {};
+  }
+
+  static Future<String> getPayment({required String chargeId}) async {
+    try {
+      final ewalletUrl =
+          Uri.parse("https://paa-payment.herokuapp.com/api/v1/ewallet/get");
+      const header = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      };
+      final body = jsonEncode(
+        {
+          "charge_id": chargeId,
+        },
+      );
+      final response = await http.post(
+        ewalletUrl,
+        headers: header,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        return (jsonDecode(response.body) as Map<String, dynamic>)["data"]
+            ["status"];
+      }
+      return "";
+    } on Exception catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 }

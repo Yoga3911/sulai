@@ -106,7 +106,8 @@ class OrderData extends StatelessWidget {
                       itemBuilder: (_, index) {
                         val.getData.where((element) =>
                             element.userId.contains(user.getUser.id));
-                        val.getData.sort((a, b) => int.parse(b.orderId).compareTo(int.parse(a.orderId)));
+                        val.getData.sort((a, b) => int.parse(b.orderId)
+                            .compareTo(int.parse(a.orderId)));
                         return OrderCard(
                           orderModel: val.getData[index],
                         );

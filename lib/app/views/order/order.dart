@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -483,7 +481,6 @@ class _OrderPageState extends State<OrderPage> {
                                                     : "ID_SAKUKU",
                                   ).then(
                                     (value) async {
-                                      log(sizeId!);
                                       String orderId = await order.insertOrder(
                                         userId: user.getUser.id,
                                         categoryId: dropdown.getRasa.toString(),
@@ -494,6 +491,7 @@ class _OrderPageState extends State<OrderPage> {
                                         sizeId: sizeId,
                                         date: dropdown.selectedDate,
                                         checkoutUrl: value["checkout_url"],
+                                        chargeId: value["id"],
                                       );
                                       location.getAddress().then(
                                         (value) {

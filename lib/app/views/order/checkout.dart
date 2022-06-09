@@ -130,6 +130,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         iconData: Icons.done_rounded,
                                         color: Colors.white,
                                       ),
+                                      indicator: (orderData.processId == "1")
+                                          ? Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.green,
+                                                  shape: BoxShape.circle),
+                                              child: (orderData.processId ==
+                                                      "1")
+                                                  ? const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                      strokeWidth: 2,
+                                                    )
+                                                  : null,
+                                            )
+                                          : null,
                                       color: Colors.green,
                                     ),
                                     alignment: TimelineAlign.start,
@@ -140,7 +155,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                       child: const Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text("Menunggu konfirmasi penjual"),
+                                        child:
+                                            Text("Menunggu konfirmasi penjual"),
                                       ),
                                     ),
                                   ),
@@ -149,12 +165,34 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       padding: const EdgeInsets.only(
                                           bottom: 5, top: 5),
                                       width: 20,
-                                      iconStyle: IconStyle(
-                                        iconData: Icons.done_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      color: Colors.green,
-                                      
+                                      iconStyle: (orderData.processId == "2" ||
+                                              orderData.processId == "3" ||
+                                              orderData.processId == "4")
+                                          ? IconStyle(
+                                              iconData: Icons.done_rounded,
+                                              color: Colors.white,
+                                            )
+                                          : null,
+                                      color: (orderData.processId == "2" ||
+                                              orderData.processId == "3" ||
+                                              orderData.processId == "4")
+                                          ? Colors.green
+                                          : Colors.red,
+                                      indicator: (orderData.processId == "2")
+                                          ? Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.green,
+                                                  shape: BoxShape.circle),
+                                              child: (orderData.processId ==
+                                                      "2")
+                                                  ? const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                      strokeWidth: 2,
+                                                    )
+                                                  : null,
+                                            )
+                                          : null,
                                     ),
                                     alignment: TimelineAlign.start,
                                     endChild: Container(
@@ -174,21 +212,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       padding: const EdgeInsets.only(
                                           bottom: 5, top: 5),
                                       width: 20,
-                                      iconStyle: IconStyle(
-                                        iconData: Icons.done_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      color: Colors.green,
-                                      indicator: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            color: Colors.green,
-                                            shape: BoxShape.circle),
-                                        child: const CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
+                                      iconStyle: (orderData.processId == "4")
+                                          ? IconStyle(
+                                              iconData: Icons.done_rounded,
+                                              color: Colors.white,
+                                            )
+                                          : null,
+                                      color: (orderData.processId == "3" ||
+                                              orderData.processId == "4")
+                                          ? Colors.green
+                                          : Colors.red,
+                                      indicator: (orderData.processId == "4" ||
+                                              orderData.processId == "2" ||
+                                              orderData.processId == "1")
+                                          ? null
+                                          : Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.green,
+                                                  shape: BoxShape.circle),
+                                              child: (orderData.processId ==
+                                                      "3")
+                                                  ? const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                      strokeWidth: 2,
+                                                    )
+                                                  : null,
+                                            ),
                                     ),
                                     alignment: TimelineAlign.start,
                                     endChild: Container(
@@ -209,13 +259,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       padding: const EdgeInsets.only(
                                           bottom: 5, top: 5),
                                       width: 20,
-                                      iconStyle: (orderData.statusId == "3")
+                                      iconStyle: (orderData.processId == "4")
                                           ? IconStyle(
                                               iconData: Icons.done_rounded,
                                               color: Colors.white,
                                             )
                                           : null,
-                                      color: (orderData.statusId == "3")
+                                      color: (orderData.processId == "4")
                                           ? Colors.green
                                           : Colors.red,
                                     ),

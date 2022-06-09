@@ -127,21 +127,24 @@ class OrderCard extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder<QuerySnapshot>(
-                          future: MyCollection.product.where("id", isEqualTo: orderModel.productId).get(),
-                          builder: (_, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SizedBox();
-                          }
-                          return Text(
-                            (snapshot.data!.docs.first.data() as Map<String, dynamic>)["name"],
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          );
-                        }),
+                            future: MyCollection.product
+                                .where("id", isEqualTo: orderModel.productId)
+                                .get(),
+                            builder: (_, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const SizedBox();
+                              }
+                              return Text(
+                                (snapshot.data!.docs.first.data()
+                                    as Map<String, dynamic>)["name"],
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              );
+                            }),
                         Text(orderModel.address),
                       ],
                     ),
@@ -157,7 +160,7 @@ class OrderCard extends StatelessWidget {
                   builder: (ctx) => Dialog(
                     child: ListTile(
                       onTap: () async {
-                        await order.deleteById(orderModel.orderId);
+                        await order.deleteById(orderModel.id);
                         Navigator.pop(ctx);
                       },
                       title: const Text("Hapus"),

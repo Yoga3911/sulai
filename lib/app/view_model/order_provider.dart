@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -75,7 +76,7 @@ class OrderProvider with ChangeNotifier {
 
   List<OrderModel> get getData => _orderData;
   Future<void> deleteById(String id) async {
-    _orderData.removeWhere((element) => element.orderId == id);
+    _orderData.removeWhere((element) => element.id == id);
     await MyCollection.order.doc(id).delete();
     notifyListeners();
   }
@@ -93,6 +94,7 @@ class OrderProvider with ChangeNotifier {
     String? paymentId,
     DateTime? date,
     String? checkoutUrl,
+    String? chargeId,
   }) async {
     final data = await MyCollection.order.get();
     final count = data.docs.length;
@@ -106,9 +108,11 @@ class OrderProvider with ChangeNotifier {
         "size_id": sizeId,
         "payment_id": paymentId,
         "status_id": "1",
+        "process_id": "1",
         "order_id": (count + 1).toString(),
         "order_date": date,
         "checkout_url": checkoutUrl,
+        "charge_id": chargeId,
         "address": "-",
         "postal_code": "-",
       },
@@ -132,6 +136,32 @@ class OrderProvider with ChangeNotifier {
       "address": address,
       "postal_code": postalCode,
     });
+  }
+
+  Future<void> updatePaymentStatus({
+    required String orderId,
+    required String status,
+    String? address,
+    String? postalCode,
+  }) async {
+    switch (status) {
+      case "SUCCEEDED":
+        await MyCollection.order.doc(orderId).update(
+          {
+            "status_id": "2",
+            "address": address,
+            "postal_code": postalCode,
+          },
+        );
+        break;
+      case "FAILED":
+        await MyCollection.order.doc(orderId).update(
+          {
+            "status_id": "4",
+          },
+        );
+        break;
+    }
   }
 
   Future<void> updateStatusState({String? statusId, String? orderId}) async {

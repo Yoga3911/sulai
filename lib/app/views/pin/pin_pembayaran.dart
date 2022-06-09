@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/order_model.dart';
 import 'package:sulai/app/routes/route.dart';
+import 'package:sulai/app/services/payment.dart';
 import 'package:sulai/app/view_model/notification.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/view_model/user_provider.dart';
+import 'package:sulai/app/views/pin/payment_webview.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
@@ -35,6 +36,11 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
     } else {
       throw "Could not launce $url";
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -156,21 +162,33 @@ class _PaymentPinPageState extends State<PaymentPinPage> {
                             .then((valid) async {
                           if (valid) {
                             (orderData.checkoutUrl.isNotEmpty)
-                                ? await launchURL(orderData.checkoutUrl)
-                                    .then((value) async {
-                                    order.updateStatus(
-                                      orderId: args["order_id"],
-                                      statusId: "2",
-                                      address: args["address"],
-                                      postalCode: args["post_code"],
-                                    );
-                                  })
+                                ? await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PaymentWebView(
+                                        url: orderData.checkoutUrl,
+                                      ),
+                                    ),
+                                  )
                                 : null;
                             notif.insertNotif(
                               userId: user.getUser.id,
                               adminId: "mOioopdH4uZDvrxy0Ewc",
                               title: "Pembayaran berhasil",
                               subtitle: "Silahkan tunggu konfirmasi dari admin",
+                            );
+                            await PaymentService.getPayment(
+                              chargeId: orderData.chargeId,
+                            ).then(
+                              (value) {
+                                if (value.isNotEmpty) {
+                                  order.updatePaymentStatus(
+                                      orderId: orderData.id,
+                                      status: value,
+                                      address: args["address"],
+                                      postalCode: args["post_code"]);
+                                }
+                              },
                             );
 
                             Navigator.pushNamedAndRemoveUntil(
