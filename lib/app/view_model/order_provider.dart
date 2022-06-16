@@ -76,17 +76,14 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> getAllProc(String userId, {String? processId}) async {
     if (processId == "0") {
-      final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
-          .where("status_id", isEqualTo: "2")
-          .get();
+      final data =
+          await MyCollection.order.where("status_id", isEqualTo: "2").get();
       setDataProc = [
         for (QueryDocumentSnapshot<Object?> item in data.docs)
           OrderModel.fromJson(item.data() as Map<String, dynamic>),
       ];
     } else if (processId == "4") {
       final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
           .where("process_id", isEqualTo: processId)
           .get();
       setDataProc = [
@@ -95,7 +92,6 @@ class OrderProvider with ChangeNotifier {
       ];
     } else {
       final data = await MyCollection.order
-          .where("user_id", isEqualTo: userId)
           .where("status_id", isEqualTo: "2")
           .where("process_id", isEqualTo: processId)
           .get();
@@ -133,6 +129,8 @@ class OrderProvider with ChangeNotifier {
     DateTime? date,
     String? checkoutUrl,
     String? chargeId,
+    int? cost,
+    int? ongkir,
   }) async {
     final data = await MyCollection.order.get();
     final count = data.docs.length;
@@ -153,6 +151,8 @@ class OrderProvider with ChangeNotifier {
         "charge_id": chargeId,
         "address": "-",
         "postal_code": "-",
+        "cost": cost,
+        "ongkir": ongkir,
       },
     );
     return order.id;

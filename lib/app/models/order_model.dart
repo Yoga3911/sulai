@@ -10,6 +10,8 @@ class OrderModel {
     required this.productId,
     required this.orderDate,
     required this.quantity,
+    required this.cost,
+    required this.ongkir,
     required this.chargeId,
     required this.sizeId,
     required this.paymentId,
@@ -27,6 +29,8 @@ class OrderModel {
   final String paymentId;
   final DateTime orderDate;
   final int quantity;
+  final int cost;
+  final int ongkir;
   final String chargeId;
   final String sizeId;
   final String address;
@@ -42,6 +46,8 @@ class OrderModel {
         productId: json["product_id"],
         quantity: json["quantity"],
         sizeId: json["size_id"],
+        ongkir: json["ongkir"],
+        cost: json["cost"],
         chargeId: json["charge_id"],
         paymentId: json["payment_id"],
         address: json["address"],
@@ -59,6 +65,8 @@ class OrderModel {
         "product_id": productId,
         "quantity": quantity,
         "size_id": sizeId,
+        "ongkir": ongkir,
+        "cost": cost,
         "payment_id": paymentId,
         "charge_id": chargeId,
         "address": address,

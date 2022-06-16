@@ -1,9 +1,11 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/constant/collection.dart';
 import 'package:sulai/app/models/order_model.dart';
+import 'package:sulai/app/models/user_model.dart';
 import 'package:sulai/app/routes/route.dart';
 import 'package:sulai/app/widgets/loading.dart';
 
@@ -46,18 +48,29 @@ class OrderCardAdmin extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: const Color(0xFFDEDBD4),
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: user.getUser.imageUrl,
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  FutureBuilder<UserModel>(
+                      future: user.getById(userId: orderModel.userId),
+                      builder: (_, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Color(0xFFDEDBD4),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 25,
+                          backgroundColor: const Color(0xFFDEDBD4),
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: snapshot.data!.imageUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      }),
                   const SizedBox(width: 10),
                   Flexible(
                     child: Column(

@@ -784,8 +784,7 @@ class _CheckoutAdminPageState extends State<CheckoutAdminPage> {
                               ),
                               Text(
                                 "Rp " +
-                                    currency(snapshot2.data!.price *
-                                        orderData.quantity),
+                                    currency(orderData.cost + orderData.ongkir),
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 16,

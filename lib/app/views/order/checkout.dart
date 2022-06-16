@@ -777,7 +777,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         child: Row(
                           children: [
                             Text(
-                              "BIAYA: Rp " + currency(args["biaya"]),
+                              "BIAYA: Rp " + currency(orderData.cost),
                               style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
@@ -793,7 +793,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    "ONGKIR: Rp " + currency(args["ongkir"]),
+                                    "ONGKIR: Rp " + currency(orderData.ongkir),
                                     style: const TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold,
@@ -820,9 +820,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ),
                               Text(
                                 "Rp " +
-                                    currency((snapshot2.data!.price *
-                                            orderData.quantity) +
-                                        args["ongkir"]),
+                                    currency(orderData.cost + orderData.ongkir),
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 16,

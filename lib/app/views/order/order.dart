@@ -699,6 +699,10 @@ class _OrderPageState extends State<OrderPage> {
                                         date: dropdown.selectedDate,
                                         checkoutUrl: value["checkout_url"],
                                         chargeId: value["id"],
+                                        cost: (int.parse(
+                                                quantityController.text) *
+                                            price),
+                                        ongkir: biayaOngkir,
                                       );
                                       location.getAddress().then(
                                         (value) {
