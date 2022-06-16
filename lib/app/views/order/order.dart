@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sulai/app/models/product_model.dart';
 import 'package:sulai/app/services/payment.dart';
+import 'package:sulai/app/services/rajaongkir.dart';
 import 'package:sulai/app/view_model/dropdown.dart';
 import 'package:sulai/app/view_model/location.dart';
 import 'package:sulai/app/view_model/order_provider.dart';
 import 'package:sulai/app/view_model/product_provider.dart';
 import 'package:sulai/app/widgets/app_bar.dart';
+import 'package:sulai/app/widgets/currency.dart';
 import 'package:sulai/app/widgets/loading.dart';
 import 'package:sulai/app/widgets/main_style.dart';
 import '../../routes/route.dart';
@@ -23,6 +25,9 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  int biayaOngkir = 0;
+  String cityId = "1";
+  int radioVal = 1;
   late TextEditingController quantityController;
   late TextEditingController phoneController;
   bool isEmpty = true;
@@ -45,6 +50,7 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    Ongkir ongkir = Ongkir();
     final args = ModalRoute.of(context)?.settings.arguments ?? "";
     ProductModel? productModel;
     if (args != "") {
@@ -57,6 +63,7 @@ class _OrderPageState extends State<OrderPage> {
     final order = Provider.of<OrderProvider>(context, listen: false);
     final user = Provider.of<UserProvider>(context, listen: false);
     final dropdown = Provider.of<DropDownNotifier>(context, listen: false);
+    final dropdown2 = Provider.of<DropDownNotifier2>(context, listen: false);
     final product = Provider.of<ProductProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return MainStyle(
@@ -429,7 +436,205 @@ class _OrderPageState extends State<OrderPage> {
                           thickness: 2,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 40, top: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Pilih Kota",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          children: [
+                            Radio<int>(
+                                value: 1,
+                                groupValue: radioVal,
+                                onChanged: (val) {
+                                  radioVal = val!;
+                                  setState(() {});
+                                }),
+                            const Text("Jember"),
+                            Radio<int>(
+                                value: 2,
+                                groupValue: radioVal,
+                                onChanged: (val) {
+                                  radioVal = val!;
+                                  setState(() {});
+                                }),
+                            const Text("Luar Jember"),
+                          ],
+                        ),
+                      ),
+                      (radioVal == 2)
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: FutureBuilder(
+                                      future: ongkir.getAllCity(),
+                                      builder: (_, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                        final data = (snapshot.data as Map<
+                                                String, dynamic>)["rajaongkir"]
+                                            ["results"] as List<dynamic>;
+                                        return Consumer<DropDownNotifier>(
+                                          builder: (_, val, __) =>
+                                              DropdownButtonHideUnderline(
+                                            child: DropdownButton<String>(
+                                                value: val.cityId,
+                                                items: data
+                                                    .map(
+                                                      (e) => DropdownMenuItem<
+                                                          String>(
+                                                        value: e["city_id"],
+                                                        child: SizedBox(
+                                                            width: 200,
+                                                            child: Text(e[
+                                                                "city_name"])),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                onChanged: (id) {
+                                                  val.setCityId = id!;
+                                                  dropdown2.setDropdown = false;
+                                                }),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
+                      (radioVal == 2)
+                          ? const Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Divider(
+                                height: 2,
+                                thickness: 2,
+                              ),
+                            )
+                          : const SizedBox(),
+                      (radioVal == 2)
+                          ? const Padding(
+                              padding: EdgeInsets.only(left: 40, top: 10),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Pilih Kurir",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      (radioVal == 2)
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Consumer<DropDownNotifier2>(
+                                builder: (_, notifier, __) => Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Radio<String>(
+                                            value: "jne",
+                                            groupValue: notifier.courier,
+                                            onChanged: (val) {
+                                              notifier.setCourier = val!;
+                                            }),
+                                        const Text("JNE"),
+                                        Radio<String>(
+                                            value: "pos",
+                                            groupValue: notifier.courier,
+                                            onChanged: (val) {
+                                              notifier.setCourier = val!;
+                                            }),
+                                        const Text("POS"),
+                                        Radio<String>(
+                                            value: "tiki",
+                                            groupValue: notifier.courier,
+                                            onChanged: (val) {
+                                              notifier.setCourier = val!;
+                                            }),
+                                        const Text("TIKI"),
+                                      ],
+                                    ),
+                                    FutureBuilder(
+                                        future: ongkir.getCost(
+                                            origin: "160",
+                                            destiantion: dropdown.cityId,
+                                            weight: (int.parse((quantityController
+                                                                .text.isEmpty)
+                                                            ? "1"
+                                                            : quantityController
+                                                                .text) *
+                                                        ((sizeId == "1")
+                                                            ? (220 * 0.0001)
+                                                                .round()
+                                                            : (650 * 0.0001)
+                                                                .round()) ==
+                                                    0)
+                                                ? 1
+                                                : int.parse(
+                                                        (quantityController.text.isEmpty)
+                                                            ? "1"
+                                                            : quantityController
+                                                                .text) *
+                                                    ((sizeId == "1")
+                                                        ? (220 * 0.0001).round()
+                                                        : (650 * 0.0001).round()),
+                                            courier: notifier.courier),
+                                        builder: (_, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
+                                          final data = ((snapshot.data as Map<
+                                                  String,
+                                                  dynamic>)["rajaongkir"]
+                                              ["results"]) as List<dynamic>;
+                                          biayaOngkir = data[0]["costs"][0]
+                                              ["cost"][0]["value"];
+                                          return Text(
+                                            "Ongkir: Rp " +
+                                                currency(biayaOngkir),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        })
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Divider(
+                          height: 2,
+                          thickness: 2,
+                        ),
+                      ),
                       const Padding(
                         padding: EdgeInsets.only(left: 40, right: 40),
                         child: Text(
@@ -468,8 +673,9 @@ class _OrderPageState extends State<OrderPage> {
                                     phone: (dropdown.getPembayaran == 1)
                                         ? phoneController.text
                                         : "",
-                                    price: int.parse(quantityController.text) *
-                                        price,
+                                    price: (int.parse(quantityController.text) *
+                                            price) +
+                                        biayaOngkir,
                                     method: (dropdown.getPembayaran == 1)
                                         ? "ID_OVO"
                                         : (dropdown.getPembayaran == 2)
@@ -481,6 +687,7 @@ class _OrderPageState extends State<OrderPage> {
                                                     : "ID_SAKUKU",
                                   ).then(
                                     (value) async {
+                                      dropdown.isCityId = true;
                                       String orderId = await order.insertOrder(
                                         userId: user.getUser.id,
                                         categoryId: dropdown.getRasa.toString(),
@@ -502,7 +709,12 @@ class _OrderPageState extends State<OrderPage> {
                                             arguments: {
                                               "order_id": orderId,
                                               "product_id":
-                                                  dropdown.getRasa.toString()
+                                                  dropdown.getRasa.toString(),
+                                              "radio": radioVal,
+                                              "ongkir": biayaOngkir,
+                                              "biaya": (int.parse(
+                                                      quantityController.text) *
+                                                  price),
                                             },
                                           );
                                         },

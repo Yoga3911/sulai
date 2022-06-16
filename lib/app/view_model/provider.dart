@@ -16,6 +16,7 @@ final List<SingleChildWidget> providerData = [
   ChangeNotifierProvider(create: (_) => ProductProvider()),
   ChangeNotifierProvider(create: (_) => NotificationProvider()),
   ChangeNotifierProvider(create: (_) => DropDownNotifier()),
+  ChangeNotifierProvider(create: (_) => DropDownNotifier2()),
   ChangeNotifierProvider(create: (_) => OrderProvider()),
   ChangeNotifierProvider(create: (_) => MyLocation()),
   ChangeNotifierProvider(create: (_) => UlasanProvider()),

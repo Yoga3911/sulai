@@ -5,6 +5,20 @@ class DropDownNotifier with ChangeNotifier {
   String _kemasan = "";
   int _pembayaran = 1;
   String image = "";
+  String cityId = "1";
+  bool isCityId = false;
+  String courier = "jne";
+  // bool isCityId = false;
+
+  set setCityId(String id) {
+    cityId = id;
+    notifyListeners();
+  }
+
+  set setCourier(String id) {
+    courier = id;
+    notifyListeners();
+  }
 
   set setImg(String val) {
     image = val;
@@ -47,5 +61,18 @@ class DropDownNotifier with ChangeNotifier {
       selectedDate = picked;
       notifyListeners();
     }
+  }
+}
+
+class DropDownNotifier2 with ChangeNotifier {
+  String courier = "jne";
+  // bool isCityId = false;
+  set setDropdown(bool val) {
+    notifyListeners();
+  }
+
+  set setCourier(String id) {
+    courier = id;
+    notifyListeners();
   }
 }

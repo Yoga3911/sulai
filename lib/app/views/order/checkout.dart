@@ -772,6 +772,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Row(
+                          children: [
+                            Text(
+                              "BIAYA: Rp " + currency(args["biaya"]),
+                              style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        ),
+                      ),
+                      (args["radio"] == 2)
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "ONGKIR: Rp " + currency(args["ongkir"]),
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       Container(
                         color: const Color.fromARGB(255, 240, 240, 240),
                         child: Padding(
@@ -789,8 +820,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ),
                               Text(
                                 "Rp " +
-                                    currency(snapshot2.data!.price *
-                                        orderData.quantity),
+                                    currency((snapshot2.data!.price *
+                                            orderData.quantity) +
+                                        args["ongkir"]),
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 16,
