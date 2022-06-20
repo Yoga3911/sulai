@@ -65,7 +65,7 @@ class CustomCarousel extends StatelessWidget {
                     ),
                   ),
                   const Text(
-                    "20 - 28 Maret 2022",
+                    "10 - 30 Juni 2022",
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   const SizedBox(height: 5),

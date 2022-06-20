@@ -114,14 +114,6 @@ class LoginPage extends HookWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            const Text(
-                              "Lupa Password ?",
-                              style: TextStyle(
-                                color: MyColor.blue,
-                                fontSize: 12,
-                              ),
-                            ),
                             const SizedBox(height: 15),
                             Text.rich(
                               TextSpan(

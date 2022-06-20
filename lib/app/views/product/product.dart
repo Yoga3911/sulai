@@ -86,7 +86,7 @@ class ProductPage extends StatelessWidget {
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(5)),
                             child: const Text(
-                              "20 - 28 Maret 2022",
+                              "10 - 30 Juni 2022",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,

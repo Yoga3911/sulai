@@ -37,7 +37,7 @@ class ProductProvider with ChangeNotifier {
         "price": price,
         "discount": discount,
         "disc_prod": discProd,
-        "size_id": size,
+        // "size_id": size,
         "update_at": DateTime.now(),
       },
     );
