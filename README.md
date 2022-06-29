@@ -5,5 +5,6 @@
   <li>Payment (Xendit)</li>
   <li>Ongkir (Raja Ongkir)</li>
   <li>Notification (FCM)</li>
-  <li>App Life Cycle with network detection</li>
+  <li>App Life Cycle dengan network detection</li>
+  <li>Transaksi sukses per hari dalam bentuk grafik</li>
 </ul>
