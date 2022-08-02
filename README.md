@@ -13,4 +13,5 @@
   <li>Transaksi sukses per hari dalam bentuk grafik</li>
   <li>Ubah profil</li>
   <li>Riwayat order dengan tracker</li>
+  <li>Auth Email, Google dan Facebook</li>
 </ul>
